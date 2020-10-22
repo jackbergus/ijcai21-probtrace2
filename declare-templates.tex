@@ -1,0 +1,112 @@
+\begin{table}[t]
+\caption{Some \declare templates, their textual and graphical representation, the corresponding \LTLf formalization and the \LTLf formula capturing their complement (i.e., their logical negation).
+\label{tab:constraints}}
+\centering
+\begin{adjustbox}{width=0.9\textwidth,center}
+\begin{tikzpicture}
+  \matrix[  nodes={node distance=\nodedist,minimum height=6mm},
+            rectangle, draw,
+            nodes in empty cells,
+            row sep=2mm,column sep=3mm,
+            very thick,
+            column 1/.style={anchor=west,font=\footnotesize},
+            column 2/.style={anchor=west,xshift=1mm,font=\footnotesize},
+            column 3/.style={anchor=west,xshift=1mm,font=\footnotesize},
+            column 4/.style={anchor=west},
+            >=latex,->,
+          ] (declarematrix) {
+    \node {\textsc{text}};
+    &
+    \node[yshift=.5mm] {\textsc{notation}};
+  &
+    \node {\textsc{\LTLf\ formula ($\varphi$)}};
+    &
+    \node[yshift=.5mm] {\textsc{complement ($\neg\varphi$)}};
+    \\
+    \node {
+      \begin{tabular}{@{}l@{}}
+      \constraint{existence($\mathit{a}$)} \\
+      \end{tabular}
+    };
+    &
+    \node[smalltask,xshift=1.5mm] (a) {$\mathit{a}$};
+    \node[taskfg,above=-1mm of a,xshift=-.3mm]{\footnotesize $1..\ast$};
+    &
+    \node {$\Diamond {a}$};
+    &
+    \node {$\Box \neg {a}$};
+
+    \\
+     \node {
+      \begin{tabular}{@{}l@{}}
+        \constraint{absence2($\mathit{a}$)}\\
+      \end{tabular}
+    };
+    &
+    \node[smalltask,xshift=1.5mm] (a) {$\mathit{a}$};
+    \node[taskfg,above=-1mm of a,xshift=-.3mm]{\footnotesize $0..1$};
+
+    &
+    \node {$\neg \Diamond ({a} \land \Next \Diamond {a})$};
+    &
+    \node {$\Diamond ({a} \land \Next \Diamond {a})$};
+    \\
+    \node {
+      \begin{tabular}{@{}l@{}}
+        \constraint{response($\mathit{a}$,$\mathit{b}$)}
+      \end{tabular}
+    };
+    &
+    \node[smalltask,xshift=1.5mm] (a) {$\mathit{a}$};
+    \node[above=-1mm of a,xshift=-.3mm]{\footnotesize $~$};
+    \node[smalltask,right=\taskdist of a] (b) {$\mathit{b}$};
+    \path[response,very thick] (a) -- (b);
+    &
+    \node {$\Box ({a} \rightarrow \Diamond {b})$};
+    &
+    \node {$\Diamond ({a} \land \Box \neg {b})$};
+    \\
+    \node {
+      \begin{tabular}{@{}l@{}}
+        \constraint{precedence($\mathit{a}$,$\mathit{b}$)}\\
+      \end{tabular}
+    };
+    &
+    \node[smalltask,xshift=1.5mm] (a) {$\mathit{a}$};
+    \node[smalltask,right=\taskdist of a] (b) {$\mathit{b}$};
+    \path[precedence,very thick] (b) -- (a);
+    &
+    \node {$\neg {b} \Wuntil {a}$};
+    &
+    \node {$\neg {a} \Until {b}$};
+    \\
+    \node {
+      \begin{tabular}{@{}l@{}}
+        \constraint{not-coexistence($\mathit{a}$,$\mathit{a}$)}\\
+
+      \end{tabular}
+    };
+    &
+    \node[smalltask,xshift=1.5mm] (a) {$\mathit{a}$};
+    \node[smalltask,right=\taskdist of a] (b) {$\mathit{b}$};
+    \path[notcoexistence,very thick] (a) -- (b);
+    &
+    \node {$\neg(\Diamond {a} \land \Diamond {b})$};
+    &
+    \node {$\Diamond {a} \land \Diamond {b}$};
+    \\
+%    \node {
+%      \begin{tabular}{@{}l@{}}
+%        \constraint{neg-response(\activity{a},\activity{b})}\\
+%        $\Box( \activity{a} \limp \neg \bigcirc\Diamond \activity{b})$
+%      \end{tabular}
+%    };
+%    &
+%    \node[smalltask,xshift=1.5mm] (a) {\activity{a}};
+%    \node[smalltask,right=\taskdist of a] (b) {\activity{b}};
+%    \path[negationresponse,very thick] (a) -- (b);
+%    \\
+    };
+\end{tikzpicture}
+\end{adjustbox}
+\end{table} 
