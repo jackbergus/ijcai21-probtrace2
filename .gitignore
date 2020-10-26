@@ -1,0 +1,11 @@
+*.soc
+*.out
+*.log
+*.blg
+*.bbl
+*.aux
+*.thm
+*.pgf-plot.gnuplot
+*.pdf
+*.loc
+*.synctex.gz
