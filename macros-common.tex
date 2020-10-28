@@ -22,7 +22,7 @@
 \renewcommand{\P}{\ensuremath{\mathcal{P}}}
 \newcommand{\Q}{\ensuremath{\mathcal{Q}}}
 \newcommand{\R}{\ensuremath{\mathcal{R}}}
-\renewcommand{\S}{\ensuremath{\mathcal{S}}}
+%\renewcommand{\S}{\ensuremath{\mathcal{S}}}
 \newcommand{\T}{\ensuremath{\mathcal{T}}}
 %\newcommand{\U}{\ensuremath{\mathcal{U}}}
 \newcommand{\V}{\ensuremath{\mathcal{V}}}
@@ -68,16 +68,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%% Delimiters
 
 %%\newcommand{\quotes}[1]{{\lq\lq #1\rq\rq}}
-\newcommand{\set}[1]{\{#1\}}                      % set
-\newcommand{\Set}[1]{\left\{#1\right\}}
+%\newcommand{\set}[1]{\{#1\}}                      % set
+%\newcommand{\Set}[1]{\left\{#1\right\}}
 \newcommand{\bigset}[1]{\Bigl\{#1\Bigr\}}
 \newcommand{\bigmid}{\Big|}
 \newcommand{\size}[1]{|{#1}|}                     % cardinality of a set
 %%\newcommand{\Card}[1]{\left| #1\right|}
 \newcommand{\card}[1]{\sharp #1}
 \newcommand{\tup}[1]{\langle #1\rangle}            % tuple
-\newcommand{\Tup}[1]{\left\langle #1\right\rangle}
-
+\newcommand{\Tup}[1]{\Braket{#1}}
+\newcommand{\norm}[2]{\|#1\|_{#2}}
 \newcommand{\setone}[2][1]{\set{#1\cld #2}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% STYLING AND SPACING
@@ -108,6 +108,7 @@
 \newcounter{dummy4}
 \newcounter{dummy5} 
 \newcounter{dummy6}
+\newcounter{dummy7}
 %\numberwithin{dummy}{section}
 
 \usepackage[thmmarks,amsmath]{ntheorem}

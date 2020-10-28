@@ -1,0 +1,267 @@
+%
+\usepackage{wrapfig}
+
+%\usepackage{lineno}
+%\linenumbers
+\newcommand{\linerange}[2]{%
+	\ifthenelse{\equal{\getrefnumber{#1}}{\getrefnumber{#2}}}{%
+		line \ref{#1}%
+	}{%
+		lines \ref{#1}--\ref{#2}%
+	}%
+}
+\usepackage{pifont}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{subfig}
+\usepackage{multirow,bigdelim} % multirow in table and big bracket
+\usepackage{amsmath}
+\newtheorem{lemma}{Lemma}
+\usepackage{array}
+\usepackage{xcolor}
+%\usepackage{comment}
+\usepackage{varioref}
+\usepackage{xfrac}
+\usepackage{adjustbox}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\newcommand{\ignore}[1]{}
+\usepackage{float}
+\usepackage{listings}
+%\usepackage[new]{old-arrows}
+\lstdefinelanguage{sparql}{
+	morecomment=[l][]{\#},
+	morestring=[b][]\",
+	morekeywords={BIND,URI,CONCAT,SELECT,CONSTRUCT,DESCRIBE,ASK,WHERE,FROM,NAMED,PREFIX,BASE,OPTIONAL,FILTER,GRAPH,LIMIT,OFFSET,SERVICE,UNION,EXISTS,NOT,BINDINGS,MINUS,a},
+	sensitive=true
+}
+\lstdefinelanguage{cypher}{
+	morekeywords={MATCH,RETURN,WHERE,DISTINCT,WITH,CREATE,COUNT,AS,UNION,ALL,is,null,NOT,AND,OR},
+	sensitive=true,
+	morecomment=[l]{//}, % l is for line comment
+}
+\definecolor{eclipseBlue}{RGB}{42,0.0,255}
+\definecolor{eclipseGreen}{RGB}{63,127,95}
+\definecolor{eclipsePurple}{RGB}{127,0,85}
+\lstset{basicstyle=\ttfamily,%
+	%backgroundcolor=\color[rgb]{0.85,0.85,0.86},%
+	frame=single,
+	framerule=0pt,
+	xleftmargin=\fboxsep,
+	xrightmargin=\fboxsep,
+	commentstyle=\color{eclipseGreen}, % style of comments
+	keywordstyle=\color{eclipsePurple}\bfseries, % style of keywords
+	stringstyle=\color{eclipseBlue},
+	breaklines=true,
+	postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+\captionsetup[lstlisting]{position=top}
+
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+%\ifCLASSOPTIONcompsoc
+%\usepackage[nocompress]{cite}
+%\else
+\usepackage[noadjust,nocompress]{cite}
+\usepackage[author={Giacomo Bergami}]{pdfcomment}
+\makeatletter
+\makeatother
+%\fi
+
+
+\usepackage{amssymb}
+\usepackage{ifsym}
+\usepackage{paralist}
+\usepackage[inline]{enumitem}
+\newlist{myalist}{enumerate*}{1}
+\setlist[myalist]{label=\textbf{(\arabic*)}}
+\newlist{mylist}{enumerate*}{1}
+\setlist[mylist]{label=\textbf{(\roman*)}}
+\newlist{alphalist}{enumerate*}{1}
+\setlist[alphalist]{label=\textbf{(\alph*)}}
+
+\usepackage{braket}
+
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\cod}{cod}
+
+\makeatletter
+\newcommand\notsotiny{\@setfontsize\notsotiny{6.31415}{7.1828}}
+\makeatother 
+
+\newenvironment{reviewerextension}{}{}
+
+\received{xxx}
+\revised{xxx}
+\accepted{xxx}
+
+\pubyear{2000}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}
+\volume{xxx}
+
+
+
+%\usepackage[printwatermark]{xwatermark}
+%\newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=30,ypos=-70]{Under Review}
+
+
+\usepackage{changes}
+\usepackage{lipsum}% <- For dummy text
+\definechangesauthor[name={Giacomo Bergami}, color=red]{del}
+%\setremarkmarkup{(#2)}
+%\setremarkmarkup{(#2)}
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFaddtex}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdeltex}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF HYPERREF PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{#1} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{#1} %DIF PREAMBLE
+\newcommand{\DIFscaledelfig}{0.5}
+%DIF HIGHLIGHTGRAPHICS PREAMBLE %DIF PREAMBLE
+\RequirePackage{settobox} %DIF PREAMBLE
+\RequirePackage{letltxmacro} %DIF PREAMBLE
+\newsavebox{\DIFdelgraphicsbox} %DIF PREAMBLE
+\newlength{\DIFdelgraphicswidth} %DIF PREAMBLE
+\newlength{\DIFdelgraphicsheight} %DIF PREAMBLE
+% store original definition of \includegraphics %DIF PREAMBLE
+\LetLtxMacro{\DIFOincludegraphics}{\includegraphics} %DIF PREAMBLE
+\newcommand{\DIFaddincludegraphics}[2][]{{\color{blue}\fbox{\DIFOincludegraphics[#1]{#2}}}} %DIF PREAMBLE
+\newcommand{\DIFdelincludegraphics}[2][]{% %DIF PREAMBLE
+	\sbox{\DIFdelgraphicsbox}{\DIFOincludegraphics[#1]{#2}}% %DIF PREAMBLE
+	\settoboxwidth{\DIFdelgraphicswidth}{\DIFdelgraphicsbox} %DIF PREAMBLE
+	\settoboxtotalheight{\DIFdelgraphicsheight}{\DIFdelgraphicsbox} %DIF PREAMBLE
+	\scalebox{\DIFscaledelfig}{% %DIF PREAMBLE
+		\parbox[b]{\DIFdelgraphicswidth}{\usebox{\DIFdelgraphicsbox}\\[-\baselineskip] \rule{\DIFdelgraphicswidth}{0em}}\llap{\resizebox{\DIFdelgraphicswidth}{\DIFdelgraphicsheight}{% %DIF PREAMBLE
+				\setlength{\unitlength}{\DIFdelgraphicswidth}% %DIF PREAMBLE
+				\begin{picture}(1,1)% %DIF PREAMBLE
+				\thicklines\linethickness{2pt} %DIF PREAMBLE
+				{\color[rgb]{1,0,0}\put(0,0){\framebox(1,1){}}}% %DIF PREAMBLE
+				{\color[rgb]{1,0,0}\put(0,0){\line( 1,1){1}}}% %DIF PREAMBLE
+				{\color[rgb]{1,0,0}\put(0,1){\line(1,-1){1}}}% %DIF PREAMBLE
+				\end{picture}% %DIF PREAMBLE
+			}\hspace*{3pt}}} %DIF PREAMBLE
+} %DIF PREAMBLE
+\LetLtxMacro{\DIFOaddbegin}{\DIFaddbegin} %DIF PREAMBLE
+\LetLtxMacro{\DIFOaddend}{\DIFaddend} %DIF PREAMBLE
+\LetLtxMacro{\DIFOdelbegin}{\DIFdelbegin} %DIF PREAMBLE
+\LetLtxMacro{\DIFOdelend}{\DIFdelend} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFaddbegin}{\DIFOaddbegin \let\includegraphics\DIFaddincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFaddend}{\DIFOaddend \let\includegraphics\DIFOincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFdelbegin}{\DIFOdelbegin \let\includegraphics\DIFdelincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFdelend}{\DIFOaddend \let\includegraphics\DIFOincludegraphics} %DIF PREAMBLE
+\LetLtxMacro{\DIFOaddbeginFL}{\DIFaddbeginFL} %DIF PREAMBLE
+\LetLtxMacro{\DIFOaddendFL}{\DIFaddendFL} %DIF PREAMBLE
+\LetLtxMacro{\DIFOdelbeginFL}{\DIFdelbeginFL} %DIF PREAMBLE
+\LetLtxMacro{\DIFOdelendFL}{\DIFdelendFL} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFaddbeginFL}{\DIFOaddbeginFL \let\includegraphics\DIFaddincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFaddendFL}{\DIFOaddendFL \let\includegraphics\DIFOincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFdelbeginFL}{\DIFOdelbeginFL \let\includegraphics\DIFdelincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFdelendFL}{\DIFOaddendFL \let\includegraphics\DIFOincludegraphics} %DIF PREAMBLE
+%DIF LISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+	%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+	moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+	moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+\usepackage{stackengine}
+\usepackage{MnSymbol}
+\usepackage[many]{tcolorbox}
+\newtcolorbox{cross}{blank,breakable,parbox=false,
+	overlay={\draw[red,line width=5pt] (interior.south west)--(interior.north east);
+		\draw[red,line width=5pt] (interior.north west)--(interior.south east);}}
+
+
+\newcommand*\mnote[3][0pt]{%
+	\if l#2\reversemarginpar\def\pointer{\filledmedtriangleright}%
+	\def\stackalignment{r}\fi%
+	\if r#2\normalmarginpar\def\pointer{\filledmedtriangleleft}%
+	\def\stackalignment{l}\fi%
+	\marginpar{%
+		\topinset{%
+			\scalebox{1.5}{\textcolor{blue}{$\pointer$}}}{%
+			\belowbaseline[-1.5\baselineskip-#1]{%
+				\stackengine%
+				{-5pt}%
+				{\fcolorbox{blue}{white}{\parbox{4cm}%
+						{\vspace{5pt}\raggedright#3}}}%
+				{~\colorbox{white}{\sffamily Note}}%
+				{O}%
+				{l}%
+				{F}%
+				{F}%
+				{S}%
+			}%
+		}{%
+			3ex+#1}{%
+			-2ex}%
+	}%
+}
+
+\newcommand{\lnote}[1]{}
+\newcommand{\rnote}[1]{}
+\newcommand{\addswig}[1]{#1}
+\newcommand{\delstrike}[1]{}
+\newcommand{\strikepic}[1]{}
+
+
+\usepackage{zref-savepos}
+\usepackage{changepage}
+\newcounter{mycomment}
+\newcounter{myinterp}
+\newenvironment{Reply}
+{\unskip\stepcounter{mycomment}\zsavepos{endpar\the\value{mycomment}}%
+	\par\bigskip%
+	%\bfseries%
+	\begin{adjustwidth}{1cm}{0cm}\textbf{[Reply \the\value{mycomment}.]}}
+	{\end{adjustwidth}
+	\par\bigskip
+	\noindent\hspace*{\dimexpr\zposx{endpar\the\value{mycomment}}sp-\oddsidemargin-1in}\ignorespaces}
+\newenvironment{Interp}
+{\unskip\stepcounter{myinterp}\zsavepos{endpar\the\value{myinterp}}%
+	\par\bigskip%
+	%\bfseries%
+	\begin{adjustwidth}{1cm}{0cm}\textbf{[Interpretazione \the\value{myinterp}.]}}
+	{\end{adjustwidth}
+	\par\bigskip
+	\noindent\hspace*{\dimexpr\zposx{endpar\the\value{myinterp}}sp-\oddsidemargin-1in}\ignorespaces}
+
+
+\usepackage{cancel}
+\newcommand\Rcancel[1]{ }
+\renewcommand{\replaced}[2]{#1}
+\renewcommand{\added}[1]{#1}
+\renewcommand{\deleted}[2][]{}

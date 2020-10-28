@@ -1,0 +1,171 @@
+\newcommand{\length}{\mathit{length}}
+\newcommand{\true}{\mathit{true}}
+\newcommand{\false}{\mathit{false}}
+\newcommand{\aut}{\mathcal{A}}
+\newcommand{\tasks}{\Sigma}
+\newcommand{\trace}{\tau}
+
+\newcommand{\close}{\activity{close}}
+\newcommand{\accept}{\activity{accept}}
+\newcommand{\reject}{\activity{reject}}
+
+\section{Preliminaries}
+\subsection{Probabilistic Petri Nets}\label{subsec:ppn}
+Given a finite set of labels $\Sigma$ and a set of nodes $V\subseteq \mathbb{N}$, a probabilistic Petri Net $(s,t,L,R,w)$ can be uniquely be described by a source node $s\in V$, a target node $t\in V$, its labels, and a transition matrix coming from its associated random process \cite{GartnerFW03}. The label matrix is defined by $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow {\color{green}\alpha}=\textit{label}(\texttt{\color{blue}i})$ and $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and the transition matrix is defined by the probability $[R]_{\texttt{\color{blue}ij}}$ that the process will, when in node $\texttt{\color{blue}i}$, make a transition into node $\texttt{\color{blue}j}$ \cite{Prob}. $[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$). 
+We can also associate a weight $w\in[0,1]\subseteq\mathbb{R}$ to a Petri Net, so to express the probability associated to the Petri Net itself as valid.
+
+\begin{figure}[!t]
+	\centering
+	\subfloat[A Probabilistic Petri Net represented as a Thompson automaton.]{\label{fig:orig}\includegraphics{images/running_example.pdf}}\qquad
+	\subfloat[Another Probabilistic Petri Net having the same set of weighted traces]{\label{fig:closed}\includegraphics{images/closed_example.pdf}}\\
+	\caption{Two equivalent probabilistic Petri Nets.}
+	\label{3figs}
+\end{figure}
+
+
+\begin{example}
+Figure \ref{fig:orig} can be represented as a Probabilistic Petri Net $(\mathtt{\color{blue}1},\mathtt{\color{blue}6},L,R,1)$, where the matrices $L$ and $R$ can be both defined as follows:
+$$L:=\kbordermatrix{
+             & \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}&\texttt{\color{blue}5}&\texttt{\color{blue}6}\\
+\color{green}\varepsilon  & \textbf{1}&0&0&\textbf{1}&0&\textbf{1}\\
+\color{green}a            & 0&\textbf{1}&0&0&0&0\\
+\color{green}b            & 0&0&0&0&\textbf{1}&0\\
+\color{green}c            & 0&0&\textbf{1}&0&0&0\\
+}\qquad R:=\kbordermatrix{
+& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}&\texttt{\color{blue}5}&\texttt{\color{blue}6}\\
+\texttt{\color{blue}1}  & 0&\color{red}p_1&\color{red}p_2&0&0&0\\
+\texttt{\color{blue}2}  & 0&\color{red}p_3&0&0&0&\color{red}p_6\\
+\texttt{\color{blue}3}  & 0&0&0&\color{red}1&0&0\\
+\texttt{\color{blue}4}  & 0&\color{red}p_2&0&0&\color{red}p_5&0\\
+\texttt{\color{blue}5}  & 0&0&0&0&0&\color{red}1\\
+\texttt{\color{blue}6}  & 0&0&0&0&0&0\\
+}$$
+\end{example}
+
+ Given a (Weighted) Probabilistic Petri Net $P=(s,t,L,R,w)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. Given that the graph isomorphism problem is NP-Complete and given that the Probabilistic Petri Nets are fully characterised by the set of the probabilistic traces that they generate,  we can say that two Petri Nets are (probabilistic-trace) equivalent if and only if they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and having a maximum length of $n$. 
+\yellownote{
+	Shall we talk about the $\varepsilon$ and the $\varepsilon$-closure explicitely, or is it a very-well known concept in literature?
+}
+
+\begin{example}
+The Probabilistic Petri Net in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P)$ of weighted traces:
+$$\set{\braket{\underbrace{\color{green}a\dots a}_{n},{\color{red}p_1p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup \set{\braket{{\color{green}c}\underbrace{\color{green}a\dots a}_{n},{\color{red}p_2p_4p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup\{\braket{{\color{green}cb},{\color{red}p_2p_5}}\}$$
+We can easily see that the Petri Net in Figure \ref{fig:closed} produces the same set of traces, and therefore we shall consider the two Petri Nets as (probabilistic-trace) equivalent.
+\end{example}
+
+Consequently, it is always possible to minimize a Probabilistic Petri Net represented as a Thompson automaton (e.g., Figure \ref{fig:orig}) via $\varepsilon$-closure, so that the only nodes that are labelled as $\varepsilon$ are source and the target nodes (Figure \ref{fig:closed}) and the set of weighted traces is preserved.
+
+
+\subsection{Kernels and Trace Kernels}\label{subsec:katk}
+Given a set of data examples $\mathcal{X}$, (e.g., traces) a (positive definite) kernel function $k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product $\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$. 
+A kernel is said to \textbf{perform ideally} \cite{Gartner03} when $k(x,x')=1\Leftrightarrow x=x'$ (\textit{strong equality}) and $k(x,x')=0\Leftrightarrow x\neq x'$ (\textit{strong inequality}). A kernel is also said to be \textbf{appropriate} when similar elements $x,x'\in\mathcal{X}$ are also close in the feature space: appropriateness can be only defined  empirically \cite{Gartner03}.
+
+Any positive definite kernel induces a distance metric as \cite{Raedt}:
+\[d_k(\mathbf{x},\mathbf{x}'):=\sqrt{k(\mathbf{x},\mathbf{x})-2k(\mathbf{x},\mathbf{x}')+k(\mathbf{x}',\mathbf{x}')}\] 
+When the kernel of choice is the inner product, the resulting distance is the well known Euclidean distance $\norm{\mathbf{x}-\mathbf{x}'}{2}$. A normalized vector (versor) $\hat{\mathbf{x}}$ is defined as $\mathbf{x}/\norm{\mathbf{x}}{2}$: we can easily prove for normalized vectors that $\norm{\hat{\mathbf{x}}-\hat{\mathbf{x}}'}{2}^2=2(1-\Braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$.
+
+When $\mathcal{X}$ does not necessarily represent a $d$-dimensional Euclidean space, we can use an embedding $\phi\colon\mathcal{X}\to \mathbb{R}^d$ to define a kernel $k_\phi\colon \mathcal{X}\times \mathcal{X}\to\mathbb{R}$ as $k_\phi(x,x'):=\Braket{\phi(x),\phi(x')}$. As a result, $k_\phi(x,x')=k_\phi(x',x)$ for each $x,x'\in\mathcal{X}$.
+
+Current literature also provides kernel representations for traces (namely, strings). We now provide an intuition describing the desired features of such representation \cite{LodhiSSCW02}: if we associate each dimension in $\mathbb{R}^d$ to a different subtrace ${\color{green}\alpha\beta}\in\Sigma^2$, the associated coordinate should represent how frequently and ``compatctly'' such subtrace is embedded in the original trace. Therefore, we need to introduce a \textbf{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ weighting the presence of each subtrace ``${\color{green}\alpha\beta}/L$'' as $\lambda^Lm$, where $m$ is the frequency of $\color{green}\alpha\beta$ appearing in the given trace at a distance $L$. Given a trace $\tau\in\Sigma^*$, we can represent it as a Probabilistic Petri Net \cite{Myers1989} $(\tau_1,\tau_{|\tau|},L_\tau,R_\tau)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. Under these assumptions, we can simplify the definition of the embedding from \cite{LodhiSSCW02, Raedt} as $\phi_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
+
+
+\begin{example}
+The subtrace \textit{\textbf{\uline{hi}}} is represented in \textit{\textbf{\uline{hi}}deous},   \textit{\uline{\textbf{h}}e\uline{{i}}d\textbf{i}}, and \textit{\uline{{\textbf{h}i}}nd\textbf{i}}, but with different frequencies and subtrace distances. We have $\phi_{\mathcal{T}}(\textit{hideous})_{{\color{green}hi}}=\lambda$,  $\phi_{\mathcal{T}}(\textit{heidi})_{{\color{green}hi}}=\lambda^2+\lambda^4$, and $\phi_{\mathcal{T}}(\textit{hindi})_{{\color{green}hi}}=\lambda+\lambda^4$.
+\end{example}
+
+For this trace kernel, we have that $\Braket{\phi_\mathcal{T}(\tau),\phi_\mathcal{T}(\tau')}=1$ if $\tau\equiv \tau'$ and that $\Braket{\phi_\mathcal{T}(\tau),\phi_\mathcal{T}(\tau')}=0$ when the two traces have no shared subtraces of size $2$: these are basic desired properties for determining the trace similarity based on the substring distribution.
+
+
+%\section{LTL over Finite Traces and the Declare Framework}
+%\label{sec:preliminaries}
+%As a formal basis for specifying crisp (temporal) business constraints, we adopt the customary choice of Linear Temporal Logic over finite traces (\LTLf \cite{DeVa13,DDGM14}). This logic is at the basis of the well-known \declare \cite{PeSV07} constraint-based process modeling language.
+%We provide here a gentle introduction to this logic and to the \declare framework.
+%
+%\subsection{Linear Temporal Logic over Finite Traces}
+%
+%$\LTLf$ has exactly the same syntax as standard $\LTL$, but, differently from $\LTL$, it interprets formulae over an unbounded, yet finite linear sequence of states. Given an alphabet $\Sigma$ of atomic propositions (in our setting, representing activities), an \LTLf formula $\varphi$ is built by extending propositional logic with temporal operators:
+%\[\varphi ::= a \mid \lnot \varphi \mid \varphi_1\lor \varphi_2
+% \mid \Next\varphi \mid \varphi_1\Until\varphi_2 \quad \text{ where $a \in \Sigma$.}\]
+%
+%
+%%The semantics of \LTLf is given in terms of \emph{finite traces}
+%%denoting finite, \emph{possibly empty}, sequences
+%%$\tau=\tau_0,\ldots,\tau_n$ of elements from the alphabet $\Sigma$. The evaluation of a formula is done in a given state (i.e., position) of the trace.
+%
+%
+%The semantics of \LTLf is given in terms of \emph{finite traces} denoting finite, \emph{possibly empty} sequences $\tau=\tup{\tau_0, \ldots, \tau_n}$ of elements of $2^\Sigma$, containing all possible propositional interpretations of the propositional symbols in $\Sigma$. In the context of this paper, consistently with the literature on business process execution traces, we make the simplifying assumption that in each point of the sequence, one and only one element from $\Sigma$ holds. Under this assumption, $\tau$ becomes a total sequence of activity occurrences from $\Sigma$, matching the standard notion of (process) execution trace. We indicate with $\tasks^*$ the set of all traces over $\tasks$. The evaluation of a formula is done in a given state (i.e., position) of the trace, and we use the notation $\tau,i\models \varphi$ to express that $\varphi$ holds in the position $i$ of $\tau$. We also use $\tau \models \varphi$ as a shortcut notation for $\tau,0\models\varphi$. This denotes that $\varphi$ holds over the entire trace $\tau$ starting from the very beginning and, consequently, logically captures the notion of \emph{conformance} of $\tau$ against $\varphi$. We also say that $\varphi$ is \emph{satisfiable} if it admits at least one conforming trace.
+%
+%%We start by giving an intuitive account of the resulting semantics. In the syntax above, operator $\Next$ denotes the \emph{next state} operator, and $\Next \varphi$ is true if $\varphi$ is true is true now if there exists a next state (i.e., the current state is not at the end of the trace), and in the next state $\varphi$ holds. Operator $\Until$ instead is the \emph{until} operator, and $\varphi_1\Until\varphi_2$ is true if $\varphi_1$ holds now and continues to hold until eventually, in a future state, $\varphi_2$ holds. From the given syntax we can derive the usual boolean operators $\land$ and $\rightarrow$, the two formulae $\true$ and $\false$, as well also additional temporal operators. We consider in particular the following three:
+%%\begin{compactitem}[$\bullet$]
+%%\item (eventually) $\Diamond \varphi = \true \Until \varphi$ is true if there is a future state where $\varphi$ holds;
+%%\item (globally) $\Box \varphi = \neg \Diamond \neg \varphi$ is true if now and in all future sates $\varphi$ holds;
+%%\item (weak until) $\varphi_1 \Wntil \varphi_2 = \varphi_1\Until\varphi_2 \lor \Box \varphi_1$ relaxes the until operator by admitting the possibility that $\varphi_2$ never becomes true, in this case by requiring that is true if $\varphi_1$ holds now and in all future states.
+%%\end{compactitem}
+%% To define the semantics formally, we denote the length of trace $\tau$ as $\length(\tau) =  n+1$.
+%
+%
+%In the syntax above, operator $\Next$ denotes the \emph{next state} operator, and $\Next \varphi$ is true if there exists a next state (i.e., the current state is not at the end of the trace), and in the next state $\varphi$ holds. Operator $\Until$ instead is the \emph{until} operator, and $\varphi_1\Until\varphi_2$ is true if $\varphi_1$ holds now and continues to hold until eventually, in a future state, $\varphi_2$ holds. From these operators, we can derive the usual boolean operators $\land$ and $\rightarrow$, the two formulae $\true$ and $\false$, as well as additional temporal operators. We consider, in particular, the following three:
+%\begin{compactitem}[$\bullet$]
+%\item (eventually) $\Diamond \varphi = \true \Until \varphi$ is true if there is a future state where $\varphi$ holds;
+%\item (globally) $\Box \varphi = \neg \Diamond \neg \varphi$ is true if now and in all future states $\varphi$ holds;
+%\item (weak until) $\varphi_1 \Wntil \varphi_2 = \varphi_1\Until\varphi_2 \lor \Box \varphi_1$ relaxes the until operator by admitting the possibility that $\varphi_2$ never becomes true, in this case by requiring that $\varphi_1$ holds now and in all future states.
+%\end{compactitem}
+%%We write $\tau \models \varphi$ as a shortcut notation for $\tau,0\models \varphi$, and say that formula $\varphi$ is \emph{satisfiable}, if there exists a trace $\tau$ such that $\tau \models \varphi$.
+%
+%\begin{example}
+%The $\LTLf$ formula $\Box(\activity{accept} \rightarrow \Diamond\activity{pay})$ models that, whenever an order is accepted, then it is eventually paid. The structure of the formula follows what is called \emph{response template} in \declare.
+%\end{example}
+%
+%%Every $\LTLf$ formula $\varphi$ can be translated into a corresponding standard finite-state automaton $\aut_\varphi$ that accepts all and only those finite traces that satisfy $\varphi$ \cite{DeVa13,DDGM14}. Although the complexity of reasoning with $\LTLf$ is the same as that of $\LTL$, finite-state automata are much easier to manipulate in comparison with B\"uchi automata, which are necessary when formulae are interpreted over infinite traces.
+%
+%\subsection{Declare}
+%\input{declare-templates}
+%\declare\ \cite{PeSV07} is a declarative process modeling language based on \LTLf. More specifically, a \declare model fixes a set of activities, and a set of constraints over such activities, formalized using \LTLf formulae. The overall model is then formalized as the conjunction of the \LTLf formulae of its constraints.
+%
+%Among all possible \LTLf formulae, \declare selects some pre-defined patterns. Each pattern is represented as a \declare template, i.e., a formula with placeholders to be substituted by concrete activities to obtain a constraint. Constraints and templates have a graphical representation; Table~\ref{tab:constraints} lists the \declare templates used in this paper. A \declare model is then graphically represented by showing its activities, and the application of templates to such activities (which indicates how the template placeholders have to be substituted to obtain the corresponding constraint).
+%
+%%Automata-based techniques for $\LTLf$ have been adopted to tackle fundamental tasks within the lifecycle of \declare processes, such as consistency checking \cite{PeSV07,MPVC11}, enactment and monitoring \cite{PeSV07,MMWV11,DDGM14}, and discovery support \cite{MaCV12}.
+%
+%
+%
+%
+%\begin{example}
+%\label{ex:inconsistency}
+%Consider the following \declare model, constituting a (failed) attempt of capturing a fragment of an order-to-shipment process:
+%
+%\begin{center}
+%  \resizebox{3.2cm}{!}{
+%        \begin{tikzpicture}
+%        \node[task] (accept) {\accept};
+%        \node[task,right=of accept] (reject) {\reject};
+%        \node[left=0mm of accept,taskfg] {1..*};
+%        \node[right=0mm of reject,taskfg] {1..*};
+%        \draw[notcoexistence] (accept) -- (reject);
+%    \end{tikzpicture}
+%  }
+%\end{center}
+%
+%The model indicates that there are two activities to accept or reject an order, that these two activities are mutually exclusive, and that both of them have to be executed.
+%%  \begin{wrapfigure}[13]{l}{42mm}
+%%  \end{wrapfigure}
+%These constraints are obviously contradictory and, in fact, the model is inconsistent, since its \LTLf formula
+%$
+%\Diamond \accept \land \Diamond \reject \land \neg (\Diamond \accept \land \Diamond \reject)
+%$
+%is unsatisfiable.
+%\end{example}
+%
+%
+%
+%\endinput
+%
+%\smallskip\noindent\textbf{\declare} is a constraint-based process modeling language based on \LTLf. Differently from imperative process modeling languages,
+%\declare models a process by fixing a set of activities, and defining a set of
+%\emph{temporal constraints} over them, accepting every execution trace that satisfies all constraints.
+%Constraints are specified via pre-defined \LTLf templates, which come with a corresponding
+%graphical representation (see Table~\ref{tab:constraints} for the \declare patterns we use in this paper).
+%For the sake of generality, in this paper we consider arbitrary \LTLf formulae as constraints. However, in the examples we consider formulae whose templates can be represented graphically in \declare.
+%
+%
+%
+%Automata-based techniques for $\LTLf$ have been adopted in \declare to tackle fundamental tasks within the lifecycle of Declare processes, such as consistency checking \cite{PeSV07,MPVC11}, enactment and monitoring \cite{PeSV07,MMWV11,DDGM14}, and discovery support \cite{MaCV12}.
