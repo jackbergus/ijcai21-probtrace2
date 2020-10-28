@@ -15,9 +15,9 @@ $$knn(k,q,\mathcal{X})=\begin{cases}
 \end{cases}$$
 \end{definition}
 
-We can express our probabilistic trace match as finding the trace that maximizes both the trace's probability and its similarity with the query trace $\tau^*$. Still, the trace alignments problems are usually expressed via trace alignments cost functions, and not via trace similarities \cite{LeoniM17}. Given a generic trace cost function $d(\tau,\tau')$, it is always possible to convert it into a normalized similarity score $s_d(x,y):=1/(d(x,y)+1)$, so that the maximum similarity of $1$ is reached when the distance is $0$ and the similarity decreases while the distance increases \cite{BergamiBM20}.
+We can express our probabilistic trace match as finding the trace that maximizes both the trace's probability and its similarity with the query trace $\tau^*$. Still, the trace alignments problems are usually expressed via trace alignments cost functions, and not via trace similarities \cite{LeoniM17}. Given a generic trace cost function $d(\tau,\tau')$, it is always possible to convert it into a normalized similarity score $s_d(\tau,\tau'):=1/(d(\tau,\tau')+1)$, so that the maximum similarity of $1$ is reached when the distance is $0$ and the similarity decreases while the distance increases \cite{BergamiBM20}.
 
-At this point, we can map each trace $\tau$ from $\braket{\tau,w_\tau}\in\mathcal{W}_p^n(P)$ that we need to align with $\tau^*$ as a point $\tau\overset{\mu_{\tau^*}}{\mapsto}(w_\tau,\; s_d(\tau,\tau^*))$ in the 2-dimensional space, so that the trace finding problem reduces to find a data point maximising the product $ps$ (Figure \ref{fig:spp}). At this stage, we can reduce the problem into a $k$-Nearest Neighbour search by providing a transformation $t$ such that the distance of $t(p,s)$ towards an arbitrary query point, e.g. the origin of the axes, corresponds to $\sfrac{1}{ps}$, so the transformed data points maximising such product are nearer to the origin of the axes (Figure \ref{fig:knnspace}). A possible transformation is the following:
+At this point, we can map each trace $\tau$ from $\braket{\tau,w_\tau}\in\mathcal{W}_p^n(P)$ that we need to align with $\tau^*$ as a point $\tau\overset{\mu_{\tau^*}}{\mapsto}(w_\tau,\; s_d(\tau,\tau^*))$ in the 2-dimensional similarity/probability space, so that the trace finding problem reduces to find a data point maximising the product $ps$ (Figure \ref{fig:spp}). At this stage, we can reduce the problem into a $k$-Nearest Neighbour search by providing a transformation $t$ such that the distance of $t(p,s)$ towards an arbitrary query point, e.g. the origin of the axes $\vec{0}$, corresponds to $\sfrac{1}{ps}$, so the transformed data points maximising $ps=k$ are all at the same distance $\sfrac{1}{k}$ from $\vec{0}$ (Figure \ref{fig:knnspace}). A possible transformation is the following:
 \[t(p,s):=\left(\frac{1}{s\sqrt{p^2+s^2}},\; \frac{1}{p\sqrt{p^2+s^2}}\right)\]
 
 \begin{example}
@@ -49,7 +49,7 @@ ps\geq k&\Leftrightarrow \frac{1}{ps}\leq\frac{1}{k} \\
 	   &\Leftrightarrow \sqrt{\frac{p^2+s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k} \\
 	   &\Leftrightarrow \sqrt{\frac{p^2}{p^2s^2(p^2+s^2)}+\frac{s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k} \\
 	   &\Leftrightarrow \sqrt{\frac{1}{s^2(p^2+s^2)}+\frac{1}{p^2(p^2+s^2)}}\leq\frac{1}{k} \\
-	   &\Leftrightarrow \left\|{\left({\frac{1}{s\sqrt{p^2+s^2}},\frac{1}{p\sqrt{p^2+s^2)}}\right)}-\vec{0}}\right\|_2\leq\frac{1}{k} \\
+	   &\Leftrightarrow \left\|{\biggr({\frac{1}{s\sqrt{p^2+s^2}},\frac{1}{p\sqrt{p^2+s^2}}\biggr)}-\vec{0}}\right\|_2\leq\frac{1}{k} \\
 	   &\Leftrightarrow \left\|t(p,s)-\vec{0}\right\|_2\leq\frac{1}{k} \\
 \end{aligned}\]
 \end{proof}
@@ -60,24 +60,24 @@ Given a Petri Net $P$ and a trace $t^*$, the probabilistic trace alignment probl
 Trivial by definition of $\mu_{\tau^*}$ and for the previous lemma.
 \end{proof}
 
-At this stage, we can possibly solve the $k$-probabilistic trace alignment problem by generating a new instance of the $k$-Nearest Neighbour problem for each possible trace $\tau^*$ that we want to align towards the traces coming from a Probabilistic Petri Net. On the other hand, this solution might result quite costly, as solving the problem would require either to use a brute force search algorithm or to load and index our set of points each time.\yellownote{TODO: add references and explaination to the problem (we need a Related Work section\dots? I am accustumed to write such sections.)} In the next section we will discuss an approximated version of the problem providing a trade off between accuracy and efficiency.
+At this stage, we can possibly solve the $k$-probabilistic trace alignment problem by generating a new instance of the $k$-Nearest Neighbour problem for each possible trace $\tau^*$ that we want to align towards the traces coming from a PPN. On the other hand, this solution might result quite costly, as solving the problem would require either to use a brute force search algorithm or to load and index our set of points each time.\yellownote{TODO: add references and explaination to the problem (we need a Related Work section\dots? I am accustumed to write such sections.)} In the next section we will discuss an approximated version of the problem providing a trade off between accuracy and efficiency.
 
 
 \subsection{Approximate $k$-probabilistic Traces Alignment Problem}\label{subsec:akptap}
 \texttt{\color{red}[TODO: provide some context and introduction. I'm facing the same problem as in the previous subsection, as the content in here depends on some content that I do not know if I have to write or not\dots]}
 
-Given the characterization of a Probabilistic Petri Net as in \S\ref{subsec:ppn} and the embedding strategy proposed in Definition \ref{def:ppne}, we can generate an embedding for each possible weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_p^n(P)$ for a given Probabilistic Petri Net $P$ as described in the following definition:
-\begin{definition}[Trace Embedding for Probabilistic Petri Nets]
-Given a minimum probability threshold $p$, a maximum path length $n$, and a Probabilistic Petri Net $P=(s,t,L,R,w)$ that underwent the $\varepsilon$-closure, we generate the set of the trace embeddings for $P$ as follows:
+Given the characterization of a PPN as in \S\ref{subsec:ppn} and the embedding strategy proposed in Definition \ref{def:ppne}, we can generate an embedding for each possible weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_p^n(P)$ for a given PPN $P$ as described in the following definition:
+\begin{definition}[Trace Embedding for PPNs]
+Given a minimum probability threshold $p$, a maximum path length $n$, and a PPN $P=(s,t,L,R,w)$, we generate the set of the trace embeddings for $P$ as follows:
 \begin{enumerate}
-	\item for each weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_p^n(P)$ generated from a path $s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a Probabilistic Petri Net $P_\tau=(s',t',L_\tau,R_\tau,w_\tau)$, where \begin{alphalist}
+	\item for each weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_p^n(P)$ generated from a path $\pi_\tau=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a PPN $P_\tau=(s',t',L_\tau,R_\tau,w_\tau)$, where \begin{alphalist}
 		\item $s'=s$ if $\textit{label}(s)\neq \varepsilon$ and $t'=n_2$ otherwise,
 		\item $t'=t$ if $\textit{label}(t)\neq \varepsilon$ and $t'=n_m$ otherwise,
-		\item $L_\tau$ (and $R_\tau$) are the projection matrix over the non-$\varepsilon$ labelled notes in $\tau$ and the labels represented in $\tau$,
-		\item $w'$ is initialised by $w$ and then multiplied by $[R]_{s,n_2}$ (and $[R]_{m_m,t}$) if $\textit{label}(s)=\varepsilon$ (and  $\textit{label}(t)=\varepsilon$);
+		\item $L_\tau$ (and $R_\tau$) is the submatrix of $L$ (and $R$) over the non-$\varepsilon$ labelled notes in $\pi_\tau$ and the labels from $\tau$,
+		\item $w'$ is initialised by $w$ and then multiplied by $[R]_{s,n_2}$ (and also $[R]_{n_m,t}$) if $\textit{label}(s)=\varepsilon$ (and  $\textit{label}(t)=\varepsilon$);
 	\end{alphalist}
 	\item each $P_\tau$ is then represented as $\phi_{\mathcal{P}}(P_\tau)$ and added to the set $\mathbf{T}_p^n(P)$.
 \end{enumerate}
 \end{definition}
 
-At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}_p^n(P), P_\tau\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\tau, T)$ returns the best approximated trace alignment $\tau$ for a query trace represented as $T$. Similarly, we can provide the Probabilistic Petri Net $P\in\mathbf{P}$ providing the best approximated alignment for $T$ as $\underset{P}{\max\arg}\underset{ P_\tau\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\tau, T)$. 
+At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}_p^n(P), P_\tau\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\tau, T)$ returns the best approximated trace alignment $\tau$ for a query trace represented as $T$. Similarly, we can provide the PPN $P\in\mathbf{P}$ providing the best approximated alignment for $T$ as $\underset{P}{\max\arg}\underset{ P_\tau\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\tau, T)$. 
