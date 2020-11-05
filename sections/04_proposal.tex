@@ -117,24 +117,7 @@ Table \ref{tab:transf} represents the transformed points $t(\mu_{\tau^*}(\tau))$
 \end{example}
 
 
-\begin{table}[!t]
-	\caption{Generating the sub-PPNs $P_\tau\in \mathbf{T}_0^4(P)$ from the PPN $P$ via the set of weighted traces $\mathcal{W}_0^4(P)$. $l$ and $w$ respectively represent the desired parameter for $\phi_{\mathcal{P}}(P_\tau)$ and the weight associated to $P_\tau$.}\label{tab:proj}
-	\centering
-	\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
-		\toprule
-		$\tau$&$P_\tau$&$n$&$w$\\
-		\midrule
-		a & \includegraphics{images/trace_a} & $1$ & $\color{red}p_1p_6$\\   
-		cb & \includegraphics{images/trace_cb} & $2$ & $\color{red}p_2$\\
-		aa & \includegraphics{images/trace_a_loop} & $2$ & $\color{red}p_1p_6$\\ 
-		ca & \includegraphics{images/trace_ca} & $2$ & $\color{red}p_2p_6$\\ 
-		aaa & \includegraphics{images/trace_a_loop} & $3$ & $\color{red}p_1p_6$\\ 
-		caa & \includegraphics{images/trace_ca_loop} & $3$ & $\color{red}p_2p_6$\\  
-		\begin{tabular}{l}aaaa\end{tabular} & \includegraphics{images/trace_a_loop} & $4$ & $\color{red}p_1p_6$\\ 
-		caaa & \includegraphics{images/trace_ca_loop} & $4$ & $\color{red}p_2p_6$\\  
-		\bottomrule
-	\end{tabular}
-\end{table}
+
 
 
 At this stage, we can possibly solve the $k$-probabilistic trace alignment problem by generating a new instance of the $k$-Nearest Neighbour problem for each possible trace $\tau^*$ that we want to align towards the traces coming from a PPN. On the other hand, this solution might result quite costly, as solving the problem would require either to use a brute force search algorithm or to load and index our set of points each time.\yellownote{TODO: add references and explaination to the problem (we need a Related Work section\dots? I am accustumed to write such sections.)} In the next section we will discuss an approximated version of the problem providing a trade off between accuracy and efficiency.
@@ -157,13 +140,26 @@ Given a minimum probability threshold $p$, a maximum path length $n$, and a PPN 
 \end{enumerate}
 \end{definition}
 
-\begin{example}
-	Table \ref{tab:proj} represents the PPNs $P_\tau\in\mathbf{T}_p^n(P)$ with weight $w$ generated for each weighted path $\braket{\tau,w_\tau}\in \mathcal{W}_0^4(P)$ of length $l=|\tau|$ from the PPN $P$ in Figure \ref{fig:closed}. The associated weight $w$ derives from the source's outgoing edges (and target's ingoing edges) when such node is  labelled as $\varepsilon$: given that the selection of a trace $\tau$ implies performing a set of specific probabilistic choices, we can remove all the edges starting (and arriving) at nodes that are $\varepsilon$-labelled and move their score as the weight of the PPN. 
-\end{example}
-
 \begin{table}[!t]
+	\caption{Generating the sub-PPNs $P_\tau\in \mathbf{T}_0^4(P)$ from the PPN $P$ via the set of weighted traces $\mathcal{W}_0^4(P)$. $l$ and $w$ respectively represent the desired parameter for $\phi_{\mathcal{P}}(P_\tau)$ and the weight associated to $P_\tau$.}\label{tab:proj}
 	\centering
-	\caption{Embedding representation for all the traces of maximum length $4$ generated from $P$.}\label{tab:emb2}
+	\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
+		\toprule
+		$\tau$&$P_\tau$&$l$&$w$\\
+		\midrule
+		a & \includegraphics{images/trace_a} & $1$ & $\color{red}p_1p_6$\\   
+		cb & \includegraphics{images/trace_cb} & $2$ & $\color{red}p_2$\\
+		aa & \includegraphics{images/trace_a_loop} & $2$ & $\color{red}p_1p_6$\\ 
+		ca & \includegraphics{images/trace_ca} & $2$ & $\color{red}p_2p_6$\\ 
+		aaa & \includegraphics{images/trace_a_loop} & $3$ & $\color{red}p_1p_6$\\ 
+		caa & \includegraphics{images/trace_ca_loop} & $3$ & $\color{red}p_2p_6$\\  
+		\begin{tabular}{l}aaaa\end{tabular} & \includegraphics{images/trace_a_loop} & $4$ & $\color{red}p_1p_6$\\ 
+		caaa & \includegraphics{images/trace_ca_loop} & $4$ & $\color{red}p_2p_6$\\  
+		\bottomrule
+	\end{tabular}
+\end{table} \begin{table}[!t]
+	\centering
+	\caption{Embedding for all the traces of maximum length $4$ generated from $P$.}\label{tab:emb2}
 	\begin{tabular}{l|l|l|l|l|l|l|}
 		\toprule
 		& a    & b                                                   & c    & aa   & ca   & cb   \\
@@ -181,8 +177,15 @@ Given a minimum probability threshold $p$, a maximum path length $n$, and a PPN 
 		\bottomrule
 	\end{tabular}
 \end{table}
+\begin{example}\label{ex:explainembed}
+	Table \ref{tab:proj} represents the PPNs $P_\tau\in\mathbf{T}_p^n(P)$ with weight $w$ generated for each weighted path $\braket{\tau,w_\tau}\in \mathcal{W}_0^4(P)$ of length $l=|\tau|$ from the PPN $P$ in Figure \ref{fig:closed}. The associated weight $w$ derives from the source's outgoing edges (and target's ingoing edges) when such node is  labelled as $\varepsilon$: given that the selection of a trace $\tau$ implies performing a set of specific probabilistic choices, we can remove all the edges starting (and arriving) at nodes that are $\varepsilon$-labelled and move their score as the weight of the PPN. 
+	
+	Table \ref{tab:emb2} represents the embeddings $\phi_{\mathcal{P}}(P_\tau)$ generated from the sub-PPNs $P_\tau\in \mathbf{T}_0^4(P)$ of $P$, where the $l$ parameters required to compute $\epsilon$ via Equations \ref{eq:epsilon} and \ref{eq:nu} are the same as above. As we can see, this representation is completely independent from the representation associated to a trace to be aligned, and therefore it doesn't have to be recomputed at each alignment with a different $\tau^*$.
+\end{example}
 
-\begin{table}
+
+
+\begin{table}[!t]
 	\caption{Comparison between the ranking induced by the kernel function and the expected ranking: the largest similar ranking subsequence is marked in blue.}\label{tab:rank3}
 	\centering
 	\begin{tabular}{l|c|ll}
@@ -206,5 +209,46 @@ Given a minimum probability threshold $p$, a maximum path length $n$, and a PPN 
 At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}_p^n(P), P_\tau\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\tau, T)$ returns the best approximated trace alignment $\tau$ for a query trace represented as $T$. Similarly, we can provide the PPN $P\in\mathbf{P}$ providing the best approximated alignment for $T$ as $\underset{P}{\max\arg}\underset{ P_\tau\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\tau, T)$. 
 
 \begin{example}
-	Table \ref{tab:emb2} represents the embeddings $\phi_{\mathcal{P}}(P_\tau)$ generated from the sub-PPNs $P_\tau\in \mathbf{T}_0^4(P)$ of $P$ (see Table \ref{tab:proj}), where the $n$ required to compute $\epsilon$ was previously given in Table \ref{tab:proj}. Given that $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)=\braket{\phi_{\mathcal{P}}(P_\tau),\;\phi_{\mathcal{P}}(T)}$ for each weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_0^4(P)$, then the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}. This similarity score approximates the expected ranking showed in Table \ref{tab:expected}, and tends to rank in similar ways the paths generated from the same subgraph of the PPN.
+	Let us resume Example \ref{ex:explainembed}. 
+	Given that $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)=\braket{\phi_{\mathcal{P}}(P_\tau),\;\phi_{\mathcal{P}}(T)}$ for each weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_0^4(P)$, then the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}. This similarity score approximates the expected ranking showed in Table \ref{tab:expected}, and tends to rank in similar ways the paths generated from the same subgraph of the PPN.
 \end{example}
+
+
+\begin{example}\label{ex:moreskew}
+	Let us suppose to change the probability distribution associated to the $P$'s edges, so that it becomes more skewed and that some traces are relatively more probable than others. Let us set $p_1=p_2=0.5$, $p_3=0.9$, $p_6=0.1$, $p_4=0.3$, and $p_5=0.7$, so that the initial choice is equiprobable but performing a loop is more probable than terminating the path. The other tuning parameters are kept the same as in Example \ref{ex:withpaths}. In this case, we generate the following set of weighted traces:
+$$\begin{aligned}
+	\mathcal{W}_0^4(P)=\{&\braket{cb,0.25},\braket{aa,0.03214},\braket{a,0.03125},\braket{aaa,0.02893},\\
+	&\braket{aaaa,0.02603},\braket{caa,0.01125},\braket{ca,0.01071},\braket{caaa,0.01012}\}\\
+\end{aligned}$$
+	Let us also assume that we want to align these traces in a probabilistic way with the query $\tau^*=\textup{caba}$: the distance ($d$) and similarity ($s_d$) scores will be still the same, while the associated probabilities will vary. The expected ranking by multiplying weight with similarity is represented in Table \ref{tab:witherror}. 
+	
+	As a consequence of the different probability distribution associated to the edges, a different set of embedding will be generated for each trace of interest while the PPN $T$ associated to $\tau^*$ will be kept the same. Table \ref{tab:witherror} represents the ranking induced by the kernel $k_{\phi_{\mathcal{P}}}$ over this different set of vectors by ranking the traces in descendant order of $k_{\phi_{\mathcal{P}}}$. As we might notice, the more skewed edge probability  distribution introduced more errors in the ranking result: while the largest ranking subsequence (marked in blue) always starts from the best expected trace \textit{cb}, this element now appears in third position, and the position of traces \textit{caa} and \textit{aaaa} is swapped.  
+ 
+\end{example}
+\begin{table}[!t]
+	\centering
+	\caption{Expected ranking of the paths from Example \ref{ex:moreskew} with the trace $\tau^*=\textup{caba}$. The cost function is the one from \cite{LeoniM17} and its normalized similarity score has $c=5$. Traces are ranked by decreasing kernel $k_{\phi_{\mathcal{P}}}$ value: slight changes in the expected expected order are circled, the others are marked in red.}\label{tab:witherror}
+	\begin{tabular}{lc|ll|cc|l}
+		\toprule
+		
+		\multirow{2}{*}{$\tau$} & 
+		\multirow{2}{*}{$d(\tau,\tau^*)$} & 
+		\multicolumn{2}{c|}{$\mu_{\tau^*}$} &
+		\multirow{2}{*}{$\approx s_d(\tau,\tau^*)\cdot w_\tau$} &
+		\multirow{2}{*}{$k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$}&
+		\multirow{2}{*}{\textit{expected ranking}}\\
+		
+		\cline{3-4} &&  $\langle w_\tau$ &  $,\,s_d(\tau,\tau^*)\rangle $ && as\\
+		
+		\midrule
+		{a}  & $3$ & $0.05$ & $\;\; 0.6250$  & $0.03125$ & $8.16497\cdot 10^{-16}$ & \textbf{\color{red}3}\\
+		{ca}  & $2$ & $0.015$ & $\;\; 0.7142$ & $0.01071$ & $1.30623\cdot 10^{-18}$ & \textbf{\color{red}7}\\
+		{cb}  & $2$ & $0.35$ & $\;\; 0.7142$ & $0.25000$ & $1.01399\cdot10^{-18}$ & \textbf{\color{blue}1}\\
+		{aa}  & $2$ & $0.045$ & $\;\; 0.7142$ & $0.03214$ & $1.01894\cdot10^{-30}$ & \textbf{\color{blue}2}\\
+		{aaa}  & $2$ & $0.0405$ & $\;\; 0.7142$ & $0.02893$ & $9.98696\cdot10^{-31}$ & \textbf{\color{blue}4}\\
+		{caa}  & $1$ & $0.0135$ & $\;\; 0.8333$ & $0.01125$ & $9.96052\cdot10^{-31}$ & \textbf{\color{blue}\ding{177}}\\
+		{aaaa}  & $3$ & $0.03645$ & $\;\; 0.7142$ & $0.02603$ & $9.80476\cdot10^{-31}$ & \textbf{\color{blue}\ding{176}}\\
+		{caaa}  & $1$  & $0.01215$ & $\;\; 0.8333$ & $0.01012$ & $9.52398\cdot 10^{-31}$ & \textbf{\color{blue}8}\\
+		\bottomrule
+	\end{tabular}
+\end{table}
