@@ -6,6 +6,19 @@ Consequently, most recent literature focused on extracting relevant features of 
 
 Given that we previously observed that a PPNs $P$ can be fully characterised (read, similarity) by their associated set of traces $\mathcal{W}_p^n(P)$ (\S\ref{subsec:ppn}), and that the trace embedding can be described as an embedding over a PPN (\S\ref{subsec:katk}), we can characterize a PPN embedding as a transition matrix embedding. In addition to that, when two Petri Nets share similar node labellings but no ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ paths for any ${\color{green}\alpha}$ and ${\color{green}\beta}$, we should combine the former embedding with an embedding characterizing the frequence on how the nodes' labels appear in the generated traces. We can now provide the following definition:
 
+
+\begin{table}[!t]
+	\centering
+	\caption{Embedding representation for the PPN $P$ in Figure \ref{fig:closed} and the trace $\tau^*=\textup{caba}$ after representing it as in Figure \ref{fig:taustar}. Please note that we restrict $\Sigma_\varepsilon^2$ to the one from $P$.}\label{tab:emb1}
+		\begin{tabular}{l|l|l|l|l|l|l|}
+	\toprule
+	& a    & b                                                   & c    & aa   & ca   & cb   \\
+	\midrule
+	$\phi_{\mathcal{P}}(P)$ & $9.94\cdot10^{-25}$ & $1.18\cdot 10^{-26}$ & $1.04\cdot10^{-25}$ & $4.45\cdot 10^{-25}$ & $6.22\cdot10^{-25}$ & $8.29\cdot10^{-26}$\\
+	$\phi_{\mathcal{P}}(T)$ & $8.16\cdot10^{-17}$ & $4.08\cdot 10^{-17}$ & $4.08\cdot10^{-17}$ & $4.37\cdot 10^{-17}$ & $1.03\cdot10^{-16}$ & $4.37\cdot10^{-17}$\\
+	\bottomrule
+\end{tabular}
+\end{table}
 \begin{definition}[PPN Embedding]\label{def:ppne}
 Given a finite set of non-empty labels $\Sigma_\varepsilon =\Sigma\backslash\{\varepsilon\}$, $\Sigma_\varepsilon^2$ denotes all the possible pair of labels associated to paths ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ and $\Sigma_\varepsilon$ denotes the set of all the possible non-$\varepsilon$ node labels. Therefore, it is always possible to enumerate $\Sigma_\varepsilon^2\cup\Sigma_\varepsilon$ via an indexing function $\iota\colon \Sigma_\varepsilon^2\cup\Sigma_\varepsilon\to  \mathbb{N}$.
 	
@@ -18,27 +31,26 @@ where $\epsilon$ and $\nu$ respectively represent the non-negatively defined emb
 \end{definition}
 
 Albeit the definition of $\epsilon$ and $\nu$ might vary, we choose a specific definition for them. 
-Walking on the footsteps of \S\ref{subsec:katk}, we can define the transition matrix embedding as  $\epsilon(R)_{\color{green}\alpha\beta}=\sum_{i=1}^n\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$ and $\nu(R,L)_{\color{green}\alpha}=\frac{1}{N}\sum_{\braket{\tau,w}\in\mathcal{W}_p^n(P)}\frac{|\Set{\tau_i\in\tau|\tau_i\neq\varepsilon\wedge \tau_i={\color{green}\alpha}}|}{|\tau|}$, where $N$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\varepsilon}\nu(R,L)_{\color{green}\alpha}=1$. When the transition matrix is ergodic \cite{StocasticCC},  the transition matrix embedding converges to $\epsilon(R)_{\color{green}\alpha\beta}=(\mathbf{I}-\lambda[\Lambda])^{-1}_{\color{green}\alpha\beta}$ \cite{GartnerFW03} for $n\to+\infty$.
+Walking on the footsteps of \S\ref{subsec:katk}, we can define the transition matrix embedding as follows:
+\begin{equation}\label{eq:epsilon}
+\epsilon(P)_{\color{green}\alpha\beta}=\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}
+\end{equation}
+\begin{equation}\label{eq:nu}
+\nu(P)_{\color{green}\alpha}=\frac{1}{N}\sum_{\braket{\tau,w}\in\mathcal{W}_p^l(P)}\frac{|\Set{\tau_i\in\tau|\tau_i\neq\varepsilon\wedge \tau_i={\color{green}\alpha}}|}{|\tau|}
+\end{equation}
+where $l$ is the maximum path length that we want to consider as valid, and $N$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\varepsilon}\nu(R,L)_{\color{green}\alpha}=1$. When the transition matrix is ergodic \cite{StocasticCC},  the transition matrix embedding converges to $\epsilon(R)_{\color{green}\alpha\beta}=(\mathbf{I}-\lambda[\Lambda])^{-1}_{\color{green}\alpha\beta}$ \cite{GartnerFW03} for $n\to+\infty$.
 
-\begin{example}
-Given the PPN in Figure \ref{fig:closed}, we assign the following probability values to the edges: $p_1=p_2=0.5$, $p_3=0.9$, $p_6=1$, $p_4=0.3$, and $p_5=0.7$. Given $\Sigma_\varepsilon=\Set{a,b,c}$ and $V=\set{1,2,3,5,6}$, we have that all the embedding space should be at least of size $6$, as $\{a,b,c,aa,ca,cb\}\subseteq \Sigma_\varepsilon^2\cup\Sigma_\varepsilon$ is the whole set of features describing both the transition matrix and the nodes. By choosing $\tau=0.0001$, $\lambda=0.7$, $n=4$, and $p=0$, we generate the following set:
+\begin{example}\label{ex:withpaths}
+Given the PPN $P$ in Figure \ref{fig:closed}, we assign the following probability values to the edges: $p_1=0.8$, $p_2=0.2$, $p_3=p_6=0.5$, $p_4=0.7$, and $p_5=0.3$. Given $\Sigma_\varepsilon=\Set{a,b,c}$ and $V=\set{1,2,3,5,6}$, we have that all the embedding space should be at least of size $6$, as $\{a,b,c,aa,ca,cb\}\subseteq \Sigma_\varepsilon^2\cup\Sigma_\varepsilon$ is the whole set of features describing both the transition matrix and the nodes. By choosing $\tau=0.0001$, $\lambda=0.7$, $n=4$, and $p=0$, we generate the following set:
 $$\begin{aligned}
-\mathcal{W}_0^4(P)=\{&\braket{cb,0.35},\braket{a,0.05},\braket{aa,0.045},\braket{aaa,0.0405},\\
-&\braket{aaaa,0.03645},\braket{ca,0.015},\braket{caa,0.0135},\braket{caaa,0.01215}\}\\
+\mathcal{W}_0^4(P)=\{&\braket{a,0.4},\braket{aa,0.2},\braket{aaa,0.1},\braket{ca,0.07},\\
+&\braket{cb,0.06},\braket{aaaa,0.05},\braket{caa,0.035},\braket{caaa,0.0175}\}\\
 \end{aligned}$$
-The embedding associated to $P$ is the following:
-\begin{center}
-		\begin{tabular}{l|l|l|l|l|l|l|}
-		\toprule
-		& a    & b                                                   & c    & aa   & ca   & cb   \\
-		\midrule
-		$\phi_{\mathcal{P}}(P)$ & $9.94\cdot10^{-25}$ & $1.18\cdot 10^{-25}$ & $1.04\cdot10^{-25}$ & $6.87\cdot 10^{-25}$ & $2.29\cdot10^{-25}$ & $1.40\cdot10^{-25}$\\
-		\bottomrule
-	\end{tabular}
-\end{center}
-This table shows that doing\yellownote{Not sure whether this example is sufficiently clear or something simpler/more clear can be done. Then, I will add further examples.} ${\color{green}a}\rightsquigarrow{\color{green}a}$ is more probable than doing  ${\color{green}c}\rightsquigarrow{\color{green}a}$. Also, even though the probability of performing  ${\color{green}c}\overset{1}{\rightsquigarrow}{\color{green}b}$ is relatively high,  the trace $\color{green}cb$ is relatively unfrequent within the set of traces for $P$, and therefore it is less probable than any other subtrace. 
 
-If we now consider the single nodes, $\color{green}c$ shares a subset of traces with $\color{green}a$ where $\color{green}a$ is more frequent than $\color{green}c$, and therefore the score of the former is higher than the one of the latter. Also, the score associated to the single node $\color{green}b$ is higher than the one for the single node $\color{green}c$ because $\color{green}b$ is overall more frequent than $\color{green}c$:  $\color{green}b$ appears once in just one trace of length $2$, while $\color{green}c$ appears once per trace of lengths from 2 to 4 so, overall, $\color{green}b$ is considered more frequent than $\color{green}c$.
+
+The embedding associated to $P$ is described in Table \ref{tab:emb1} as $\phi_{\mathcal{P}}(P)$: it shows that doing\yellownote{Not sure whether this example is sufficiently clear or something simpler/more clear can be done. Then, I will add further examples.} ${\color{green}a}\rightsquigarrow{\color{green}a}$ is more probable than doing  ${\color{green}c}\rightsquigarrow{\color{green}a}$. Also, given that both the probability of performing ${\color{green}c}\overset{1}{\rightsquigarrow}{\color{green}b}$ is relatively low and trace $\color{green}cb$ is relatively infrequent, ${\color{green}c}{\rightsquigarrow}{\color{green}b}$ is less probable than any other subtrace. If we now consider the single nodes, $\color{green}c$ shares a subset of traces with $\color{green}a$ where $\color{green}a$ is more frequent than $\color{green}c$, and therefore the score of the former is higher than the one of the latter. Also, the score associated to the single node $\color{green}b$ is lower than the one for the single node $\color{green}c$ because $\color{green}b$ is less frequent and appears in less probable traces than $\color{green}c$: in particular, $\color{green}c$ appears in \textit{ca}, which is more probable than \textit{cb}.
+
+Similar considerations can be also drawn from the embedding $\phi_{\mathcal{P}}(T)$ associated to the trace $\tau^*=\textup{caba}$ (also in Table \ref{tab:emb1}): we might see that ${\color{green}a}$ is clearly the most frequent label ${\color{green}b}$ and ${\color{green}c}$ are equiprobable, as well as the path ${\color{green}c}\rightsquigarrow {\color{green}a}$ appears twice in the trace's set and then, it is more frequent than the other subtraces.
 \end{example}
 
 After providing this definition, we can show that this embedding shows some desired features that are independent from the definition of $\epsilon$ and $\nu$, and that $\epsilon$ and $\nu$ only depend on the characterization of both the labelling $L$ and the transition matrix $R$. We provide a rewriting proposition that is going to be used in the incoming subsection to allow proving the aforementioned characterizing properties.
@@ -63,6 +75,7 @@ k_{\phi_{\mathcal{P}}}(P,P')&=\Braket{\phi_{\mathcal{P}}(P),\phi_{\mathcal{P}}(P
 \subsection{Properties}
 As a first property, we want to show that when the two PPNs are (trace) equivalent, then there exists an embedding configuration for which the kernel computation reduces to the two PPNs' weight product, i.e. $ww'$. The kernel will then represent the probability that both Petri Nets are valid contemporaneously and, when both weights are $1$, the kernel returns $1$. We will call this condition as ``weak equality'' because we cannot possibly prove that $k_{\phi_{\mathcal{P}}}(P,P')=ww'\Leftrightarrow \mathcal{W}_p^n(P)=\mathcal{W}_p^n(P')$, as there could be similar embeddings coming from Petri Nets sharing a different weighted traces set ($\mathcal{W}_p^n(P)\neq\mathcal{W}_p^n(P')$).
 
+
 \begin{lemma}[Weak Equality]
 Given two PPNs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$ providing the same set of weighted traces, then $k_{\phi_{\mathcal{P}}}(P,P')=ww'$ for $\tau=1$.
 \end{lemma}
@@ -81,11 +94,11 @@ If we exclude the trivial conditions $\tau=0$, $w=0$ or $w'=0$, the only conditi
 
 As a corollary of the two lemmas, we have that the proposed embedding performs weakly-ideally, as the equality condition holds only on a relaxed form.
 
-Last, under the assumption that a PPN is approximately characterized by $\epsilon$ and $\nu$, we might expect that the PPN similarity is characterized by the sum of the distance of both embeddings. Therefore, we show that an increase of both distance embeddings approximately corresponds to a decrease in the kernel output and viceversa.
+Last, under the assumption that a PPN is approximately characterized by $\epsilon$ and $\nu$, we might expect that the PPN similarity is characterized by the sum of the distance of both embeddings. Therefore, we show that an increase of both distance embeddings approximately corresponds to a decrease in the kernel output and viceversa.\yellownote{TODO (if required), establish the further approximation from such distributions and the actual expected ranking.}
 
 \begin{lemma}\label{lem:approxRank}
-Given two PPNs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$ having respectively the embeddings $(\epsilon,\nu)$ and $(\epsilon',\nu')$, we have that the kernel $k_{\phi_{\mathcal{T}}}$ induces an inverse ranking of $\norm{\epsilon-\epsilon'}{2}+\norm{\nu-\nu'}{2}$:
-$$k_{\phi_{\mathcal{T}}}(P,P')\appropto 2-(\norm{\epsilon-\epsilon'}{2}+\norm{\nu-\nu'}{2})$$
+Given two PPNs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$ having respectively the embeddings $(\epsilon,\nu)$ and $(\epsilon',\nu')$, we have that the kernel $k_{\phi_{\mathcal{T}}}$ induces an inverse ranking of $\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}+\norm{\hat{\nu}-\hat{\nu}'}{2}$:
+$$k_{\phi_{\mathcal{T}}}(P,P')\appropto 2-(\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}+\norm{\hat{\nu}-\hat{\nu}'}{2})$$
 \end{lemma}
 \begin{proof}
 Let us use $T=\tau^{|R>0|+|R'>0|}$, $\omega=ww'$, $V=\norm{\hat{\nu}-\hat{\nu}'}{2}$, and $E=\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}$ as shorthands. The goal can be rewritten as $k_{\phi_{\mathcal{T}}}(P,P')\appropto 2-(E+V)$. Given that the embeddings $(\epsilon,\nu)$ and $(\epsilon',\nu')$ are normalized kernel function $k_{\phi_{\mathcal{P}}}$ and that they are always positive definite, then we have that $0\leq E +V\leq 2$, so $0\leq 2-(E+V)\leq 2$. Using Proposition \ref{lem:rewritinglemma}, we can write $k_{\phi_{\mathcal{P}}}(P,P')$ as follows:

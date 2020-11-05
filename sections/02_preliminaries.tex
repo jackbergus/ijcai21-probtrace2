@@ -1,19 +1,20 @@
 \section{Preliminaries}
 \subsection{Probabilistic Petri Nets (PPNs)}\label{subsec:ppn}
-Given a finite set of labels $\Sigma$ and a finite set of nodes $V\subset \mathbb{N}$, a \textsc{Probabilistic Petri Net} $(s,t,L,R,w)$ can be uniquely be described by a source node $s\in V$, a target node $t\in V$, its labels, and a transition matrix coming from its associated random process \cite{GartnerFW03}. The label matrix is defined by $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow {\color{green}\alpha}=\textit{label}(\texttt{\color{blue}i})$ and $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and the transition matrix is defined by the probability $[R]_{\texttt{\color{blue}ij}}$ that the process will, when in node $\texttt{\color{blue}i}$, make a transition into node $\texttt{\color{blue}j}$ \cite{Prob}. $[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$). 
+Given a finite set of labels $\Sigma$ and a finite set of nodes $V\subset \mathbb{N}$, a \textsc{Probabilistic Petri Net} $(s,t,L,R,w)$ can be uniquely be described by a initial node $s\in V$, an accepting node $t\in V$, its labels, and a transition matrix coming from its associated random process \cite{GartnerFW03}. The label matrix is defined by $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow {\color{green}\alpha}=\textit{label}(\texttt{\color{blue}i})$ and $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and the transition matrix is defined by the probability $[R]_{\texttt{\color{blue}ij}}$ that the process will, when in node $\texttt{\color{blue}i}$, make a transition into node $\texttt{\color{blue}j}$ \cite{Prob}. $[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$). 
 We can also associate a weight $w\in[0,1]\subseteq\mathbb{R}$ to a PPN, so to express the probability associated to the PPN itself as valid.
 
 \begin{figure}[!t]
 	\centering
 	\subfloat[A Probabilistic Petri Net represented as a Thompson automaton.]{\label{fig:orig}\includegraphics{images/running_example.pdf}}\qquad
 	\subfloat[Another Probabilistic Petri Net having the same set of weighted traces]{\label{fig:closed}\includegraphics{images/closed_example.pdf}}\\
-	\caption{Two equivalent probabilistic Petri Nets.}
+	\caption{Two equivalent probabilistic Petri Nets. Initial states are denoted by nodes starting from $\ast$, while accepting states are circled.}
 	\label{3figs}
 \end{figure}
 
 
+
 \begin{example}
-Figure \ref{fig:orig} can be represented as a PPN $(\mathtt{\color{blue}1},\mathtt{\color{blue}6},L,R,1)$, where the matrices $L$ and $R$ can be both defined as follows:
+Figure \ref{fig:orig} can be represented as a PPN $P^*=(\mathtt{\color{blue}1},\mathtt{\color{blue}6},L,R,1)$, where the matrices $L$ and $R$ can be both defined as follows:
 $$L:=\kbordermatrix{
              & \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}&\texttt{\color{blue}5}&\texttt{\color{blue}6}\\
 \color{green}\varepsilon  & \textbf{1}&0&0&\textbf{1}&0&\textbf{1}\\
@@ -37,9 +38,9 @@ $$L:=\kbordermatrix{
 }
 
 \begin{example}
-The PPN in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P)$ of weighted traces:
+The PPN in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces:
 $$\set{\braket{\underbrace{\color{green}a\dots a}_{n},{\color{red}p_1p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup \set{\braket{{\color{green}c}\underbrace{\color{green}a\dots a}_{n},{\color{red}p_2p_4p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup\{\braket{{\color{green}cb},{\color{red}p_2p_5}}\}$$
-We can easily see that the Petri Net in Figure \ref{fig:closed} produces the same set of traces, so the two Petri Nets are (probabilistic-trace) equivalent.
+We can easily see that the PPN in Figure \ref{fig:closed} ($P$) produces the same set of traces, so the two Petri Nets are (probabilistic-trace) equivalent.
 \end{example}
 
 Consequently, it is always possible to minimize a PPN represented as a Thompson automaton (e.g., Figure \ref{fig:orig}) via $\varepsilon$-closure, so that the only nodes that are labelled as $\varepsilon$ are source and the target nodes (Figure \ref{fig:closed}) and the set of weighted traces is preserved. From now on, we always that all the PPNs are minimized via $\varepsilon$-closure.
@@ -55,12 +56,34 @@ When the kernel of choice is the inner product, the resulting distance is the we
 
 When $\mathcal{X}$ does not necessarily represent a $d$-dimensional Euclidean space, we can use an \textbf{embedding} $\phi\colon\mathcal{X}\to \mathbb{R}^d$ to define a kernel $k_\phi\colon \mathcal{X}\times \mathcal{X}\to\mathbb{R}$ as $k_\phi(x,x'):=\Braket{\phi(x),\phi(x')}$. As a result, $k_\phi(x,x')=k_\phi(x',x)$ for each $x,x'\in\mathcal{X}$.
 
-Current literature also provides kernel representations for traces (namely, strings). We now provide an intuition describing the desired features of such representation \cite{LodhiSSCW02}: if we associate each dimension in $\mathbb{R}^d$ to a different subtrace ${\color{green}\alpha\beta}\in(\Sigma\backslash\{\varepsilon\})^2$, the associated coordinate should represent how frequently and ``compatctly'' such subtrace is embedded in the original trace. Therefore, we need to introduce a \textbf{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ weighting the presence of each subtrace ``${\color{green}\alpha\beta}/L$'' as $\lambda^Lm$, where $m$ is the frequency of $\color{green}\alpha\beta$ appearing in the given trace at a distance $L$. Given a trace $\tau\in\Sigma^*$, we can represent it as a PPN \cite{Myers1989} $(\tau_1,\tau_{|\tau|},L_\tau,R_\tau,1)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. Under these assumptions, we can simplify the definition of the embedding from \cite{LodhiSSCW02, Raedt} as $\phi_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
+Current literature also provides kernel representations for traces (namely, strings). We now provide an intuition describing the desired features of such representation \cite{LodhiSSCW02}: if we associate each dimension in $\mathbb{R}^d$ to a different subtrace ${\color{green}\alpha\beta}\in(\Sigma\backslash\{\varepsilon\})^2$, the associated coordinate should represent how frequently and ``compatctly'' such subtrace is embedded in the original trace. Therefore, we need to introduce a \textbf{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ weighting the presence of each subtrace ``${\color{green}\alpha\beta}/L$'' as $\lambda^Lm$, where $m$ is the frequency of $\color{green}\alpha\beta$ appearing in the given trace at a distance $L$. Given a trace $\tau\in\Sigma^*$, we can represent it as a PPN \cite{Myers1989} $(1,{|\tau|},L_\tau,R_\tau,1)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. Under these assumptions, we can simplify the definition of the embedding from \cite{LodhiSSCW02,Raedt} as $\phi_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
 
+\begin{figure}[!t]
+	\centering
+	\includegraphics{images/taustar.pdf}
+	\caption{Graphical representation of $\tau^*=\textup{caba}$ as a Thompson automaton.}\label{fig:taustar}
+\end{figure}
+\begin{example}
+	A trace $\tau^*=\textup{caba}$  can be graphically represented as a Thompson automaton in Figure \ref{fig:taustar}. The associated PPN $T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ has matrices $L$ and $R$  defined as follows:
+	$$L:=\kbordermatrix{
+		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
+		\color{green}a            & 0&\textbf{1}&0&\textbf{1}\\
+		\color{green}b            & 0&0&\textbf{1}&0\\
+		\color{green}c            & \textbf{1}&0&0&0\\
+	}\qquad R:=\kbordermatrix{
+		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
+		\texttt{\color{blue}1}  & 0&\color{red}1&0&0\\
+		\texttt{\color{blue}2}  & 0&0&\color{red}1&0\\
+		\texttt{\color{blue}3}  & 0&0&0&\color{red}1\\
+		\texttt{\color{blue}4}  & 0& 0& 0& 0\\
+	}$$
+\end{example}
 
 \begin{example}
 The subtrace \textit{\textbf{\uline{hi}}} is represented in \textit{\textbf{\uline{hi}}deous},   \textit{\uline{\textbf{h}}e\uline{{i}}d\textbf{i}}, and \textit{\uline{{\textbf{h}i}}nd\textbf{i}}, but with different frequencies and subtrace distances. We have $\phi_{\mathcal{T}}(\textit{hideous})_{{\color{green}hi}}=\lambda$,  $\phi_{\mathcal{T}}(\textit{heidi})_{{\color{green}hi}}=\lambda^2+\lambda^4$, and $\phi_{\mathcal{T}}(\textit{hindi})_{{\color{green}hi}}=\lambda+\lambda^4$.
 \end{example}
+
+
 
 For this trace kernel, we have that $\Braket{\phi_\mathcal{T}(\tau),\phi_\mathcal{T}(\tau')}=1$ if $\tau\equiv \tau'$ and that $\Braket{\phi_\mathcal{T}(\tau),\phi_\mathcal{T}(\tau')}=0$ when the two traces have no shared subtraces of size $2$: these are basic desired properties for determining the trace similarity based on the substring distribution.
 
