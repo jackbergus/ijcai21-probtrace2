@@ -1,12 +1,12 @@
 \section{Preliminaries}
 \subsection{Probabilistic Petri Nets (PPNs)}\label{subsec:ppn}
 We restrict our analysis to single-token and multi-labelled Probabilistic Petri Nets (\texttt{\color{red}TODO: add reference from Workflow Networks}). Under these assumptions and given a finite set of labels $\Sigma$ and a finite set of nodes $V\subset \mathbb{N}$,  a \textsc{Probabilistic Petri Net} $(s,t,L,R,w)$ can be uniquely be described by a initial node $s\in V$, an accepting node $t\in V$, its labels, and a transition matrix coming from its associated random process \cite{GartnerFW03}. The label matrix is defined by $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow {\color{green}\alpha}=\textit{label}(\texttt{\color{blue}i})$ and $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and the transition matrix is defined by the probability $[R]_{\texttt{\color{blue}ij}}$ that the process will, when in node $\texttt{\color{blue}i}$, make a transition into node $\texttt{\color{blue}j}$ \cite{Prob}. $[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\overset{n}{\rightsquigarrow}{\color{green}\beta}$). We denote as ${\color{green}\alpha}{\rightsquigarrow}{\color{green}\beta}$ an aforementioned path of arbitrary length. 
-We can also associate a weight $w\in[0,1]\subseteq\mathbb{R}$ to a PPN, so to express the probability associated to the PPN itself as valid. This representation can be extremely useful when such PPNs are inferred and extracted from log files \cite{PPNFromLog}.
+We can also associate a weight $w\in[0,1]\subseteq\mathbb{R}$ to a PPN, so to express the probability associated with the PPN itself as valid. This representation can be beneficial when such PPNs are inferred and extracted from log files \cite{PPNFromLog}.
 
 \begin{figure}[!t]
 	\centering
 	\subfloat[A Probabilistic Petri Net represented as a Thompson automaton.]{\label{fig:orig}\includegraphics{images/running_example.pdf}}\qquad
-	\subfloat[Another Probabilistic Petri Net having the same set of weighted traces]{\label{fig:closed}\includegraphics{images/closed_example.pdf}}\\
+	\subfloat[Another Probabilistic Petri Net having the same set of weighted traces.]{\label{fig:closed}\includegraphics{images/closed_example.pdf}}\\
 	\caption{Two equivalent probabilistic Petri Nets. Initial nodes are pointed by arrows starting from $\ast$, while accepting nodes are circled.}
 	\label{3figs}
 \end{figure}
@@ -33,7 +33,7 @@ $$L:=\kbordermatrix{
 }$$
 \end{example}
 
- Given a PPN $P=(s,t,L,R,w)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. Given that the graph isomorphism problem is NP-Complete and given that the PPNs are fully characterised by the set of the probabilistic traces that they generate,  we can say that two Petri Nets are (probabilistic-trace) equivalent if and only if they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and  a maximum length of $n$. Under these assumptions, the probabilistic trace equivalence is deterministic.
+ Given a PPN $P=(s,t,L,R,w)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. Being that both the graph isomorphism problem is NP-Complete and the PPNs are fully characterised by the set of the probabilistic traces that they generate,  we can say that two Petri Nets are (probabilistic-trace) equivalent if and only if they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and  a maximum length of $n$. Under these assumptions, the probabilistic trace equivalence is deterministic.
 
 \begin{example}
 The PPN represented as a Thompson automaton in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces:
@@ -42,7 +42,7 @@ The $\varepsilon$-closure remotes the non-initial and non-accepting nodes within
 we can easily see that $\mathcal{W}_0^{\aleph_0}(P^*)=\mathcal{W}_0^{\aleph_0}(P)$, so the two Petri Nets are (probabilistic-trace) equivalent.
 \end{example}
 
-Consequently, it is always possible to minimize a PPN represented as a Thompson automaton (e.g., Figure \ref{fig:orig}) via $\varepsilon$-closure, so that the only nodes that are labelled as $\varepsilon$ are source and the target nodes (Figure \ref{fig:closed}) and the set of weighted traces is preserved. From now on, we always that all the PPNs are minimized via $\varepsilon$-closure.
+Consequently, it is always possible to minimize a PPN represented as a Thompson automaton (e.g., Figure \ref{fig:orig}) via $\varepsilon$-closure, so that the only nodes that are labelled as $\varepsilon$ are the source and the target nodes (Figure \ref{fig:closed}) and the set of weighted traces is preserved. From now on, we always that all the PPNs are minimized via $\varepsilon$-closure.
 
 
 \subsection{Kernels and Trace Kernels}\label{subsec:katk}

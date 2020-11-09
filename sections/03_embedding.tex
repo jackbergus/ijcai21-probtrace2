@@ -1,10 +1,10 @@
 \section{Probabilistic Petri Net Embedding}
-Graph kernels allow mapping graph data structures to feature spaces (usually an Eulcidean space in $\mathbb{R}^n$ for $n\in \mathbb{N}_{>0}$) \cite{Samatova} so to express graph similarity functions that can then be adopted for both classification \cite{TsudaS10} and clustering \cite{Raedt} algorithms. One of the first approaches used in literature involved the definition of topological description vectors \cite{Sidere} for each graph in a graph database, for then defining the graph similarity function as an inner product of their associated vectors. One inconvenience of such a technique is that it is required to perform \yellownote{Not sure if it is better to move this part into a Related Work section, but I think we still need to discuss the structure of the paper.} NP-complete subgraph isomorphisms among a collection of graphs. It has been already proved that the definition of a graph kernel function fully recognizing the structure the graph always boils down solving such  NP-Complete problem \cite{GartnerFW03}. 
+Graph kernels allow mapping graph data structures to feature spaces (usually an Eulcidean space in $\mathbb{R}^n$ for $n\in \mathbb{N}_{>0}$) \cite{Samatova} so to express graph similarity functions that can then be adopted for both classification \cite{TsudaS10} and clustering \cite{Raedt} algorithms. One of the first approaches used in literature involved the definition of topological description vectors \cite{Sidere} for each graph in a graph database, for then defining the graph similarity function as an inner product of their associated vectors. One inconvenience of such a technique is that it is required to perform \yellownote{Not sure if it is better to move this part into a Related Work section, but I think we still need to discuss the structure of the paper.} NP-complete subgraph isomorphisms among a collection of graphs. It has been already proved that the definition of a graph kernel function fully recognising the structure the graph always boils down solving such  NP-Complete problem \cite{GartnerFW03}. 
 
 
-Consequently, most recent literature focused on extracting relevant features of such graphs, that are then used to define a graph similarity function. The most common approach adopted in kernel to extract such features is called \textit{propositionalisation}: we might extract all the possible features (e.g., subsequences), and then define a kernel function based on the occurrence and similarity of these features \cite{Gartner03}. 
+Consequently, most recent literature focused on extracting relevant features of such graphs, that are then used to define a graph similarity function. The most common approach adopted in the kernel to extract such features is called \textit{propositionalisation}: we might extract all the possible features (e.g., subsequences), and then define a kernel function based on the occurrence and similarity of these features \cite{Gartner03}. 
 
-Given that we previously observed that a PPNs $P$ can be fully characterised (read, similarity) by their associated set of traces $\mathcal{W}_p^n(P)$ (\S\ref{subsec:ppn}), and that the trace embedding can be described as an embedding over a PPN (\S\ref{subsec:katk}), we can characterize a PPN embedding as a transition matrix embedding. In addition to that, when two Petri Nets share similar node labellings but no ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ paths for any ${\color{green}\alpha}$ and ${\color{green}\beta}$, we should combine the former embedding with an embedding characterizing the frequence on how the nodes' labels appear in the generated traces. We can now provide the following definition:
+Given that we previously observed that a PPNs $P$ can be fully characterised (read, similarity) by their associated set of traces $\mathcal{W}_p^n(P)$ (\S\ref{subsec:ppn}), and that the trace embedding can be described as an embedding over a PPN (\S\ref{subsec:katk}), we can characterise a PPN embedding as a transition matrix embedding. In addition to that, when two Petri Nets share similar node labellings but no ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ paths for any ${\color{green}\alpha}$ and ${\color{green}\beta}$, we should combine the former embedding with an embedding characterising the frequency on how the nodes' labels appear in the generated traces. We can now provide the following definition:
 
 
 \begin{table}[!t]
@@ -24,21 +24,25 @@ Given a finite set of non-empty labels $\Sigma_\varepsilon =\Sigma\backslash\{\v
 	
 Given a PPN $P=(s,t,L,R,w)$ resulting from a $\varepsilon$-closure and a tuning parameter $t_f\in[0,1]\subseteq\mathbb{R}$, the associated embedding is defined as follows:
 $$\phi_{\mathcal{P}}(P)_i=\begin{cases}
-	\frac{\epsilon_{\color{green}\alpha\beta}}{\|\epsilon\|_2}wt_f^{|R>0|} & i={\color{green}\alpha\beta}\\
-	\frac{\nu_{\color{green}\alpha}}{\|\nu\|_2}t_f^{|R>0|} & i={\color{green}\alpha}\\
+	\frac{\epsilon(P)_{\color{green}\alpha\beta}}{\|\epsilon\|_2}wt_f^{|R>0|} & i={\color{green}\alpha\beta}\\
+	\frac{\nu(P)_{\color{green}\alpha}}{\|\nu\|_2}t_f^{|R>0|} & i={\color{green}\alpha}\\
 \end{cases}$$
 where $\epsilon$ and $\nu$ respectively represent the non-negatively defined embedding associated to the PPN's transition matrix and nodes. 
 \end{definition}
 
 Albeit the definition of $\epsilon$ and $\nu$ might vary, we choose a specific definition for them. 
-Walking on the footsteps of \S\ref{subsec:katk}, we can define the transition matrix embedding as follows:
+We can define the transition matrix embedding as follows:
 \begin{equation}\label{eq:epsilon}
-\epsilon(P)_{\color{green}\alpha\beta}=\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}
+\epsilon(P)_{\color{green}\alpha\beta}=\sum_{i=1}^l{\lambda^i}\frac{[LR^iL^t]_{\color{green}\alpha\beta}}{\sum_{\color{green}\alpha'\beta'}R^i_{\color{green}\alpha'\beta'}}
+%
 \end{equation}
 \begin{equation}\label{eq:nu}
 \nu(P)_{\color{green}\alpha}=\frac{1}{N}\sum_{\braket{\tau,w}\in\mathcal{W}_p^l(P)}\frac{|\Set{\tau_i\in\tau|\tau_i\neq\varepsilon\wedge \tau_i={\color{green}\alpha}}|}{|\tau|}
 \end{equation}
-where $l$ is the maximum path length that we want to consider as valid, and $N$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\varepsilon}\nu(R,L)_{\color{green}\alpha}=1$. When the transition matrix is ergodic \cite{StocasticCC},  the transition matrix embedding converges to $\epsilon(R)_{\color{green}\alpha\beta}=[(\mathbf{I}-\lambda\Lambda)^{-1}]_{\color{green}\alpha\beta}$ \cite{GartnerFW03} for $n\to+\infty$.
+where $l$ is the maximum path length that we want to consider as valid, and $N$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\varepsilon}\nu(R,L)_{\color{green}\alpha}=1$. In Example \ref{ex:cmpexample} we will see that the given definition of $\epsilon$ provides a better approximation than the edge embedding given in current literature (\S\ref{subsec:katk}), i.e. $\tilde{\epsilon}(P)_{\color{green}\alpha\beta}=\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$.
+
+
+%When the transition matrix is ergodic \cite{StocasticCC},  the transition matrix embedding converges to $\epsilon(R)_{\color{green}\alpha\beta}=[(\mathbf{I}-\lambda\Lambda)^{-1}]_{\color{green}\alpha\beta}$ \cite{GartnerFW03} for $n\to+\infty$.
 
 \begin{example}\label{ex:withpaths}
 Given the PPN $P$ in Figure \ref{fig:closed}, we assign the following probability values to the edges: $p_1=0.8$, $p_2=0.2$, $p_3=p_6=0.5$, $p_4=0.7$, and $p_5=0.3$. Given $\Sigma_\varepsilon=\Set{a,b,c}$ and $V=\set{1,2,3,5,6}$, we have that all the embedding space should be at least of size $6$, as $\{a,b,c,aa,ca,cb\}\subseteq \Sigma_\varepsilon^2\cup\Sigma_\varepsilon$ is the whole set of features describing both the transition matrix and the nodes. By choosing $t_f=0.0001$, $\lambda=0.7$, $n=4$, and $p=0$, we generate the following set:
@@ -52,10 +56,10 @@ The embedding associated to $P$ is described in Table \ref{tab:emb1} as $\phi_{\
 
 Similar considerations can be also drawn from the embedding $\phi_{\mathcal{P}}(T)$ associated to the trace $\tau^*=\textup{caba}$ (also in Table \ref{tab:emb1}): we might see that ${\color{green}a}$ is clearly the most frequent label ${\color{green}b}$ and ${\color{green}c}$ are equiprobable, as well as the path ${\color{green}c}\rightsquigarrow {\color{green}a}$ appears twice in the trace's set and then, it is more frequent than the other subtraces.
 
-Last, we can observe that the representation of $\phi_{\mathcal{P}}$ only depends on the $\Sigma_\varepsilon$ of choice and on the PPN that we want to represent. As a consequence, this representation is completely independent from the alignment that we might be interested to calculate in a subsequent step. 
+Last, we can observe that the representation of $\phi_{\mathcal{P}}$ only depends on the $\Sigma_\varepsilon$ of choice and on the PPN that we want to represent. As a consequence, this representation is entirely independent of the alignment that we might be interested in calculating in a subsequent step. 
 \end{example}
 
-After defining the embedding, we can show that this embedding establishes some desired features that are independent from the definition of $\epsilon$ and $\nu$, and that $\epsilon$ and $\nu$ only depend on the characterization of both the labelling $L$ and the transition matrix $R$. We provide a rewriting proposition that is going to be used in the incoming subsection to  provide the aforementioned characterizing properties.
+After defining the embedding, we can show that this embedding establishes some desired features that are independent of the definition of $\epsilon$ and $\nu$, and that $\epsilon$ and $\nu$ only depend on the characterization of both the labelling $L$ and the transition matrix $R$. We provide a rewriting proposition that is going to be used in the incoming subsection to provide the aforementioned characterizing properties.
 
 \begin{figure}
 	\centering
@@ -94,7 +98,7 @@ Given two PPNs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$ providing the same set 
 Given Proposition \ref{lem:rewritinglemma} and the positive definition of $\epsilon$ and $\nu$,  we have that $\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}\to 0$ as well as $\norm{\hat{\nu}-\hat{\nu}'}{2}\to 0$, for which we can immediately close the goal.
 \end{proof}
 
-As per previous observations, we know that two PPNs should have the maximum dissimilarity when all the non $\varepsilon$-nodes have different labels, thus making it impossible to find an alignment, thus implying that they share a completely dissimilar set of weighted traces.
+As per previous observations, we know that two PPNs should have the maximum dissimilarity when all the non $\varepsilon$-nodes have different labels, thus making it impossible to find an alignment, thus implying that they share an utterly dissimilar set of weighted traces.
 
 \begin{lemma}[Strong Dissimilarity]
 Given two PPNs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$, $k_{\phi_{\mathcal{P}}}(P,P')=0$ iff. $P$ and $P'$ have a different set of labels with $t_f,w,w'>0$.
@@ -105,7 +109,7 @@ If we exclude the trivial conditions $t_f=0$, $w=0$ or $w'=0$, the only conditio
 
 As a corollary of the two lemmas, we have that the proposed embedding performs weakly-ideally, as the equality condition holds only on a relaxed form.
 
-Last, under the assumption that a PPN is approximately characterized by $\epsilon$ and $\nu$, we might expect that the PPN similarity is characterized by the sum of the distance of both embeddings. Therefore, we show that an increase of both distance embeddings approximately corresponds to a decrease in the kernel output and viceversa.\yellownote{TODO (if required), establish the further approximation from such distributions and the actual expected ranking.}
+Last, under the assumption that a PPN is approximately characterized by $\epsilon$ and $\nu$, we might expect that the PPN similarity is characterized by the sum of the distance of both embeddings. Therefore, we show that an increase in both distance embeddings approximately corresponds to a decrease in the kernel output and vice-versa.\yellownote{TODO (if required), establish the further approximation from such distributions and the actual expected ranking.}
 
 \begin{lemma}\label{lem:approxRank}
 Given two PPNs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$ having respectively the embeddings $(\epsilon,\nu)$ and $(\epsilon',\nu')$, we have that the kernel $k_{\phi_{\mathcal{T}}}$ induces an inverse ranking of $\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}+\norm{\hat{\nu}-\hat{\nu}'}{2}$:
@@ -119,4 +123,5 @@ Given that the embeddings $(\epsilon,\nu)$ and $(\epsilon',\nu')$ are normalized
 
 Given that we can now follow Definition \ref{def:ppne} for representing a trace $\tau$ as a proper embedding after transforming it as a PPN $T$ (\S\ref{subsec:katk}), we can find the PPN $P$ providing the best approximate match with  a trace $\tau$ as follows:
 \[\underset{{P}}{\max\arg}\;k_{\phi_{\mathcal{P}}}(P,T)\]
-Still, this PPN matching strategy does not allow to find the trace maximizing such score. In order do assess such problem, the next section is going to determine both an exact (\S\ref{subsec:exbkptap}) and an approximated strategy (\S\ref{subsec:akptap}) for probabilistically matching one single trace from the PPN.
+Still, this PPN matching strategy does not allow to find the trace maximizing such score. To assess such problem, the next section is going to determine both an exact (\S\ref{subsec:exbkptap}) and an approximated strategy (\S\ref{subsec:akptap}) for probabilistically matching one single trace from the PPN.
+
