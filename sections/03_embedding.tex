@@ -8,12 +8,12 @@ Consequently, most recent literature focused on extracting relevant features of 
 Nevertheless, SPNs cannot be directly embedded using the embedding strategy proposed in current literature: as previously observed, Reachability Graphs associated to Stochastic Petri Nets are edge labelled, while Transition Graphs are Node Labelled. In order to do so, we need to first transform Reachability Graphs from SPNs into Transition Graphs, while guaranteeing that such transformation preserves the set of the traces, as well as their associated probability. We provide such desired transformation in the following definition:
 
 \begin{definition}[RG$\to$TG]\label{def:transf}
-Given a Reachability Graph $(\mathcal{M},\mathcal{E})$ generated from an initial marking $M$, we can transform it into a Transition Graph $(s,t,L,R,w)$, where:
+Given a Reachability Graph $(\mathcal{M},\mathcal{E})$ generated from an initial marking $M$, we can transform it into a Transition Graph $(s,t,L,R,1)$, where:
 \begin{itemize}
 	\item If there exist one single edge $M_1\overset{t}{\to}M_2\in\mathcal{E}$ where $M_1=M$, then $s=M\overset{t}{\to}M_2$; otherwise, we define a new node $\textbf{i}$ and we set it as the initial node for TG: $s=\textbf{i}$.
 	\item If there exist one single edge $M_1\overset{t}{\to}M_2\in\mathcal{E}$ having no outgoing edges in the Reachability Graph, then $t=M_1\overset{t}{\to}M_2$; otherwise, we define a new node $\textbf{f}$ and we set it as the accepting node for TG:  $t=\textbf{f}$.
 	\item $[L]_{\lambda(t),\;M\overset{t}{\to} M'}=1$ for each $M\overset{t}{\to} M'\in\mathcal{E}$; if $\textbf{i}$ is defined then $[L]_{\varepsilon\textbf{i}}=1$; if $\textbf{f}$ is defined, then $[L]_{\varepsilon\textbf{f}}=1$; $[L]_{ij}=0$ otherwise.
-	\item $[R]_{M\overset{t}{\to} M',\;M'\overset{t'}{\to} M''}=\frac{W(t')}{\sum_{\textbf{t}\in E(M')}W(\textbf{t})}$ for each $M\overset{t}{\to} M',M'\overset{t'}{\to} M''\in\mathcal{E}$; if $\textbf{i}$ is defined, then $[R]_{\textbf{i},\;M\to\overset{t}{\to}M'}=\frac{W(t)}{\sum_{\textbf{t}\in E(M)}W(\textbf{t})}$; if $\textbf{f}$ is defined, then $[R]_{\textbf{i},\;M\to\overset{t}{\to}M'}=1$; $[R]_{ij}=0$ otherwise.
+	\item $[R]_{M\overset{t}{\to} M',\;M'\overset{t'}{\to} M''}=\frac{W(t')}{\sum_{\textbf{t}\in E(M')}W(\textbf{t})}$ for each $M\overset{t}{\to} M',M'\overset{t'}{\to} M''\in\mathcal{E}$; if $\textbf{i}$ is defined, then $[R]_{\textbf{i},\;M\overset{t}{\to}M'}=\frac{W(t)}{\sum_{\textbf{t}\in E(M)}W(\textbf{t})}$; if $\textbf{f}$ is defined, then $[R]_{M\overset{t}{\to}M',\;\textbf{i}}=1$ for each $M'$ having no outgoing edges in the Reachability Graph; $[R]_{ij}=0$ otherwise.
 \end{itemize}
 \end{definition}
 
