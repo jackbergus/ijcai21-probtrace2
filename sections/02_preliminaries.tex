@@ -2,7 +2,7 @@
 \subsection{Stochastic Petri Nets (SPN)}\label{subsec:spn}
 In this paper, we consider a specific case of Stochastic Petri Nets, such as Workflow Networks over $k$-bounded Place-Transitions Nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13}. Those Stochastic Petri Nets can be modelled as a tuple $SPN=(P,T,F,\omega,W,i,f)$ where:
 \begin{itemize}
-\item $P$ is a set of \textit{places} to which we can associate a finite number of distinguishable tokens.
+\item $P$ is a set of \textit{places} to which we can associate a finite number of indistinguishable tokens.
 \item $T$ is a set of \textit{transitions} $t\in T$, to which we associate a label $\lambda(t)\in\Sigma$, where $\Sigma$ also includes the empty string\footnote{Given that we are going to denote the traces as $\tau$ and $t$ as the Petri Net Transitions, we choose to denote the empty string as such instead of $\tau$ as in current literature from Petri Nets.} $\varepsilon$.
 \item $F\subseteq (P\times T)\cup (T\times P)$ is a set of arcs to which we associate a \textit{firing cost} $\omega\colon F\to\mathbb{N}$.
 \item $W\colon T\to \mathbb{R}$ defines a \textit{firing weight} associated to each transition. 
