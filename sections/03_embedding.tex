@@ -10,8 +10,8 @@ Nevertheless, SPNs cannot be directly embedded using the embedding strategy prop
 \begin{definition}[RG$\to$TG]\label{def:transf}
 Given a Reachability Graph $(\mathcal{M},\mathcal{E})$ generated from an initial marking $M$, we can transform it into a Transition Graph $(s,t,L,R,w)$, where:
 \begin{itemize}
-	\item If there exist one single node $M_1\overset{t}{\to}M_2\in\mathcal{M}$ where $M_1=M$, then $s=M\overset{t}{\to}M_2$; otherwise, we define a new node $\textbf{i}$ and we set it as the initial node for TG: $s=\textbf{i}$.
-	\item If there exist one single node $M_1\overset{t}{\to}M_2\in\mathcal{M}$ having no outgoing edges in the Reachability Graph, then $t=M_1\overset{t}{\to}M_2$; otherwise, we define a new node $\textbf{f}$ and we set it as the accepting node for TG:  $t=\textbf{f}$.
+	\item If there exist one single edge $M_1\overset{t}{\to}M_2\in\mathcal{E}$ where $M_1=M$, then $s=M\overset{t}{\to}M_2$; otherwise, we define a new node $\textbf{i}$ and we set it as the initial node for TG: $s=\textbf{i}$.
+	\item If there exist one single edge $M_1\overset{t}{\to}M_2\in\mathcal{E}$ having no outgoing edges in the Reachability Graph, then $t=M_1\overset{t}{\to}M_2$; otherwise, we define a new node $\textbf{f}$ and we set it as the accepting node for TG:  $t=\textbf{f}$.
 	\item $[L]_{\lambda(t),\;M\overset{t}{\to} M'}=1$ for each $M\overset{t}{\to} M'\in\mathcal{E}$; if $\textbf{i}$ is defined then $[L]_{\varepsilon\textbf{i}}=1$; if $\textbf{f}$ is defined, then $[L]_{\varepsilon\textbf{f}}=1$; $[L]_{ij}=0$ otherwise.
 	\item $[R]_{M\overset{t}{\to} M',\;M'\overset{t'}{\to} M''}=\frac{W(t')}{\sum_{\textbf{t}\in E(M')}W(\textbf{t})}$ for each $M\overset{t}{\to} M',M'\overset{t'}{\to} M''\in\mathcal{E}$; if $\textbf{i}$ is defined, then $[R]_{\textbf{i},\;M\to\overset{t}{\to}M'}=\frac{W(t)}{\sum_{\textbf{t}\in E(M)}W(\textbf{t})}$; if $\textbf{f}$ is defined, then $[R]_{\textbf{i},\;M\to\overset{t}{\to}M'}=1$; $[R]_{ij}=0$ otherwise.
 \end{itemize}
