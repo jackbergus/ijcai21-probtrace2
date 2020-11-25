@@ -1,21 +1,54 @@
 \section{Preliminaries}
-\subsection{Probabilistic Petri Nets (PPNs)}\label{subsec:ppn}
-We restrict our analysis to single-token and multi-labelled Probabilistic Petri Nets (\texttt{\color{red}TODO: add reference from Workflow Networks}). Under these assumptions and given a finite set of labels $\Sigma$ and a finite set of nodes $V\subset \mathbb{N}$,  a \textsc{Probabilistic Petri Net} $(s,t,L,R,w)$ can be uniquely be described by a initial node $s\in V$, an accepting node $t\in V$, its labels, and a transition matrix coming from its associated random process \cite{GartnerFW03}. The label matrix is defined by $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow {\color{green}\alpha}=\textit{label}(\texttt{\color{blue}i})$ and $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and the transition matrix is defined by the probability $[R]_{\texttt{\color{blue}ij}}$ that the process will, when in node $\texttt{\color{blue}i}$, make a transition into node $\texttt{\color{blue}j}$ \cite{Prob}. $[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\overset{n}{\rightsquigarrow}{\color{green}\beta}$). We denote as ${\color{green}\alpha}{\rightsquigarrow}{\color{green}\beta}$ an aforementioned path of arbitrary length. 
-We can also associate a weight $w\in[0,1]\subseteq\mathbb{R}$ to a PPN, so to express the probability associated with the PPN itself as valid. This representation can be beneficial when such PPNs are inferred and extracted from log files \cite{PPNFromLog}.
+\subsection{Stochastic Petri Nets (SPN)}\label{subsec:spn}
+In this paper, we consider a specific case of Stochastic Petri Nets, such as Workflow Networks over $k$-bounded Place-Transitions Nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13}. Those Stochastic Petri Nets can be modelled as a tuple $SPN=(P,T,F,\omega,W,i,f)$ where:
+\begin{itemize}
+\item $P$ is a set of \textit{places} to which we can associate a finite number of distinguishable tokens.
+\item $T$ is a set of \textit{transitions} $t\in T$, to which we associate a label $\lambda(t)\in\Sigma$, where $\Sigma$ also includes the empty string\footnote{Given that we are going to denote the traces as $\tau$ and $t$ as the Petri Net Transitions, we choose to denote the empty string as such instead of $\tau$ as in current literature from Petri Nets.} $\varepsilon$.
+\item $F\subseteq (P\times T)\cup (T\times P)$ is a set of arcs to which we associate a \textit{firing cost} $\omega\colon F\to\mathbb{N}$.
+\item $W\colon T\to \mathbb{R}$ defines a \textit{firing weight} associated to each transition. 
+\item The initial place $i\in P$ has no ingoing edges ($\not\exists t\in T. (t,i)\in F$).
+\item The final place $f\in P$ has no outgoing edges ($\not\exists t\in T. (f,t)\in F$).
+\end{itemize}
+A \textit{marking} is an assignment of a given amount of indistinguishable tokens to places described by a vector $M\colon P\to \mathbb{N}$. We say that a given transition $t$ is \textit{enabled} if $M(p)\geq \omega(p,t)$ for each ingoing $p$ to $t$ ($(p,t)\in F$). If such transition is enabled, then it can \textit{fire} a token. The set of the \textit{enabling transitions} $E(M)$ for a given marking $M$ are all the $t$ reachable from $p$ ($(p,t)\in F$) with $M(p)\neq 0$ where $t$ is enabled. When $t$ can fire a token for a marking $M$, we can generate a novel marking $M'$ from $M$ by moving the tokens from the ingoing places towards the outgoing places as follows:
+\[\forall p\in P.\; M'(p)=M(p)-[\omega(p,t)]+[\omega(t,p)]\]
+We denote the transition from marking $M$ to marking $M'$ via an enabling $t$ as a relation $M\overset{t}{\to}M'$. Given an initial marking $M$ for a Stochastic Petri Net $SPN$,  the \textit{Reachability Graph} for $SPN$ is a graph $(\mathcal{M},\mathcal{E})$ where the nodes  $\mathcal{M}$ is composed of of all the reachable markings from $M$, $M$ included, and all the edges $\mathcal{E}$ are induced by the aforementioned relation $M\overset{t}{\to}M'$ among the reachability graph's nodes. To each of such edges $M\overset{t}{\to}M'$, we associate a transition probability $\mathbb{P}\left(M\overset{t}{\to}M'\right)=\frac{W(t)}{\sum_{t'\in E(M)}W(t')}$ \cite{spdwe}. We say that a SPN with initial marking $M$ is $k$-\textit{bounded} if each of the nodes $M$ in the reachability graph have $\forall p\in P.\; M(p)\leq k$\\
+
+
+\begin{example}
+Figure \ref{fig:spn} provides an example of a Stocastic Petri Net defined as such, and \ref{fig:rg} provides its associated Reachability Graph \texttt{[TODO: some explanation?]}.
+\end{example}
+
+
+In this paper, we use SPNs for modelling business processes: in fact, it can be shown (\texttt{[TODO: paper?]}) that it is always possible to convert BPMNs to SPNs. Last, in this paper we also assume that a transition is enabled when all of its input places contain at least one token and that, when a transition fires, we remove one token from each of its input places and depose tokens for each of its output places: this condition is set via $\forall e\in F. \omega(e)=1$.
+\begin{figure}[!ph]
+	\centering
+	\subfloat[A Stochastic Petri Net.]{\label{fig:spn}\includegraphics[width=.9\textwidth]{images/petri.pdf}}\qquad
+	\subfloat[Reachability Graph associated to the Stochastic Petri Net.]{\label{fig:rg}\includegraphics[width=.9\textwidth]{images/rg.pdf}}\\
+	\subfloat[Reachability Graph Transformed as a Transition Graph.]{\label{fig:lmc}\includegraphics[width=.9\textwidth]{images/rg_transformed.pdf}}
+	\caption{Steps required to transform the set of probabilistic traces associated to a Stochastic Petri Net into a Transition Graph.}
+	\label{transformspn}
+\end{figure}
+
+
+\subsection{Transition Graphs (TGs)}\label{subsec:ppn}
+Current graph embedding and trace embedding literature uses a different representation of graphs, where nodes (and not edges) are labelled, and where edges are still associated to a transition probability value.
+
+Given a finite set of labels $\Sigma$ and a finite set of nodes $V\subset \mathbb{N}$,  a \textsc{(Probabilistic) Transition Graph} $(s,t,L,R,w)$ \cite{GartnerFW03} can be uniquely be described by a initial node $s\in V$, an accepting node $t\in V$, its labels, and a transition matrix coming from its associated random process. The label matrix is defined by $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow {\color{green}\alpha}=\textit{label}(\texttt{\color{blue}i})$ and $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and the transition matrix is defined by the probability $[R]_{\texttt{\color{blue}ij}}$ that the process will, when in node $\texttt{\color{blue}i}$, make a transition into node $\texttt{\color{blue}j}$ \cite{Prob} with $\sum_{\texttt{\color{blue}j}\in V}[R]_{\color{blue}\texttt{ij}}=1$. $[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\overset{n}{\rightsquigarrow}{\color{green}\beta}$). We denote as ${\color{green}\alpha}{\rightsquigarrow}{\color{green}\beta}$ an aforementioned path of arbitrary length. 
+We can also associate a weight $w\in[0,1]\subseteq\mathbb{R}$ to a TG, so to express the probability associated with the TG itself as valid. This representation can be beneficial when such TGs are inferred and extracted from log files \cite{PPNFromLog}.
 
 \begin{figure}[!t]
 	\centering
-	\subfloat[A Probabilistic Petri Net represented as a Thompson automaton.]{\label{fig:orig}\includegraphics{images/running_example.pdf}}\qquad
-	\subfloat[Another Probabilistic Petri Net having the same set of weighted traces.]{\label{fig:closed}\includegraphics{images/closed_example.pdf}}\\
-	\caption{Two equivalent probabilistic Petri Nets. Initial nodes are pointed by arrows starting from $\ast$, while accepting nodes are circled.}
+	\subfloat[A (Probabilistic) Transition Graph.]{\label{fig:orig}\includegraphics{images/running_example.pdf}}\qquad
+	\subfloat[Another (Probabilistic) Transition Graph having the same set of weighted traces.]{\label{fig:closed}\includegraphics{images/closed_example.pdf}}\\
+	\caption{Two equivalent probabilistic (Probabilistic) Transition Graphs. Initial nodes are pointed by arrows starting from $\ast$, while accepting nodes are circled.}
 	\label{3figs}
 \end{figure}
 
 
 
 \begin{example}
-	Under these assumptions, we can graphically represent such PPN as a Thompson automaton \cite{Myers1989}: 
-Figure \ref{fig:orig} can be represented as a PPN $P^*=(\mathtt{\color{blue}1},\mathtt{\color{blue}6},L,R,1)$, where the matrices $L$ and $R$ can be both defined as follows:
+	Under these assumptions, we can graphically represent such TG as a Thompson automaton \cite{Myers1989}: 
+Figure \ref{fig:orig} can be represented as a TG $P^*=(\mathtt{\color{blue}1},\mathtt{\color{blue}6},L,R,1)$, where the matrices $L$ and $R$ can be both defined as follows:
 $$L:=\kbordermatrix{
              & \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}&\texttt{\color{blue}5}&\texttt{\color{blue}6}\\
 \color{green}\varepsilon  & \textbf{1}&0&0&\textbf{1}&0&\textbf{1}\\
@@ -33,20 +66,20 @@ $$L:=\kbordermatrix{
 }$$
 \end{example}
 
- Given a PPN $P=(s,t,L,R,w)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. Being that both the graph isomorphism problem is NP-Complete and the PPNs are fully characterised by the set of the probabilistic traces that they generate,  we can say that two Petri Nets are (probabilistic-trace) equivalent if and only if they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and  a maximum length of $n$. Under these assumptions, the probabilistic trace equivalence is deterministic.
+ Given a TG $P=(s,t,L,R,w)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. Being that both the graph isomorphism problem is NP-Complete and the TGs are fully characterised by the set of the probabilistic traces that they generate,  we can say that two TGs are (probabilistic-trace) equivalent if and only if they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and  a maximum length of $n$. Under these assumptions, the probabilistic trace equivalence is deterministic.
 
 \begin{example}
-The PPN represented as a Thompson automaton in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces:
+The TG in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces:
 $$\set{\braket{\underbrace{\color{green}a\dots a}_{n},{\color{red}p_1p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup \set{\braket{{\color{green}c}\underbrace{\color{green}a\dots a}_{n},{\color{red}p_2p_4p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup\{\braket{{\color{green}cb},{\color{red}p_2p_5}}\}$$
-The $\varepsilon$-closure remotes the non-initial and non-accepting nodes within such automaton, while preserving the probabilistic trace equivalence of the two automata: node \texttt{\color{blue}4} is then removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{red}p_4}\texttt{\color{blue}2}$ and $\texttt{\color{blue}3}\xrightarrow{\color{red}p_5}\texttt{\color{blue}5}$ are introduced. The resulting PPN $P$ is represented with the same graphical depiction Figure \ref{fig:closed}: 
-we can easily see that $\mathcal{W}_0^{\aleph_0}(P^*)=\mathcal{W}_0^{\aleph_0}(P)$, so the two Petri Nets are (probabilistic-trace) equivalent.
+The $\varepsilon$-closure remotes the non-initial and non-accepting nodes within such automaton, while preserving the probabilistic trace equivalence of the two automata: node \texttt{\color{blue}4} is then removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{red}p_4}\texttt{\color{blue}2}$ and $\texttt{\color{blue}3}\xrightarrow{\color{red}p_5}\texttt{\color{blue}5}$ are introduced. The resulting TG $P$ is represented with the same graphical depiction Figure \ref{fig:closed}: 
+we can easily see that $\mathcal{W}_0^{\aleph_0}(P^*)=\mathcal{W}_0^{\aleph_0}(P)$, so the two TGs are (probabilistic-trace) equivalent.
 \end{example}
 
-Consequently, it is always possible to minimize a PPN represented as a Thompson automaton (e.g., Figure \ref{fig:orig}) via $\varepsilon$-closure, so that the only nodes that are labelled as $\varepsilon$ are the source and the target nodes (Figure \ref{fig:closed}) and the set of weighted traces is preserved. From now on, we always that all the PPNs are minimized via $\varepsilon$-closure.
+Consequently, it is always possible to minimize a TG  (e.g., Figure \ref{fig:orig}) via $\varepsilon$-closure, so that the only nodes that are labelled as $\varepsilon$ are the source and the target nodes (Figure \ref{fig:closed}) and the set of weighted traces is preserved. From now on, we always that all the TGs are minimized via $\varepsilon$-closure.
 
 
 \subsection{Kernels and Trace Kernels}\label{subsec:katk}
-Given a set of data examples $\mathcal{X}$, (e.g., traces, PPNs) a (positive definite) \textbf{kernel} function $k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product $\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$. 
+Given a set of data examples $\mathcal{X}$, (e.g., traces, TGs) a (positive definite) \textbf{kernel} function $k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product $\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$. 
 A kernel is said to \textbf{perform ideally} \cite{Gartner03} when $k(x,x')=1\Leftrightarrow x=x'$ (\textit{strong equality}) and $k(x,x')=0\Leftrightarrow x\not\simeq x'$ (\textit{strong dissimilarity}). A kernel is also said to be \textbf{appropriate} when similar elements $x,x'\in\mathcal{X}$ are also close in the feature space: appropriateness can be only assessed  empirically \cite{Gartner03}.
 
 Any positive definite kernel induces a distance metric as \cite{Raedt}:
@@ -55,7 +88,7 @@ When the kernel of choice is the inner product, the resulting distance is the we
 
 When $\mathcal{X}$ does not necessarily represent a $d$-dimensional Euclidean space, we can use an \textbf{embedding} $\phi\colon\mathcal{X}\to \mathbb{R}^d$ to define a kernel $k_\phi\colon \mathcal{X}\times \mathcal{X}\to\mathbb{R}$ as $k_\phi(x,x'):=\Braket{\phi(x),\phi(x')}$. As a result, $k_\phi(x,x')=k_\phi(x',x)$ for each $x,x'\in\mathcal{X}$.
 
-Current literature also provides kernel representations for traces (namely, strings). We now provide an intuition describing the desired features of such representation \cite{LodhiSSCW02}: if we associate each dimension in $\mathbb{R}^d$ to a different subtrace ${\color{green}\alpha\beta}\in(\Sigma\backslash\{\varepsilon\})^2$, the associated coordinate should represent how frequently and ``compatctly'' such subtrace is embedded in the original trace. Therefore, we need to introduce a \textbf{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ weighting the presence of each subtrace ``${\color{green}\alpha\beta}/L$'' as $\lambda^Lm$, where $m$ is the frequency of $\color{green}\alpha\beta$ appearing in the given trace at a distance $L$. Given a trace $\tau\in\Sigma^*$, we can represent it as a PPN \cite{Myers1989} $(1,{|\tau|},L_\tau,R_\tau,1)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. Under these assumptions, we can simplify the definition of the embedding from \cite{LodhiSSCW02,Raedt} as $\phi_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
+Current literature also provides kernel representations for traces (namely, strings). We now provide an intuition describing the desired features of such representation \cite{LodhiSSCW02}: if we associate each dimension in $\mathbb{R}^d$ to a different subtrace ${\color{green}\alpha\beta}\in(\Sigma\backslash\{\varepsilon\})^2$, the associated coordinate should represent how frequently and ``compatctly'' such subtrace is embedded in the original trace. Therefore, we need to introduce a \textbf{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ weighting the presence of each subtrace ``${\color{green}\alpha\beta}/L$'' as $\lambda^Lm$, where $m$ is the frequency of $\color{green}\alpha\beta$ appearing in the given trace at a distance $L$. Given a trace $\tau\in\Sigma^*$, we can represent it as a TG \cite{Myers1989} $(1,{|\tau|},L_\tau,R_\tau,1)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. Under these assumptions, we can simplify the definition of the embedding from \cite{LodhiSSCW02,Raedt} as $\phi_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
 
 \begin{figure}[!t]
 	\centering
@@ -63,7 +96,7 @@ Current literature also provides kernel representations for traces (namely, stri
 	\caption{Graphical representation of $\tau^*=\textup{caba}$ as a Thompson automaton.}\label{fig:taustar}
 \end{figure}
 \begin{example}
-	A trace $\tau^*=\textup{caba}$  can be graphically represented as a Thompson automaton in Figure \ref{fig:taustar}. The associated PPN $T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ has matrices $L$ and $R$  defined as follows:
+	A trace $\tau^*=\textup{caba}$  can be graphically represented in Figure \ref{fig:taustar}. The associated TG $T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ has matrices $L$ and $R$  defined as follows:
 	$$L:=\kbordermatrix{
 		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
 		\color{green}a            & 0&\textbf{1}&0&\textbf{1}\\
