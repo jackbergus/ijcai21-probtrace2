@@ -1,0 +1,55 @@
+\documentclass[tikz]{standalone}
+\usetikzlibrary{arrows,shapes,automata,petri,positioning}
+
+\tikzset{
+	place/.style={
+		circle,
+		thick,
+		draw=blue!75,
+		fill=blue!20,
+		minimum size=6mm,
+	},
+	transitionH/.style={
+		rectangle,
+		thick,
+		fill=black,
+		minimum width=8mm,
+		inner ysep=2pt
+	},
+	transitionV/.style={
+		rectangle,
+		thick,
+		fill=black,
+		minimum height=8mm,
+		inner xsep=2pt
+	}
+}
+
+\begin{document}
+	
+	\begin{tikzpicture}[node distance=0.4cm and 1cm,>=stealth',bend angle=45,auto]
+	\node [place,label=above:$p_1$,tokens=1] (p1) {};
+	\node [transitionV,label=above:$t_1$] (t1) [right= of p1] {} edge[pre] (p1);
+	\node [place,label=above:$p_2$] (p2) [above right= of t1] {} edge[pre] (t1);
+	\node [transitionV,label=above:$t_2$] (t2) [above right= of p2] {} edge[pre] (p2);
+	\node [place,label=above:$p_3$] (p3) [right= of t2] {} edge[pre] (t2);
+	\node [transitionV,label=above:$t_4$] (t4) [right= of p3] {} edge[pre] (p3);
+	\node [transitionV,label=above:$t_5$] (t5) [below right= of p2] {} edge[pre] (p2);
+	\node [place,label=above:$p_5$] (p5) [below right= of t1] {} edge[pre] (t1);
+	\node [transitionV,label=below:$t_3$] (t3) [right= of p5] {} edge[pre] (p5);
+	\node (b1) [right = of p2] {};
+	\node (b2) [right = of b1] {};
+	\node (b3) [right = of b2] {};
+	\node [place,label=above:$p_4$] (p4) [right= of b3] {} edge[pre] (t4) edge[pre] (t5);
+	\node (b1) [right = of t3] {};
+	\node (b3) [right = of b1] {};
+	\node [place,label=above:$p_6$] (p6) [right= of b3] {} edge[pre] (t3);
+	\node (b1) [right = of t5] {};
+	\node (b2) [right = of b1] {};
+	\node (b3) [right = of b2] {};
+	\node [transitionV,label=below:$t_6$] (t6) [right= of b3] {} edge[pre] (p4) edge[pre] (p6);
+	\node [place,label=above:$p_7$] (p7) [right= of t6] {} edge[pre] (t6);
+	
+	\end{tikzpicture}
+	
+\end{document}
