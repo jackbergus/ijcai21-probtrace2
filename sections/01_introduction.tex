@@ -1,4 +1,14 @@
 \section{Introduction}\label{introduction}
+
+
+In the existing literature on conformance checking, one of the most common approach is based on trace alignments. However, the proposed approaches based on trace alignments use crisp process models as reference models. On the other hand, recently, probabilistic conformance checking approaches are gaining momentum, but the existing approaches are used to check the degree of conformance of and event log with respect to a stochastic process model instead of finding trace alignments.
+In this paper, for the first time, we provide a conformance checking approach based on trace alignments using stochastic reference models. Conceptually, this requires to handle the two possibly contrasting forces of the cost of the alignment on the one hand and the likelihood of the model trace with respect to which the alignment is computed.
+Balancing between the likelihood of the model trace with respect to which we are computing the alignment and the cost of the alignment (if the cost of the alignment is too high even if the model trace is very likely applying too many changes in the original trace is in turn not very likely).
+
+
+
+
+%%%%% Proposed part as the last part of the introduction: 
 \texttt{\color{red}[TODO]}
 Then, we're going to perform experiments for empirically evaluating some of the properties of the proposed embedding strategy (\S\ref{sec:exp}):
 \begin{enumerate}
@@ -7,51 +17,3 @@ Then, we're going to perform experiments for empirically evaluating some of the 
 	\item Last, we're going to compare the time required to compute the exact trace alignment approach (\S\ref{subsec:exbkptap}) against the approximated approach (\S\ref{subsec:akptap}). \texttt{\color{red}[TODO]}
 \end{enumerate}
 \texttt{\color{red}[TODO]}
-
-In the existing literature on conformance checking, one of the most common approach is based on trace alignments. However, the proposed approaches based on trace alignments use crisp process models as reference models. On the other hand, recently, probabilistic conformance checking approaches are gaining momentum, but the existing approaches are used to check the degree of conformance of and event log with respect to a stochastic process model instead of finding trace alignments.
-In this paper, for the first time, we provide a conformance checking approach based on trace alignments using stochastic reference models. Conceptually, this requires to handle the two possibly contrasting forces of the cost of the alignment on the one hand and the likelihood of the model trace with respect to which the alignment is computed.
-Balancing between the likelihood of the model trace with respect to which we are computing the alignment and the cost of the alignment (if the cost of the alignment is too high even if the model trace is very likely applying too many changes in the original trace is in turn not very likely).
-
-%
-%Temporal business constraints have been extensively adopted to declaratively capture the acceptable courses of execution in a business process. In particular, the \emph{\declare} constraint-based process modeling language \cite{PeSV07} has been introduced as a front-end language to specify business constraints based on Linear Temporal Logic over finite traces (\LTLf) \cite{DeVa13}.
-%
-%In general, business constraints are interpreted logically in a crisp way.
-% This means that an execution trace conforms with a constraint model if all the constraints therein are satisfied. This is too restrictive when one wants to capture patterns that recur in many application domains, such as:
-% \begin{compactitem}[$\bullet$]
-% \item best practices, captured as constraints that should hold in the majority, but not necessary all cases (example: an order is shipped via truck in $90\%$ of the cases);
-% \item outlier behaviors, i.e., constraints that only apply to very few cases that should still considered to be conforming (example: an order is shipped via car in less than $1\%$ of the cases);
-% \item constraints involving activities that are not all necessarily controlled by the organization that orchestrates the process, and for which only some guarantees can be given about their proper executability (example: whenever an order is accepted, payment is performed by the customer in $8$ cases out of $10$).
-% \end{compactitem}
-%
-%Surprisingly enough, to the best of our knowledge no attempt has been done, so far, to make constraint-based process modeling approaches able to capture this form of uncertainty. In this paper, we tackle this timely and important challenge, relying on recent results on probabilistic temporal logics over finite traces \cite{MaMP20}. Specifically, \emph{we equip business constraints with a natural, probabilistic notion of uncertainty based on the ratio of traces in a log that must satisfy the constraint}, and use the resulting probabilistic constraints to lift \declare\ to its probabilistic variant that we call \pdeclare.
-%We then discuss the semantic implications of this approach, showing how it has to combine logical and probabilistic reasoning to tackle the semantics of probabilistic constraints and their interplay.
-%We finally show how this combined reasoning can be applied to verify the consistency of a \pdeclare model, do conformance checking, and carry out probabilistic constraint entailment, i.e., estimate with which probability a \pdeclare model implies a given \LTLf formula.
-%
-%\endinput
-%A key functionality that any process-aware information system should support is that of {\it monitoring} \cite{DBLP:journals/is/LyMMRA15}. Monitoring concerns the ability to verify at runtime whether an actual process execution conforms with a prescriptive business process model. This runtime form of conformance checking is instrumental to detect, and then suitably handle, deviations appearing in ongoing process instances.
-%
-%A common way of representing monitoring requirements that capture the expected behavior prescribed by a process model is by using declarative, business constraints. Many studies demonstrated that, in several settings, business constraints can be formalized in terms of temporal logic rules \cite{MPVC11}.
-%Within this paradigm, the \emph{\declare} constraint-based process modeling language \cite{PeSV07} has been introduced as a front-end language to specify business constraints based on Linear Temporal Logic over finite traces (\LTLf) \cite{DeVa13}. The advantage of this approach is that the automata-theoretic characterization of \LTLf is based on standard, finite-state automata. These can be exploited to provide advanced monitoring facilities where the state of constraints is determined in a sophisticated way by combining the events collected at runtime with the possible, future continuations \cite{MMWV11,DDGM14}, in turn enabling the early detection of conflicting constraints \cite{MWMV11}.
-%
-%
-%In a variety of application domains, business constraints are inherently \emph{uncertain}. This is clearly the case for constraints which:
-%\begin{inparaenum}[\it (i)]
-%\item capture best practices that have to be followed by default, i.e., in most, but not necessarily all, cases;
-%\item link controllable activities to activities that are under the responsibility of uncontrollable, external stakeholders;
-%\item should hold in exceptional but still conforming courses of execution.
-% \end{inparaenum}
-% Uncertainty is intrinsically present also when business constraints are discovered from event data. It is then very surprising that only very few approaches incorporate uncertainty as a first-class citizen. This is the case not just when the prescriptive behavior to be monitored is expressed as a set of business constraints, but also when a more conventional imperative approach is adopted \cite{DBLP:conf/bpm/LeemansSA19}.
-%
-%
-%It is well known that combining uncertainty with temporal logics is extremely challenging. This is due to the interplay of temporal operators and uncertainty, which becomes especially tricky considering that, usually, temporal logics are interpreted over infinite traces. The resulting, combined logics then come with semantic or syntactic restrictions (see, e.g., \cite{Ognj06,KovP18}).
-%To tackle these issues, the probabilistic temporal logic over finite traces $\PLTL$, and its fragment $\PLTLz$, have been recently proposed in \cite{MaMP20}. Since these logics are defined over finite traces, they are the natural candidate to enrich existing constraint-based process modeling approaches with uncertainty.
-%
-%In this paper, we indeed employ $\PLTLz$ to achieve this goal.  Specifically, we exploit the fact that $\PLTLz$ handles time and probabilities in a way that naturally matches with the notion of conformance: a constraint $\varphi$ holds with probability $p$ if, by considering all the traces contained in a log, $\varphi$ is satisfied by fraction $p$ of all the traces contained therein. Based on this observation, we provide a threefold contribution.
-%
-%First, we exploit $\PLTLz$ to introduce \emph{probabilistic constraints} and delve into their semantics and conceptual meaning; notably, our semantics is based on the already established notion of stochastic language \cite{DBLP:conf/bpm/LeemansSA19}. We then show how probabilistic constraints can be used to naturally lift the \declare language to its probabilistic version \pdeclare.
-%%
-%Second, we observe that probabilistic Declare constraints can be discovered off-the-shelf using already existing techniques for declarative process discovery \cite{LMMR07,MaCV12,CiccioM15,DBLP:conf/caise/SchonigRCJM16}, with strong guarantees on the consistency of the generated models. In fact, the discovered constraints are for sure (probabilistically) consistent, without incurring in the notorious consistency issues experienced when the discovered constraints are interpreted in a crisp way \cite{DMMM17}.
-%%
-% Third, we study how to monitor probabilistic constraints,  where constraints and their combinations may be in multiple monitoring states at the same time, though with different associated probabilities. This is based on the fact that a single \pdeclare model gives raise to multiple scenarios, each with its own distinct probability, where some of the constraints are expected to be satisfied, and the others to be violated. Specifically, we show how to lift existing automata-theoretic monitoring techniques to this more sophisticated probabilistic setting, and report on a proof-of-concept implementation of the resulting framework.
-%
-%The paper is structured as follows. After preliminary notions introduced in Section~\ref{sec:preliminaries}, we introduce the syntax and semantics of probabilistic constraints in Section~\ref{sec:probdeclare}. In Section~\ref{sec:discovery}, we discuss how \pdeclare constraints can be discovered from event data using existing techniques. In Section~\ref{sec:monitoring}, we show how to monitor probabilistic constraints, and report on the corresponding implementation.
