@@ -25,13 +25,13 @@ At this point, we can map each weighted trace  $\braket{\tau,w_\tau}\in\mathcal{
 \begin{tabular}{lc|ll|cl}
 	\toprule
 	
-	\multirow{2}{*}{$\tau$} & 
-	\multirow{2}{*}{$d(\tau,\tau^*)$} & 
+	\multirow{2}{*}{$\tau$} &
+	\multirow{2}{*}{$d(\tau,\tau^*)$} &
 	\multicolumn{2}{c|}{$\mu_{\tau^*}$} &
 	 \multirow{2}{*}{$\approx s_d(\tau,\tau^*)\cdot w_\tau$} & \multirow{2}{*}{\textit{expected ranking}}\\
-	 
+	
 	\cline{3-4} &&  $\langle w_\tau$ &  $,\,s_d(\tau,\tau^*)\rangle $ &&\\
-	 
+	
 	\midrule
 	{a}  & $3$ & $0.4$ & $\;\; 0.6250$  & $0.2500$ & \textbf{1}\\
 	{aa}  & $2$ & $0.2$ & $\;\; 0.7142$ & $0.1428$ & \textbf{2}\\
@@ -54,7 +54,7 @@ Table \ref{tab:expected} represents the expected exact alignment raking of all t
 \begin{example}
 Figure \ref{fig:spp} shows a family of hyperbolae $ps=k$ describing all the points $(p,s)$ having $k$ as a weighted similarity score. For example,  point $\color{red}(1,1)$ represents the best possible trace match, as it means that there exists a trace $\braket{\tau,p}\in\mathcal{W}_p^n(P)$ with probability $p=1$ and trace similarity $s_d(\tau,\tau^*)=1$.
 
-Figure \ref{fig:knnspace} shows that the transformation $t$ moves the points of the hyperbola $ps=k$ over a circumference $\overline{p}^2+\overline{s}^2=\sfrac{1}{k^2}$ describing a locus of the points equidistant from the origin of the axes $(0,0)$ with distance $\sfrac{1}{k}$. %This implies that now all the points $(p,s)$ having the same product $ps=k$ are equidistant from the origin of the axes, thus implying that we might now rank the points using a $k$-Nearest Neighbour algorithm using $q=\vec{0}$ as a query vector. 
+Figure \ref{fig:knnspace} shows that the transformation $t$ moves the points of the hyperbola $ps=k$ over a circumference $\overline{p}^2+\overline{s}^2=\sfrac{1}{k^2}$ describing a locus of the points equidistant from the origin of the axes $(0,0)$ with distance $\sfrac{1}{k}$. %This implies that now all the points $(p,s)$ having the same product $ps=k$ are equidistant from the origin of the axes, thus implying that we might now rank the points using a $k$-Nearest Neighbour algorithm using $q=\vec{0}$ as a query vector.
 This consideration will be formally proved in the subsequent lemma.
 \end{example}
 
@@ -112,7 +112,7 @@ caaa   & $\braket{1.44, 68.56}$ & $68.57$ & $0.0145$ & \textbf{8}\\
 \end{tabular}
 \end{table}
 \begin{example}
-We now want to show the correctness of the former lemmas with some examples. 
+We now want to show the correctness of the former lemmas with some examples.
 Table \ref{tab:transf} represents the transformed points $t(\mu_{\tau^*}(\tau))$ from the data points $\mu_{\tau^*}(\tau)$  calculated  Example \ref{ex:rankingTaus}. The third column shows the distance of the transformed point from the origin: the following column shows that the inverse of such distance exactly represents the previously calculated $s_d(\tau,\tau^*)\cdot w_\tau$, thus empirically implying that the $k$-nearest neighbours problem corresponts to the best $k$ traces maximising the product $s_d(\tau,\tau^*)\cdot w_\tau$.
 \end{example}
 
@@ -147,14 +147,14 @@ Given a minimum probability threshold $p$, a maximum path length $n$, and a TG $
 		\toprule
 		$\tau$&$P_\tau$&$l$&$w$\\
 		\midrule
-		a & \includegraphics{images/trace_a} & $1$ & $\color{red}p_1p_6$\\   
+		a & \includegraphics{images/trace_a} & $1$ & $\color{red}p_1p_6$\\
 		cb & \includegraphics{images/trace_cb} & $2$ & $\color{red}p_2$\\
-		aa & \includegraphics{images/trace_a_loop} & $2$ & $\color{red}p_1p_6$\\ 
-		ca & \includegraphics{images/trace_ca} & $2$ & $\color{red}p_2p_6$\\ 
-		aaa & \includegraphics{images/trace_a_loop} & $3$ & $\color{red}p_1p_6$\\ 
-		caa & \includegraphics{images/trace_ca_loop} & $3$ & $\color{red}p_2p_6$\\  
-		\begin{tabular}{l}aaaa\end{tabular} & \includegraphics{images/trace_a_loop} & $4$ & $\color{red}p_1p_6$\\ 
-		caaa & \includegraphics{images/trace_ca_loop} & $4$ & $\color{red}p_2p_6$\\  
+		aa & \includegraphics{images/trace_a_loop} & $2$ & $\color{red}p_1p_6$\\
+		ca & \includegraphics{images/trace_ca} & $2$ & $\color{red}p_2p_6$\\
+		aaa & \includegraphics{images/trace_a_loop} & $3$ & $\color{red}p_1p_6$\\
+		caa & \includegraphics{images/trace_ca_loop} & $3$ & $\color{red}p_2p_6$\\
+		\begin{tabular}{l}aaaa\end{tabular} & \includegraphics{images/trace_a_loop} & $4$ & $\color{red}p_1p_6$\\
+		caaa & \includegraphics{images/trace_ca_loop} & $4$ & $\color{red}p_2p_6$\\
 		\bottomrule
 	\end{tabular}
 \end{table} \begin{table}[!t]
@@ -178,7 +178,7 @@ Given a minimum probability threshold $p$, a maximum path length $n$, and a TG $
 	\end{tabular}
 \end{table}
 \begin{example}\label{ex:explainembed}
-	Table \ref{tab:proj} represents the TGs $P_\tau\in\mathbf{T}_p^n(P)$ with weight $w$ generated for each weighted path $\braket{\tau,w_\tau}\in \mathcal{W}_0^4(P)$ of length $l=|\tau|$ from the TG $P$ in Figure \ref{fig:closed}. The associated weight $w$ derives from the source's outgoing edges (and target's ingoing edges) when such node is labelled as $\varepsilon$: given that the selection of a trace $\tau$ implies performing a set of specific probabilistic choices, we can remove all the edges starting (and arriving) at nodes that are $\varepsilon$-labelled and move their score as the weight of the TG. 
+	Table \ref{tab:proj} represents the TGs $P_\tau\in\mathbf{T}_p^n(P)$ with weight $w$ generated for each weighted path $\braket{\tau,w_\tau}\in \mathcal{W}_0^4(P)$ of length $l=|\tau|$ from the TG $P$ in Figure \ref{fig:closed}. The associated weight $w$ derives from the source's outgoing edges (and target's ingoing edges) when such node is labelled as $\varepsilon$: given that the selection of a trace $\tau$ implies performing a set of specific probabilistic choices, we can remove all the edges starting (and arriving) at nodes that are $\varepsilon$-labelled and move their score as the weight of the TG.
 
 Table \ref{tab:emb2} represents the embeddings $\phi_{\mathcal{P}}(P_\tau)$ generated from the sub-TGs $P_\tau\in \mathbf{T}_0^4(P)$ of $P$, where the $l$ parameters required to compute $\epsilon$ via Equations \ref{eq:epsilon} and \ref{eq:nu} are the same as above. As we can see, this representation is completely independent of the representation associated with a trace to be aligned. Therefore it doesn't have to be recomputed at each alignment with a different $\tau^*$.
 \end{example}
@@ -207,8 +207,8 @@ Table \ref{tab:emb2} represents the embeddings $\phi_{\mathcal{P}}(P_\tau)$ gene
 	\begin{tabular}{lc|ll|cc|l}
 	\toprule
 	
-	\multirow{2}{*}{$\tau$} & 
-	\multirow{2}{*}{$d(\tau,\tau^*)$} & 
+	\multirow{2}{*}{$\tau$} &
+	\multirow{2}{*}{$d(\tau,\tau^*)$} &
 	\multicolumn{2}{c|}{$\mu_{\tau^*}$} &
 	\multirow{2}{*}{$\approx s_d(\tau,\tau^*)\cdot w_\tau$} &
 	\multirow{2}{*}{$k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$}&
@@ -230,10 +230,10 @@ Table \ref{tab:emb2} represents the embeddings $\phi_{\mathcal{P}}(P_\tau)$ gene
 \end{table}
 
 
-At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}_p^n(P), P_\tau\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\tau, T)$ returns the best approximated trace alignment $\tau$ for a query trace represented as $T$. Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $T$ as $\underset{P}{\max\arg}\underset{ P_\tau\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\tau, T)$. 
+At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}_p^n(P), P_\tau\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\tau, T)$ returns the best approximated trace alignment $\tau$ for a query trace represented as $T$. Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $T$ as $\underset{P}{\max\arg}\underset{ P_\tau\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\tau, T)$.
 
 \begin{example}
-	Let us resume Example \ref{ex:explainembed}. 
+	Let us resume Example \ref{ex:explainembed}.
 	Given that $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)=\braket{\phi_{\mathcal{P}}(P_\tau),\;\phi_{\mathcal{P}}(T)}$ for each weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_0^4(P)$, then the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}. This similarity score approximates the expected ranking showed in Table \ref{tab:expected}, and tends to rank in similar ways the paths generated from the same subgraph of the TG.
 \end{example}
 
@@ -244,10 +244,10 @@ $$\begin{aligned}
 	\mathcal{W}_0^4(P)=\{&\braket{cb,0.35},\braket{a,0.05},\braket{aa,0.045},\braket{aaa,0.0405},\\
 	&\braket{aaaa,0.03645},\braket{ca,0.015},\braket{caa,0.0135},\braket{caaa,0.01215}\}\\
 \end{aligned}$$
-	Let us also assume that we want to align these traces in a probabilistic way with the query $\tau^*=\textup{caba}$: the distance ($d$) and similarity ($s_d$) scores will be still the same, while the associated probabilities will vary. The expected ranking by multiplying weight with similarity is represented in Table \ref{tab:witherror}. 
+	Let us also assume that we want to align these traces in a probabilistic way with the query $\tau^*=\textup{caba}$: the distance ($d$) and similarity ($s_d$) scores will be still the same, while the associated probabilities will vary. The expected ranking by multiplying weight with similarity is represented in Table \ref{tab:witherror}.
 
-As a consequence of the different probability distribution associated to the edges, a different set of embedding will be generated for each trace of interest while the TG $T$ associated to $\tau^*$ will be kept the same. Table \ref{tab:witherror} represents the ranking induced by the kernel $k_{\phi_{\mathcal{P}}}$ over this different set of vectors by ranking the traces in descendant order of $k_{\phi_{\mathcal{P}}}$. As we might notice, the more skewed edge probability distribution introduced more errors in the ranking result: while the largest ranking subsequence (marked in blue) always starts from the best-expected trace \textit{cb}, this element now appears in the third position, and the position of traces \textit{caa} and \textit{aaaa} is swapped.  
- 
+As a consequence of the different probability distribution associated to the edges, a different set of embedding will be generated for each trace of interest while the TG $T$ associated to $\tau^*$ will be kept the same. Table \ref{tab:witherror} represents the ranking induced by the kernel $k_{\phi_{\mathcal{P}}}$ over this different set of vectors by ranking the traces in descendant order of $k_{\phi_{\mathcal{P}}}$. As we might notice, the more skewed edge probability distribution introduced more errors in the ranking result: while the largest ranking subsequence (marked in blue) always starts from the best-expected trace \textit{cb}, this element now appears in the third position, and the position of traces \textit{caa} and \textit{aaaa} is swapped.
+
 \end{example}
 \begin{table}[!t]
 	\centering
@@ -255,8 +255,8 @@ As a consequence of the different probability distribution associated to the edg
 	\begin{tabular}{lc|ll|cc|l}
 		\toprule
 		
-		\multirow{2}{*}{$\tau$} & 
-		\multirow{2}{*}{$d(\tau,\tau^*)$} & 
+		\multirow{2}{*}{$\tau$} &
+		\multirow{2}{*}{$d(\tau,\tau^*)$} &
 		\multicolumn{2}{c|}{$\mu_{\tau^*}$} &
 		\multirow{2}{*}{$\approx s_d(\tau,\tau^*)\cdot w_\tau$} &
 		\multirow{2}{*}{$k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$}&
@@ -283,7 +283,7 @@ As a consequence of the different probability distribution associated to the edg
 	\multicolumn{3}{c||}{Example \ref{ex:withpaths}} &
 	\multicolumn{3}{c}{Example \ref{ex:moreskew}}\\
 	\hline
-	$\tau$ &  $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$ & \textit{exp. ranking} & 
+	$\tau$ &  $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$ & \textit{exp. ranking} &
 	$\tau$ &  $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$ & \textit{exp. ranking}\\
 	\midrule
 	
@@ -304,4 +304,10 @@ As a consequence of the different probability distribution associated to the edg
 Let us compare the ranking results by replacing our proposed edge embedding in $\phi_{\mathcal{P}}$ with $\tilde{\epsilon}(P)_{\color{green}\alpha\beta}=\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$ as proposed by the current literature (see \S\ref{subsec:katk}). If we re-run the computations performed in both Example \ref{ex:withpaths} and \ref{ex:moreskew}, we obtain the results depicted in Table \ref{tab:compLit}: as we can see, our proposal provides longer approximated subsequences if compared to $\tilde{\epsilon}$. Both embedding proposals tend to favor sequences containing one single node or one single subtrace due to the normalization of both  the edge and the nodes' distribution, but $\tilde{\epsilon}$ seems to be less influenced than $\epsilon$ in the change of the edge distribution. Therefore, our proposal is to be preferred than the one proposed by current literature.
 \end{example}
 
-In the next section, we propose a novel scoring function providing a numerical characterization for objectively comparing the ranking results by both changing the edge embedding definition and the graph distribution. Before doing so, we're going to compare such proposed function to the well-known Spearman Correlation Index.
+In the next section, we propose a novel scoring function providing a numerical characterization for objectively comparing the ranking results by both changing the edge embedding definition and the graph distribution. Before doing so, we're going to compare such proposed function to the well-known Spearman Correlation Index. 
+
+
+Trace alignments algorithms provide as output a single alignment. This is not very convenient in practice because a rich feedback shoild provide different possibilities. This is even more important when the Petri net we are considering is stochastic and the different model traces have different probabilities.
+
+INPUT: trace, stochastic (Workflow net) Petri net, minimum probability threshold, maximum model trace length
+OUTPUT: set of model traces satisfying the minimum probability threshold and the maximum model trace length candidates for the alignment with an alignment ranking
