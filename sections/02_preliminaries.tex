@@ -1,6 +1,9 @@
+
+
+
 \section{Preliminaries}
-\subsection{Stochastic Petri Nets (SPN)}\label{subsec:spn}
-In this paper, we consider a specific case of Stochastic Petri Nets, such as Workflow Networks over $k$-bounded Place-Transitions Nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13}. Those Stochastic Petri Nets can be modelled as a tuple $SPN=(P,T,F,\omega,W,i,f)$ where:
+\subsection{Untimed Stochastic Petri Nets (USPN)}\label{subsec:spn}
+In this paper, we consider a specific case of Untimed Stochastic Petri Nets, such as Workflow Networks over $k$-bounded Place-Transitions Nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13}. Those Untimed Stochastic Petri Nets can be modelled as a tuple $USPN=(P,T,F,\omega,W,i,f)$ where:
 \begin{itemize}
 \item $P$ is a set of \textit{places} to which we can associate a finite number of indistinguishable tokens.
 \item $T$ is a set of \textit{transitions} $t\in T$, to which we associate a label $\lambda(t)\in\Sigma$, where $\Sigma$ also includes the empty string\footnote{Given that we are going to denote the traces as $\tau$ and $t$ as the Petri Net Transitions, we choose to denote the empty string as such instead of $\tau$ as in current literature from Petri Nets.} $\varepsilon$.
@@ -11,23 +14,16 @@ In this paper, we consider a specific case of Stochastic Petri Nets, such as Wor
 \end{itemize}
 A \textit{marking} is an assignment of a given amount of indistinguishable tokens to places described by a vector $M\colon P\to \mathbb{N}$. We say that a given transition $t$ is \textit{enabled} if $M(p)\geq \omega(p,t)$ for each ingoing $p$ to $t$ ($(p,t)\in F$). If such transition is enabled, then it can \textit{fire} a token. The set of the \textit{enabling transitions} $E(M)$ for a given marking $M$ are all the $t$ reachable from $p$ ($(p,t)\in F$) with $M(p)\neq 0$ where $t$ is enabled. When $t$ can fire a token for a marking $M$, we can generate a novel marking $M'$ from $M$ by moving the tokens from the ingoing places towards the outgoing places as follows:
 \[\forall p\in P.\; M'(p)=M(p)-[\omega(p,t)]+[\omega(t,p)]\]
-We denote the transition from marking $M$ to marking $M'$ via an enabling $t$ as a relation $M\overset{t}{\to}M'$. Given an initial marking $M$ for a Stochastic Petri Net $SPN$,  the \textit{Reachability Graph} for $SPN$ is a graph $(\mathcal{M},\mathcal{E})$ where the nodes  $\mathcal{M}$ are composed of of all the reachable markings from $M$, $M$ included, and all the edges $\mathcal{E}$ are induced by the aforementioned relation $M\overset{t}{\to}M'$ among the reachability graph's nodes. To each of such edges $M\overset{t}{\to}M'$, we associate a transition probability $\mathbb{P}\left(M\overset{t}{\to}M'\right)=\frac{W(t)}{\sum_{t'\in E(M)}W(t')}$ \cite{spdwe}. We say that a SPN with initial marking $M$ is $k$-\textit{bounded} if each of the nodes $M$ in the reachability graph have $\forall p\in P.\; M(p)\leq k$\\
+We denote the transition from marking $M$ to marking $M'$ via an enabling $t$ as a relation $M\overset{t}{\to}M'$. We say that a USPN with initial marking $M$ is $k$-\textit{bounded} if each of the markings $M'$ reachable from $M$, $M$ included, have $\forall p\in P.\; M(p)\leq k$\\
 
 
 \begin{example}
-Figure \ref{fig:spn} provides an example of a Stocastic Petri Net defined as such, and \ref{fig:rg} provides its associated Reachability Graph \texttt{[TODO: some explanation?]}. This representation can be beneficial when such SPNs are inferred and extracted from log files \cite{PPNFromLog} for extracting the set of the probabilistic traces associated to the SPN.
+Figure \ref{fig:spn} provides an example of a Stocastic Petri Net defined as such, and \ref{fig:rg} provides its associated Reachability Graph \texttt{[TODO: some explanation?]}. This representation can be beneficial when such USPNs are inferred and extracted from log files \cite{PPNFromLog} for extracting the set of the probabilistic traces associated to the USPN.
 \end{example}
 
 
-In this paper, we use SPNs for modelling business processes: in fact, it can be shown (\texttt{[TODO: paper?]}) that it is always possible to convert BPMNs to SPNs. Last, in this paper we also assume that a transition is enabled when all of its input places contain at least one token and that, when a transition fires, we remove one token from each of its input places and depose tokens for each of its output places: this condition is set via $\forall e\in F. \omega(e)=1$.
-\begin{figure}[!ph]
-	\centering
-	\subfloat[A Stochastic Petri Net.]{\label{fig:spn}\includegraphics[width=.9\textwidth]{images/petri.pdf}}\qquad
-	\subfloat[Reachability Graph associated to the Stochastic Petri Net.]{\label{fig:rg}\includegraphics[width=.9\textwidth]{images/rg.pdf}}\\
-	\subfloat[Reachability Graph Transformed as a Transition Graph.]{\label{fig:lmc}\includegraphics[width=.9\textwidth]{images/rg_transformed.pdf}}
-	\caption{Steps required to transform the set of probabilistic traces associated to a Stochastic Petri Net into a Transition Graph.}
-	\label{transformspn}
-\end{figure}
+In this paper, we use USPNs for modelling business processes: in fact, it can be shown (\texttt{[TODO: paper?]}) that it is always possible to convert BPMNs to USPNs. Last, in this paper we also assume that a transition is enabled when all of its input places contain at least one token and that, when a transition fires, we remove one token from each of its input places and depose tokens for each of its output places: this condition is set via $\forall e\in F. \omega(e)=1$.
+
 
 
 \subsection{Transition Graphs (TGs)}\label{subsec:ppn}
@@ -47,8 +43,8 @@ We can also associate a weight $w\in[0,1]\subseteq\mathbb{R}$ to a TG, so to exp
 
 
 \begin{example}
-	Under these assumptions, we can graphically represent such TG as a Thompson automaton \cite{Myers1989}: 
-Figure \ref{fig:orig} can be represented as a TG $P^*=(\mathtt{\color{blue}1},\mathtt{\color{blue}6},L,R,1)$, where the matrices $L$ and $R$ can be both defined as follows:
+	Under these assumptions, we can graphically represent such TG as in \cite{Myers1989}. 
+Figure \ref{fig:orig} is a  TG $P^*=(\mathtt{\color{blue}1},\mathtt{\color{blue}6},L,R,1)$, where the matrices $L$ and $R$ can be both defined as follows:
 $$L:=\kbordermatrix{
              & \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}&\texttt{\color{blue}5}&\texttt{\color{blue}6}\\
 \color{green}\varepsilon  & \textbf{1}&0&0&\textbf{1}&0&\textbf{1}\\
@@ -66,16 +62,9 @@ $$L:=\kbordermatrix{
 }$$
 \end{example}
 
- Given a TG $P=(s,t,L,R,w)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. Being that both the graph isomorphism problem is NP-Complete and the TGs are fully characterised by the set of the probabilistic traces that they generate,  we can say that two TGs are (probabilistic-trace) equivalent if and only if they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and  a maximum length of $n$. Under these assumptions, the probabilistic trace equivalence is deterministic.
+ Given a TG $P=(s,t,L,R,w)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. 
 
-\begin{example}
-The TG in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces:
-$$\set{\braket{\underbrace{\color{green}a\dots a}_{n},{\color{red}p_1p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup \set{\braket{{\color{green}c}\underbrace{\color{green}a\dots a}_{n},{\color{red}p_2p_4p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup\{\braket{{\color{green}cb},{\color{red}p_2p_5}}\}$$
-The $\varepsilon$-closure remotes the non-initial and non-accepting nodes within such automaton, while preserving the probabilistic trace equivalence of the two automata: node \texttt{\color{blue}4} is then removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{red}p_4}\texttt{\color{blue}2}$ and $\texttt{\color{blue}3}\xrightarrow{\color{red}p_5}\texttt{\color{blue}5}$ are introduced. The resulting TG $P$ is represented with the same graphical depiction Figure \ref{fig:closed}: 
-we can easily see that $\mathcal{W}_0^{\aleph_0}(P^*)=\mathcal{W}_0^{\aleph_0}(P)$, so the two TGs are (probabilistic-trace) equivalent.
-\end{example}
 
-Consequently, it is always possible to minimize a TG  (e.g., Figure \ref{fig:orig}) via $\varepsilon$-closure, so that the only nodes that are labelled as $\varepsilon$ are the source and the target nodes (Figure \ref{fig:closed}) and the set of weighted traces is preserved. From now on, we always that all the TGs are minimized via $\varepsilon$-closure.
 
 
 \subsection{Kernels and Trace Kernels}\label{subsec:katk}
@@ -119,6 +108,11 @@ The subtrace \textit{\textbf{\uline{hi}}} is represented in \textit{\textbf{\uli
 
 For this trace kernel, we have that $\Braket{\phi_\mathcal{T}(\tau),\phi_\mathcal{T}(\tau')}=1$ if $\tau\equiv \tau'$ and that $\Braket{\phi_\mathcal{T}(\tau),\phi_\mathcal{T}(\tau')}=0$ when the two traces have no shared subtraces of size $2$ with arbitrary distance $L$: these are basic desired properties for determining the trace similarity based on the substring distribution.
 
+\subsection{Graph Embedding}\label{ssec:ge}
+Graph kernels allow mapping graph data structures to feature spaces (usually an Eulcidean space in $\mathbb{R}^n$ for $n\in \mathbb{N}_{>0}$) \cite{Samatova} so to express graph similarity functions that can then be adopted for both classification \cite{TsudaS10} and clustering \cite{Raedt} algorithms. One of the first approaches used in literature involved the definition of topological description vectors \cite{Sidere} for each graph in a graph database, for then defining the graph similarity function as an inner product of their associated vectors. One inconvenience of such a technique is that it is required to perform \yellownote{Not sure if it is better to move this part into a Related Work section, but I think we still need to discuss the structure of the paper.} NP-complete subgraph isomorphisms among a collection of graphs. It has been already proved that the definition of a graph kernel function fully recognising the structure the graph always boils down solving such  NP-Complete problem \cite{GartnerFW03}. 
+
+
+Consequently, most recent literature focused on extracting relevant features of such graphs, that are then used to define a graph similarity function. The most common approach adopted in the kernel to extract such features is called \textit{propositionalisation}: we might extract all the possible features (e.g., subsequences), and then define a kernel function based on the occurrence and similarity of these features \cite{Gartner03}. 
 
 %\section{LTL over Finite Traces and the Declare Framework}
 %\label{sec:preliminaries}
