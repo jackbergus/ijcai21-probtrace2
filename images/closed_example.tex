@@ -15,15 +15,17 @@
 \begin{tikzpicture}[align=center,node distance=3cm]
     % equidistant points and arc
     \vertex{above}{$\color{green}\varepsilon_\texttt{\color{blue}1}$}{s}{initial}{right}{1}
-    \node[above right of=s] (bp) {};
-    \vertex{above left}{$\color{green}a$}{bp2}{right of=bp}{below right}{2}
+    \vertex{above}{$\color{green}a$}{a2}{right of=s}{right}{4}
+    
+    %\node[above right of=s] (bp) {};
+    \vertex{above left}{$\color{green}a$}{bp2}{above of=a2}{below right}{2}
     \vertex{above}{$\color{green}a$}{b1}{right of=bp2}{below right}{6}
     
     
     \vertex{above}{$\color{green}c$}{b2}{below right of=s}{below right}{3}
     \node[ right of=b2] (e2) {};
     
-    \node[shape=circle,fill=black, scale=0.5,label=left:{\color{green}$a$},label=below right:{\tiny\texttt{\color{blue}4}}] (a2) at ($(e2)!0.5!(bp2)$) {};
+    %\node[shape=circle,fill=black, scale=0.5,label=left:{\color{green}$a$},label=below right:{\tiny\texttt{\color{blue}4}}] (a2) at ($(e2)!0.5!(bp2)$) {};
     
     \vertex{above}{$\color{green}b$}{b}{right of=e2}{below right}{5}
     \vertex{above right}{$\color{green}\varepsilon_\texttt{\color{blue}f}$}{f}{right of=b1,accepting,state,scale=0.4}{below right}{8}
