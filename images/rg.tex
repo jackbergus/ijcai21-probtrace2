@@ -19,15 +19,15 @@
 \node[draw=black,rectangle,label=left:{\texttt{vi}}] (vi) [below=of iv] {$(0,0,0,0,0,1,0)$};
 \node[draw=black,rectangle,label=right:{\texttt{vii}}] (vii) [below=of v] {$(0,0,0,0,0,0,1)$};
 
-\draw[->] (i) -- (ii) node [midway] {$\color{green}\varepsilon_\texttt{\color{blue}1}$};
-\draw[->] (ii) -- (iii) node [midway] {$\color{green}\varepsilon_\texttt{\color{blue}2}$};
-\draw[->] (ii) -- (iv) node [midway,above] {$\color{green}c$};
-\draw[->] (v.south east) .. controls +(2,-2) and +(2,2) .. (v.north east) node [midway,right] {$\color{green}a$};
-\draw[->] (vi) -- (v) node [midway] {$\color{green}a$};
-\draw[->] (iii) -- (v) node [midway] {$\color{green}a$};
-\draw[->] (iv) -- (vi) node [midway] {$\color{green}\varepsilon_\texttt{\color{blue}3}$};
-\draw[->] (vi) -- (vii) node [midway,below] {$\color{green}b$};
-\draw[->] (v) -- (vii) node [midway] {$\color{green}\varepsilon_\texttt{\color{blue}4}$};
+\draw[->] (i) -- (ii) node [midway,right] {$\color{green}\varepsilon_\texttt{\color{blue}1}$} node [midway,left] {$\color{red}1$};
+\draw[->] (ii) -- (iii) node [midway,right] {$\color{green}\varepsilon_\texttt{\color{blue}2}$} node [midway,left] {$\color{red}p_1$};
+\draw[->] (ii) -- (iv) node [midway,above] {$\color{green}c$} node [midway,below] {$\color{red}p_2$};
+\draw[->] (v.south east) .. controls +(2,-2) and +(2,2) .. (v.north east) node [midway,right] {$\color{green}a$} node [midway,left] {$\color{red}p_3$};
+\draw[->] (vi) -- (v) node [midway] {$\color{green}a$} node [midway,above right] {$\color{red}p_4$};
+\draw[->] (iii) -- (v) node [midway] {$\color{green}a$} node [midway,left] {$\color{red}1$};
+\draw[->] (iv) -- (vi) node [midway] {$\color{green}\varepsilon_\texttt{\color{blue}3}$} node [midway,left] {$\color{red}1$};
+\draw[->] (vi) -- (vii) node [midway,below] {$\color{green}b$} node [pos=0.9,above] {$\color{red}p_5$};
+\draw[->] (v) -- (vii) node [midway] {$\color{green}\varepsilon_\texttt{\color{blue}4}$} node [midway,left] {$\color{red}1$};
 	
 %\node[draw=black,rectangle,label=right:{\texttt{\color{blue}i}}] (a) {$(1,0,0,0,0,0,0)$};
 %\node[draw=black,rectangle,label=right:{\texttt{\color{blue}ii}}] (b) [below= of a] {$(0,1,0,0,1)$};
