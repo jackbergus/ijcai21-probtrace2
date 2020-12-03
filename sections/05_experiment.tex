@@ -22,15 +22,17 @@
 \subsection{Dataset} 
 For our experiments, we took the Sepsis Cases Event Log \cite{mannhardt_2016}, splitted the dataset into the ``\textit{happy traces}'' occurring approximately near to the trace average length ($\leq 2.3\cdot 10^{7}$ ms), and used this dataset to generate either a USWN via ProM \cite{RoggeSoltiAW13} and a BPMN with only exclusive gates using Split Miner 2.0 \cite{AugustoCDRP19} that was then converted into a Petri Net \cite{{PPNFromLog}}. Such Petri Net was later on converted into a USWN by using a firing weight estimator: we choose the Fork and the PairScale estimators from \cite{spdwe} and we denote as \texttt{Constant} a naïve estimator assuming that each all the transition probabilities from a given marking are equiprobable. No estimator was used for the USWN generated via ProM, as such engine already estimates the firing weights. From such USWNs, we generate distinct sets of unravelled traces. All these steps are summarised in Table \ref{tab:dataset}. The following experiments have the aim of evaluating the benefits of performing the approximated trace embedding strategy over the exact trace aligner one.
 
-\begin{figure}[!t]
-	\centering
-\includegraphics[width=.75\textwidth]{images/Rplot04.pdf}
-\caption{Comparing appropriateness for different sub-embedding strategies for $\phi_{\mathcal{P}}$: $\color{ggplotGreen}\epsilon^1\&\nu^1$, $\color{ggplotRed}\epsilon^2\&\nu^1$, $\color{ggplotPurple}\epsilon^1\&\nu^2$, and $\color{ggplotBlue}\epsilon^2\&\nu^2$. Solid (dashed) lines refer to $k_{\phi_{\mathcal{P}}}$ ranking similarities considering controlled noise of $20\%$ ($30\%$).}\label{fig:app}
-\end{figure} \begin{figure}[!t]
-	\centering
-	\includegraphics[width=.75\textwidth]{images/kronos.pdf}
+\begin{figure*}[!t]
+\begin{minipage}{.49\textwidth}
+
+	\includegraphics[width=1.1\textwidth]{images/Rplot04.pdf}
+	\caption{Comparing appropriateness for different sub-embedding strategies for $\phi_{\mathcal{P}}$: $\color{ggplotGreen}\epsilon^1\&\nu^1$, $\color{ggplotRed}\epsilon^2\&\nu^1$, $\color{ggplotPurple}\epsilon^1\&\nu^2$, and $\color{ggplotBlue}\epsilon^2\&\nu^2$. Solid (dashed) lines refer to $k_{\phi_{\mathcal{P}}}$ ranking similarities considering controlled noise of $20\%$ ($30\%$).}\label{fig:app}
+\end{minipage}\hfill \begin{minipage}{.49\textwidth}
+
+	\includegraphics[width=1.1\textwidth]{images/kronos.pdf}
 	\caption{Comparing the top-$k$ trace alignment time (ms) for $k$NN strategies. Both VP-Trees ({\color{ggplotBlue}Blue} and {\color{ggplotPurple}Purple}) and KD-Trees ({\color{ggplotRed}Red} and {\color{ggplotGreen}Green}) are considered, as well as both $\phi_\star$ ({\color{ggplotPurple}Purple} and {\color{ggplotGreen}Green}) and $\phi_{\mathcal{P}}$ ({\color{ggplotBlue}Blue} and {\color{ggplotRed}Red}) embedding strategies.}\label{fig:kronos}
-\end{figure}
+\end{minipage}
+\end{figure*}
 \subsection{Appropriateness}\label{subsec:apprp}
 In order to assess the proposed embedding's appropriateness, we use the set of unravelled traces in Table \ref{tab:dataset} and the subset of the Sepsis Cases Event Log that was not used to generate the USWNs. For each of this log trace $\tau^*$ we added controlled noise (transition addition, deletion, or swap) at either $20\%$ ($\tilde{\tau}^*$) or $30\%$ ($\tilde{\tilde{{\tau}}}^*$) of the log trace as for \cite{LeoniM17}. Then, we found the correlation between the ranking $R_\star$ induced by $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$ to the ranking induced by replacing $\tau^*$ with one of the two noised traces (either a ranking $R_{20}$ induced by $k_{\phi_{\mathcal{P}}}(\tau,\tilde{\tau}^*)$ or $R_{30}$ induced by $k_{\phi_{\mathcal{P}}}(\tau,\tilde{\tilde{\tau}}^*)$). The correlation $\rho$ between these two rankings ($\rho(R_\star,R_{20})$ and $\rho(R_\star,R_{30})$) is performed via Spearman Correlation Index $\rho$: such index will return near-$1$ on increasing monotonic trend, near-$(-1)$ values on decreasing monotonic trend, and near-$0$ values where the two rankings are almost uncorrelated. Figure \ref{fig:app} shows the outcome of such experiments for all the possible combinations of $\epsilon$ and $\nu$ sub-embeddings for $\phi_{\mathcal{P}}$ while varying the log trace length. We can observe that strategies including traces' frequencies ($\nu^1$) are more stable if compared to strategies where such information is completely ignored ($\nu^2$). Furthermore, such approximation never reaches zero values, while that occurrence might happen for $\nu^2$-based strategies.
 
