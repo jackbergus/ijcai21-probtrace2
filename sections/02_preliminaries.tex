@@ -1,20 +1,67 @@
+\newcommand{\uswn}{USWN\xspace}
+\newcommand{\net}{N}
+\newcommand{\enaset}[1]{E(#1)}
+\newcommand{\fire}[3]{#1\xrightarrow{#2}#3}
+\newcommand{\prob}[2]{\mathbb{P}_{#2}(#1)}
+\newcommand{\rg}[1]{RG(#1)}
 
-
-
-\section{Related Works}
+\section{Preliminaries}
 \subsection{Untimed Stochastic Workflow Nets (USWN)}\label{subsec:spn}
-We consider a specific case of Untimed Stochastic Petri Nets, such as Workflow Networks over $k$-bounded Place-Transitions Nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13}. Untimed Stochastic Petri Nets are tuple $USWN=(P,T,F,\omega,W,i,f)$ where:
-\begin{itemize}
-\item $P$ is a set of \textit{places} to which we can associate a finite number of indistinguishable tokens.
-\item $T$ is a set of \textit{transitions} $t\in T$, to which we associate a label $\lambda(t)\in\Sigma$, where $\Sigma$ also includes the empty string\footnote{Given that we are going to denote the traces as $\tau$ and $t$ as the Petri Net Transitions, we choose to denote the empty string as such instead of $\tau$ as in current literature from Petri Nets.} $\varepsilon$.
-\item $F\subseteq (P\times T)\cup (T\times P)$ is a set of arcs. %to which we associate a \textit{firing cost} $\omega\colon F\to\mathbb{N}$.
-\item $W\colon T\to \mathbb{R}^+_{>0}$ defines a \textit{firing weight} associated to each transition. 
-\item The initial place $i\in P$ has no ingoing edges ($\not\exists t\in T. (t,i)\in F$).
-\item The final place $f\in P$ has no outgoing edges ($\not\exists t\in T. (f,t)\in F$).
-\end{itemize}
-A \textit{marking} is an assignment of a given amount of indistinguishable tokens to places described by a vector $M\colon P\to \mathbb{N}$. We say that a given transition $t$ is \textit{enabled} if $M(p)\geq 1$ for each ingoing $p$ to $t$ ($(p,t)\in F$). If such transition is enabled, then it can \textit{fire} a token. The \textit{enabling transitions} $E(M)$ for a given marking $M$ are all the $t$ reachable from $p$ ($(p,t)\in F$) with $M(p)\neq 0$ where $t$ is enabled. When $t$ can fire a token for a marking $M$, we can generate a novel marking $M'$ from $M$ by moving the tokens from the ingoing places towards the outgoing places as follows:
-\[\forall p\in P.\; M'(p)=M(p)-\mathbf{1}_{(p,t)\in F}+\mathbf{1}_{(t,p)\in F}\]
-We denote the transition from marking $M$ to marking $M'$ via an enabling $t$ as a relation $M\overset{t}{\to}M'$. We say that a USWN with initial marking $M$ is $k$-\textit{bounded} if each of the markings $M'$ reachable from $M$, $M$ included, have $\forall p\in P.\; M(p)\leq k$\\
+As customary in probabilistic conformance checking \cite{lavori-su-prob-conformance}, we adopt stochastic Petri nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13} as the underlying formal basis to represent processes. More specifically, we consider an interesting class of Stochastic Petri Nets with only immediate transitions (i.e., no timed ones), namely untimed stochastic bounded workflow nets (\uswn for short). 
+
+We assume to have a set $\Sigma$ of labels indicating either a process task of an invisible task. In the latter case, we employ the special label $\varepsilon$.\footnote{This corresponds to the standard notion of $\tau$-transitions in Petri nets, but we use $\varepsilon$ since in the remainder of the paper $\tau$ is used to refer to an execution trace.}
+ 
+An \uswn is a tuple $\net = (P,T,F,i,f,W)$ where:
+\begin{compactitem}
+\item $(P,T,F,i,f)$ is a standard workflow net with places $P$, transitions $T$, flow relation $F$, input place $i \in P$, and output place $f \in P$; each transition $t \in T$ is associated to a label $\ell(t) \in \Sigma$ to indicate the task executed upon firing $t$, or the fact that $t$ is an invisible transition (in the latter case, we then have $\ell(t) = \varepsilon$). 
+\item $W\colon T\to \mathbb{R}^+$ is a weighting function assigning a positive firing weight to each transition of the net; this provides the basis for capturing the stochastic behavior of the net, as described next.
+\end{compactitem}
+
+As usual, the current state of execution is captured using a marking of the net, that is, a multiset over places $P$ indicating how many tokens populate each place. As pointed out above, we always assume, as customary in BPM, that the input \uswn is \emph{bounded}, that is, the number of tokens associated to each place by a marking cannot exceed a maximum, fixed threshold.
+
+
+The notions of transition enablement and firing are also the standard ones. We use the following symbols: given a marking $M$ over \uswn $\net$, we denote by $\enaset{M}$ the set of enabled transitions in $M$, and given transition $t \in \enaset{M}$, we indicate with $\fire{M}{t}{M'}$ the fact that firing $t$ in $M$ results in the new marking $M'$. When executing a \uswn, the crucial addition to the standard execution semantics of Petri nets is that, being the net stochastic, in each marking the set of enabled transitions gets associated to a discrete probability distribution. This is defined as follows: given a marking $M$ of $N$ and an enabled transition $t \in \enaset{M}$, the \emph{firing probability} of $t$ in $M$ is $\prob{t}{M} = \frac{W(t)}{\sum_{t'\in \enaset{M}}W(t')}$.
+
+To capture the execution semantics of an \uswn, we interpret concurrency by interleaving, consequently obtaining a standard reachability graph, whose edges are labelled by probabilities. 
+
+
+\begin{definition}[Reachability Graph]
+Given an \uswn \net and an (initial) marking $M_0$, the reachability graph $\rg{\net,M_0}$ is a triple $(\mathcal{M},E,P)$ where:
+\begin{compactitem}
+\item $\mathcal{M}$ is the set of all reachable markings from $M_0$ (including $M_0$ itself);
+\item $E \subseteq \mathcal{M} \times \Sigma \times \mathcal{M}$ is the transition relation induced by the notion of transition firing, that is, for $M,M' \in \mathcal{M}$, we have that $(M,M') \in E$ if and only if    
+\end{compactitem}
+
+
+
+	Given an initial marking $M$ for a USWN $\mathcal{U}$,  the \textit{Reachability Graph} for $\mathcal{U}$ is a graph $(\mathcal{M},\mathcal{E})$ where the nodes  $\mathcal{M}$ are composed of of all the reachable markings from $M$, $M$ included, and all the edges $\mathcal{E}$ are induced by the aforementioned relation $M\overset{t}{\to}M'$ among the reachability graph's nodes. To each of such edges $M\overset{t}{\to}M'$, we associate a transition probability $\mathbb{P}\left(M\overset{t}{\to}M'\right)=\frac{W(t)}{\sum_{t'\in E(M)}W(t')}$ \cite{spdwe}. 
+\end{definition}
+
+
+
+ Since the input net is bounded, this reachability graph always contains finitely many states.  
+
+
+
+
+
+
+
+%Technically:
+%\begin{compactitem}
+%\item $P$ is a finite set of \textit{places}.
+%\item $T$ is a finite set of \textit{transitions}, each of which is associate to a label. Each label either denotes a task executed upon transition firing, or indicates an invisible transition; in the latter case, we employ the special label $\varepsilon$.\footnotesize{This corresponds to the standard notion of $\tau$-transitions in Petri nets, but we use $\varepsilon$ since in the remainder of the paper $\tau$ is used to refer to an execution trace.}
+%%to which we associate a label $\lambda(t)\in\Sigma$, where $\Sigma$ also includes the empty string\footnote{Given that we are going to denote the traces as $\tau$ and $t$ as the Petri Net Transitions, we choose to denote the empty string as such instead of $\tau$ as in current literature from Petri Nets.} $\varepsilon$.
+%\item $F\subseteq (P\times T)\cup (T\times P)$ is the flow relation, representing arcs linking places to transitions and transitions to places. 
+%%to which we associate a \textit{firing cost} $\omega\colon F\to\mathbb{N}$.
+%\item The initial place $i\in P$ has no ingoing edges ($\not\exists t\in T. (t,i)\in F$).
+%\item The final place $f\in P$ has no outgoing edges ($\not\exists t\in T. (f,t)\in F$).
+%\item $W\colon T\to \mathbb{R}^+_{>0}$ defines a \textit{firing weight} associated to each transition. 
+%\end{compactitem}
+
+%A \textit{marking} is an assignment of a given amount of indistinguishable tokens to places described by a vector $M\colon P\to \mathbb{N}$. We say that a given transition $t$ is \textit{enabled} if $M(p)\geq 1$ for each ingoing $p$ to $t$ ($(p,t)\in F$). If such transition is enabled, then it can \textit{fire} a token. The \textit{enabling transitions} $E(M)$ for a given marking $M$ are all the $t$ reachable from $p$ ($(p,t)\in F$) with $M(p)\neq 0$ where $t$ is enabled. When $t$ can fire a token for a marking $M$, we can generate a novel marking $M'$ from $M$ by moving the tokens from the ingoing places towards the outgoing places as follows:
+%\[\forall p\in P.\; M'(p)=M(p)-\mathbf{1}_{(p,t)\in F}+\mathbf{1}_{(t,p)\in F}\]
+%We denote the transition from marking $M$ to marking $M'$ via an enabling $t$ as a relation $M\overset{t}{\to}M'$. We say that a USWN with initial marking $M$ is $k$-\textit{bounded} if each of the markings $M'$ reachable from $M$, $M$ included, have $\forall p\in P.\; M(p)\leq k$\\
 
 \begin{figure}[!t]
 	\centering
