@@ -14,20 +14,20 @@
 \begin{document}
 \begin{tikzpicture}[align=center,node distance=3cm]
     % equidistant points and arc
-    \vertex{above}{$\color{green}\varepsilon_\texttt{\color{blue}1}$}{s}{initial}{right}{1}
-    \vertex{above left}{$\color{green}\varepsilon_\texttt{\color{blue}2}$}{bp}{above right of=s}{below right}{9}
+    \vertex{above}{$\color{green}\tau_\texttt{\color{blue}1}$}{s}{initial}{right}{1}
+    \vertex{above left}{$\color{green}\tau_\texttt{\color{blue}2}$}{bp}{above right of=s}{below right}{9}
     \vertex{above left}{$\color{green}a$}{bp2}{right of=bp}{below right}{2}
     \vertex{above}{$\color{green}a$}{b1}{right of=bp2}{below right}{6}
     
     
     \vertex{above}{$\color{green}c$}{b2}{below right of=s}{below right}{3}
-    \vertex{above left}{$\color{green}\varepsilon_\texttt{\color{blue}3}$}{e2}{right of=b2}{below right}{10}
+    \vertex{above left}{$\color{green}\tau_\texttt{\color{blue}3}$}{e2}{right of=b2}{below right}{10}
     
     \node[shape=circle,fill=black, scale=0.5,label=left:{\color{green}$a$},label=below right:{\tiny\texttt{\color{blue}4}}] (a2) at ($(e2)!0.5!(bp2)$) {};
     
     \vertex{above}{$\color{green}b$}{b}{right of=e2}{below right}{5}
-    \vertex{above}{$\color{green}\varepsilon_\texttt{\color{blue}f}$}{bk}{right of=b,accepting,state,scale=0.4}{below right}{8}
-    \vertex{above right}{$\color{green}\varepsilon_\texttt{\color{blue}4}$}{f}{right of=b1}{below right}{7}
+    \vertex{above}{$\color{green}\tau_\texttt{\color{blue}f}$}{bk}{right of=b,accepting,state,scale=0.4}{below right}{8}
+    \vertex{above right}{$\color{green}\tau_\texttt{\color{blue}4}$}{f}{right of=b1}{below right}{7}
     
     %
     \myedge{s}{above}{$\scriptscriptstyle{\color{red}p_1}$}{bp}
