@@ -67,3 +67,21 @@
 		\vspace{0.5\yellownoteheight}
 	}
 }
+
+
+
+\newcommand{\ADD}[1]{{\color{blue}\uwave{#1}}}
+\usepackage{cancel}
+\newcommand\Rcancel[1]{\renewcommand\CancelColor{\color{red}}\cancel{\color{red}#1}}
+\newcommand{\colouredcircle}[1]{%
+	\tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em);
+		\draw[ball color=blue,shading=ball,line width=0.03em] (0,0) circle(0.18em) {#1};}}
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
+
+\definecolor{ggplotRed}{HTML}{F8766D}
+\definecolor{ggplotGreen}{HTML}{7CAE00}
+\definecolor{ggplotBlue}{HTML}{00BFC4}
+\definecolor{ggplotPurple}{HTML}{C77CFF}
