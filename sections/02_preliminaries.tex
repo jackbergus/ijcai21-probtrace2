@@ -28,7 +28,7 @@ Figure \ref{fig:spn} provides an example of a Stocastic Petri Net defined as suc
 \end{example}
 
 
-We use USWNs for modelling business processes: in fact, it can be shown (\texttt{[TODO: paper?]}) that it is always possible to convert BPMNs to USWNs. Last, we also assume that a transition is enabled when all of its input places contain at least one token and that, when a transition fires, we remove one token from each of its input places and depose tokens for each of its output places.
+We use USWNs for modelling business processes: in fact, it can be shown \cite{RaedtsPUWGS07} that it is always possible to convert BPMNs to USWNs. Last, we also assume that a transition is enabled when all of its input places contain at least one token and that, when a transition fires, we remove one token from each of its input places and depose tokens for each of its output places.
 
 
 
@@ -103,15 +103,35 @@ Current literature also provides kernel representations for traces (referred as 
 		\texttt{\color{blue}3}  & 0&0&0&\color{red}1\\
 		\texttt{\color{blue}4}  & 0& 0& 0& 0\\
 	}$$
+We can similarly represent all the traces from the USPN.
 \end{example}
 
+%\begin{example}
+%The subtrace \textit{\textbf{\uline{hi}}} is represented in \textit{\textbf{\uline{hi}}deous},   \textit{\uline{\textbf{h}}e\uline{{i}}d\textbf{i}}, and \textit{\uline{{\textbf{h}i}}nd\textbf{i}}, but with different frequencies and subtrace distances. We have $\phi_{\mathcal{T}}(\textit{hideous})_{{\color{green}hi}}=\lambda$,  $\phi_{\mathcal{T}}(\textit{heidi})_{{\color{green}hi}}=\lambda^2+\lambda^4$, and $\phi_{\mathcal{T}}(\textit{hindi})_{{\color{green}hi}}=\lambda+\lambda^4$.
+%\end{example}
+
+
+
+\begin{table}[!t]
+\caption{Embedding for both $\tau^*=cacb$ and some traces caaa, caa and cb generated from the USPN $\mathcal{U}$ in Figure \ref{fig:spn}}\label{tb:embedding}
+\begin{center}
+	\begin{tabular}{l|l|l|l|l|l|l|l|l|l|}
+		\toprule
+		& aa    & ab   & ac    & ba   & bb   & bc & ca & cb & cc   \\
+		\midrule
+		cacb & $0$ & $\lambda^2$ & $\lambda$ & $0$  & $0$  & $0$ & $\lambda$ & $\lambda+\lambda^3$ & $\lambda^2$\\
+		caaa & $2\lambda+\lambda^2$& $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2+\lambda^3$ & $0$ & $0$ \\
+		caa  & $\lambda$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2$ & $0$&  $0$\\
+		cb   & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda$& $0$ \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+\end{table}
 \begin{example}
-The subtrace \textit{\textbf{\uline{hi}}} is represented in \textit{\textbf{\uline{hi}}deous},   \textit{\uline{\textbf{h}}e\uline{{i}}d\textbf{i}}, and \textit{\uline{{\textbf{h}i}}nd\textbf{i}}, but with different frequencies and subtrace distances. We have $\phi_{\mathcal{T}}(\textit{hideous})_{{\color{green}hi}}=\lambda$,  $\phi_{\mathcal{T}}(\textit{heidi})_{{\color{green}hi}}=\lambda^2+\lambda^4$, and $\phi_{\mathcal{T}}(\textit{hindi})_{{\color{green}hi}}=\lambda+\lambda^4$.
+Given $\Sigma_\varepsilon=\Set{a,b,c}$, we have that $\Set{aa,ab,ac,ba,bb,bc,ca,cb,cc}\\=\Sigma^2_\varepsilon$ defines the set of all the possible $2$-grams represented by the grammar $\Sigma_\varepsilon$ induced by the non-$\varepsilon$ transitions within the USPN $\mathcal{U}$ in Figure \ref{fig:spn}. For each $2$-gram ${\color{green}\alpha\beta}\in\Sigma_\varepsilon^2$ in a given trace $\tau$, we will have a non-zero component $\phi_{\mathcal{T}}(\tau)_{\color{green}\alpha\beta}$ describing a penalty \cite{Gartner03}, while the kernel between two traces will describe the sum of such penalties. Given a trace $cb$ associated to $\mathcal{U}$,  the only non-zero component of $\phi_{\mathcal{T}}(cb)$ will be $cb$ itself where $\phi_{\mathcal{T}}(cb)_{\color{green}cb}=\lambda$ (Table \ref{tb:embedding}). On the other hand, the trace $caa$ from $\mathcal{U}$ will have a $2$-gram $ca$ with occurring lengths $1$ (\textbf{ca}a) and $2$ (\textbf{c}a\textbf{a}), and $aa$ with occurring length $1$; therefore, $\phi_{\mathcal{T}}(caa)_{\color{green}ca}=\lambda+\lambda^2$ and  $\phi_{\mathcal{T}}(caa)_{\color{green}aa}=\lambda$.  Similar considerations can be carried out for the other traces cacb and caaa, which embeddings are represented in Figure \ref{tb:embedding}. 
+
+If we want to evaluate the similarity $k_{\phi_{\mathcal{T}}}$ between $\tau^*=cacb$ and the remaining traces, we will obtain the following results: $k_{\phi_{\mathcal{T}}}(cacb,caaa)=\lambda(\lambda+\lambda^2+\lambda^3)$,  $k_{\phi_{\mathcal{T}}}(cacb,caa)=\lambda(\lambda+\lambda^2)$, and $k_{\phi_{\mathcal{T}}}(cacb,cb)=\lambda(\lambda+\lambda^3)$, thus obtaining an induced traces ranking $k_{\phi_{\mathcal{T}}}(cacb,caaa)>k_{\phi_{\mathcal{T}}}(cacb,caa)>k_{\phi_{\mathcal{T}}}(cacb,cb)$. For this trace kernel, we have strong dissimilarity when the two traces have no shared $2$-grams at any arbitrary occurring length ($k_{\phi_{\mathcal{T}}}(caa,cb)=0$) but no strong equality ($k_{\phi_{\mathcal{T}}}(cb,cb)=\lambda^2$ with $\lambda^2\neq 1$ for $0\leq \lambda<1$).
 \end{example}
-
-
-
-For this trace kernel, we have that $\Braket{\phi_\mathcal{T}(\tau),\phi_\mathcal{T}(\tau')}=1$ if $\tau\equiv \tau'$ and that $\Braket{\phi_\mathcal{T}(\tau),\phi_\mathcal{T}(\tau')}=0$ when the two traces have no shared subtraces of size $2$ with arbitrary distance $L$: these are basic desired properties for determining the trace similarity based on the substring distribution.
 
 \subsection{Graph Embedding}\label{ssec:ge}
 Graph kernels allow mapping graph data structures to feature spaces (usually an Eulcidean space in $\mathbb{R}^n$ for $n\in \mathbb{N}_{>0}$) \cite{Samatova} so to express graph similarity functions that can then be adopted for both classification \cite{TsudaS10} and clustering \cite{Raedt} algorithms. One of the first approaches used in literature involved the definition of topological description vectors \cite{Sidere} for each graph in a graph database, for then defining the graph similarity function as an inner product of their associated vectors. One inconvenience of such a technique is that it is required to perform NP-complete subgraph isomorphisms among a collection of graphs. It has been already proved that the definition of a graph kernel function fully recognising the structure the graph always boils down solving such  NP-Complete problem \cite{GartnerFW03}, as exact embeddings generable in polynomial can be inferred just for loop-free Direct Acyclic Graphs \cite{BergamiBM20}.  
