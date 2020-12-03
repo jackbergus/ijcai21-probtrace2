@@ -1,30 +1,32 @@
 
 \subsection{Alignment Strategy}
 
-\subsubsection{Exact Trace Aligner}\label{subsec:eta}
-{A possible way to carry out probabilistic trace alignment is to reuse existing trace aligners such as \cite{LeoniM17}, where the alignment's cost $d(\tau,\tau^*)$ (distance in database literature, \S\ref{subsec:katk}). We can exploit decision theory at first \cite{dectheor} and express the statistical decision of aligning a weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_{p_\theta}(P)$ with $\tau^*$ as the $w_\tau$-weighted cost of performing an alignment $w_\tau d(\tau,\tau^*)$. If we want to represent the same intuition of such weighted cost as a kernel function (\S\ref{subsec:katk}) so to compare such strategy to our proposed approximate trace embedder, we need to transform it as a function returning $1$  when $\tau$ is the desired trace with probability $w_\tau=1$ and $\tau=\tau^*$. In order to do so, we might prefer to express $d$ as}
-%\xout{We can express our probabilistic trace alignment as finding the trace that maximizes both the trace's probability and its similarity with the query trace $\tau^*$. Still, the trace alignments problems are usually expressed via trace alignments cost functions, and not via trace similarities \cite{LeoniM17}. Given a generic trace cost function $d(\tau,\tau')$, it is always possible to convert it into}
- a normalized similarity score $s_d(\tau,\tau'):=1/(d(\tau,\tau')/c+1)$ where $c\in\mathbb{N}_{\neq 0}$ is a constant, so that the maximum similarity of $1$ is reached when the distance is $0$ and the similarity decreases while the distance increases \cite{BergamiBM20}. %\xout{As a consequence, the exact trace aligner will find the weighted trace $\braket{\tau,\mathbb{P}(\tau)}$ in $\mathcal{W}_{p_\theta}(P)$ maximising $s_d(\tau,\tau^*)$, and use $s_d$ as a ranking function.} \ADD
- {Given that usually $w_{\tau^*}=1$, we can express the golden kernel function $k_\star$ as $k_\star(\tau,\tau^*)=w_\tau w_{\tau^*} s_d(\tau,\tau^*)$: we are going to use this function to both }% \xout{Section \ref{subsec:exbkptap} is going to discuss how such problem might be} 
- reduce {it} to the k-nearest neighbour problem{ (\S\ref{subsec:exbkptap}), and compare this ranking to the one induced by the approximated vectorial embedding (\S\ref{sec:exp}) proposed in the incoming subsection.}
+\subsubsection{Optimal-Ranking Trace Aligner}\label{subsec:eta}
+{A possible way to carry out probabilistic trace alignment is to reuse existing trace aligners such as \cite{LeoniM17}, where the notion of distance $d(\sigma,\sigma^*)$ between two traces $\sigma$ and $\sigma^*$ (introduced in \S\ref{subsec:katk}) is the cost for aligning one of the two traces with respect to the other when all the possible moves have cost equal to 1.\footnote{This distance is slightly different from the Levenstein distance since here the replacement is obtained as a concatenation of a deletion and an addition.} We can then exploit decision theory \cite{dectheor} and express the statistical decision of aligning a weighted trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_{p_\theta}(P)$ with $\sigma^*$ as the $w_\sigma$-weighted distance between the two traces, i.e., as $w_\sigma d(\sigma,\sigma^*)$, and rank the alignments based on this metric (this produces what we call an \emph{optimal ranking}).
 
-\subsubsection{Approximate Trace Embedder}\label{subsec:ate}
-{We want to define an embedding $\phi_\mathcal{P}$ for a dot-product-based kernel $k_{\phi_\mathcal{P}}$ so that it  performs weakly-ideally (\S\ref{subsec:katk} and \cite{Gartner03}). Given that the embedding of a (weighted) trace $\braket{\tau,w_\tau}\in\mathcal{W}_{p_\theta}^n(P)$ requires an intermediate $TG$ representation, we can map each of these traces to the subgraph of $P$ generating $\braket{\tau,w_\tau}$ with at most $|\tau|$ steps:}
+Note that if we want to represent the same intuition of such a weighted distance as a kernel function (\S\ref{subsec:katk}) so to compare the optimal-ranking strategy to our proposed approximate-ranking trace embedder, we need to transform it as a similarity function returning $1$ when $\sigma=\sigma^*$ and has probability $w_\sigma=1$. In order to do so, we express $d$ as}
+%\xout{We can express our probabilistic trace alignment as finding the trace that maximizes both the trace's probability and its similarity with the query trace $\sigma^*$. Still, the trace alignments problems are usually expressed via trace alignments cost functions, and not via trace similarities \cite{LeoniM17}. Given a generic trace cost function $d(\sigma,\sigma')$, it is always possible to convert it into}
+a normalized similarity score $s_d(\sigma,\sigma'):=1/(d(\sigma,\sigma')/c+1)$ where $c\in\mathbb{N}_{\neq 0}$ is a constant, so that the maximum similarity of $1$ is reached when the distance is $0$ and the similarity decreases while the distance increases \cite{BergamiBM20}. %\xout{As a consequence, the exact trace aligner will find the weighted trace $\braket{\sigma,\mathbb{P}(\sigma)}$ in $\mathcal{W}_{p_\theta}(P)$ maximising $s_d(\sigma,\sigma^*)$, and use $s_d$ as a ranking function.} \ADD
+{Considering that if we interpret the trace to be aligned $\sigma^*$ as a TG, it is reasonable to assume that $w_{\sigma^*}=1$, we can express the golden kernel function (i.e., the one producing the optimal ranking) as $k_\star(\sigma,\sigma^*)=w_\sigma w_{\sigma^*} s_d(\sigma,\sigma^*)$. We use this function to both }% \xout{Section \ref{subsec:exbkptap} is going to discuss how such problem might be}
+reduce {it} to the k-nearest neighbor problem{ (\S\ref{sec:topk}), and to compare this ranking to the one induced by the approximated vectorial embedding (\S\ref{sec:exp}) proposed in the incoming subsection.}
+
+\subsubsection{Approximate-Ranking Trace Embedder}\label{subsec:ate}
+{We want to define an embedding $\phi_\mathcal{P}$ for a dot-product-based kernel $k_{\phi_\mathcal{P}}$ so that it  performs weakly-ideally (\S\ref{subsec:katk} and \cite{Gartner03}). Given that the embedding of a (weighted) trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_{p_\theta}^n(P)$ requires an intermediate $TG$ representation, we can map each of these traces to the subgraph of $P$ generating $\braket{\sigma,w_\sigma}$ with at most $|\sigma|$ steps:}
 	\begin{definition}[Trace Embedding for TGs]
-		Given a minimum probability\\ threshold $p_\theta$, a maximum path length $n$, and a TG $P=(s,t,L,R,w)$, we generate the set of the trace embeddings for $P$ as follows: for each weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_{p_\theta}^n(P)$ generated from a path $\pi_\tau=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a TG $P_\tau=(s',t',L_\tau,R_\tau,w_\tau)$, where \begin{alphalist}
-			\item $s'=s$ if $\textit{label}(s)\neq \varepsilon$ and $t'=n_2$ otherwise,
-			\item $t'=t$ if $\textit{label}(t)\neq \varepsilon$ and $t'=n_m$ otherwise,
-			\item $L_\tau$ (and $R_\tau$) is the submatrix of $L$ (and $R$) over the non-$\varepsilon$ labelled notes in $\pi_\tau$ and the labels from $\tau$,
-			\item $w'$ is initialised by $w$ and then multiplied by $[R]_{s,n_2}$ (and also $[R]_{n_m,t}$) if $\textit{label}(s)=\varepsilon$ (and  $\textit{label}(t)=\varepsilon$).
+		Given a minimum probability\\ threshold $p_\theta$, a maximum path length $n$, and a TG $P=(s,t,L,R,w)$, we generate the set of the trace embeddings for $P$ as follows: for each weighted trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_{p_\theta}^n(P)$ generated from a path $\pi_\sigma=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a TG $P_\sigma=(s',t',L_\sigma,R_\sigma,w_\sigma)$, where \begin{alphalist}
+			\item $s'=s$ if $\textit{label}(s)\neq \tau$ and $t'=n_2$ otherwise,
+			\item $t'=t$ if $\textit{label}(t)\neq \tau$ and $t'=n_m$ otherwise,
+			\item $L_\sigma$ (and $R_\sigma$) is the submatrix of $L$ (and $R$) over the non-$\tau$ labelled notes in $\pi_\sigma$ and the labels from $\sigma$,
+			\item $w'$ is initialised by $w$ and then multiplied by $[R]_{s,n_2}$ (and also $[R]_{n_m,t}$) if $\textit{label}(s)=\tau$ (and  $\textit{label}(t)=\tau$).
 		\end{alphalist}
 	\end{definition}
 
 \begin{table}[!t]
-	\caption{Generating the sub-TGs $P_\tau\in \mathbf{T}_0^4(P)$ from the TG $P$ via the set of weighted traces $\mathcal{W}_0^4(P)$. $l$ and $w$ respectively represent the desired parameter for $\phi_{\mathcal{P}}(P_\tau)$ and the weight associated to $P_\tau$.}\label{tab:proj}
+	\caption{Generating the sub-TGs $P_\sigma\in \mathbf{T}_0^4(P)$ from the TG $P$ via the set of weighted traces $\mathcal{W}_0^4(P)$. $l$ and $w$ respectively represent the desired parameter for $\phi_{\mathcal{P}}(P_\sigma)$ and the weight associated to $P_\sigma$.}\label{tab:proj}
 	\centering
 	\resizebox{.45\textwidth}{!}{\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
 			\toprule
-			$\tau$&$P_\tau$&$l$&$\omega$\\
+			$\sigma$&$P_\sigma$&$l$&$\omega$\\
 			\midrule
 			a & \includegraphics{images/trace_a} & $1$ & $\color{red}p_1p_6$\\
 			cb & \includegraphics{images/trace_cb} & $2$ & $\color{red}p_2$\\
@@ -33,7 +35,7 @@
 			\bottomrule
 	\end{tabular}}\quad 	\resizebox{.45\textwidth}{!}{\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
 	\toprule
-	$\tau$&$P_\tau$&$l$&$\omega$\\
+	$\sigma$&$P_\sigma$&$l$&$\omega$\\
 	\midrule
 	aa & \includegraphics{images/trace_aa} & $2$ & $\color{red}p_1p_6$\\
 	ca & \includegraphics{images/trace_ca} & $2$ & $\color{red}p_2p_6$\\
@@ -41,7 +43,7 @@
 	caaa & \includegraphics{images/trace_ca_loop} & $4$ & $\color{red}p_2p_6$\\
 	\bottomrule
 \end{tabular}}
-\end{table} 
+\end{table}
 \begin{example}\label{ex:neue}
 Given the TG $P$ in Figure \ref{fig:closed}, we assign the following probability values to the edges: $p_1=0.8$, $p_2=0.2$, $p_3=p_6=0.5$, $p_4=0.7$, and $p_5=0.3$. If we limit our analysis to all the traces of maximum length $4$, we generate the following probabilistic traces set:
 $$\begin{aligned}
@@ -50,36 +52,36 @@ W^4_0(P)=\{&\braket{a,0.4},\braket{aa,0.2},\braket{aaa,0.1},\braket{ca,0.07},\\
 \end{aligned}$$
 \medskip
 
-Table \ref{tab:proj} represents the TGs $P_\tau\in\mathbf{T}_p^n(P)$ with weight $\omega$ generated for each weighted path $\braket{\tau,w_\tau}\in \mathcal{W}_0^4(P)$ of length $l=|\tau|$ from the TG $P$ in Figure \ref{fig:closed}. The associated weight $\omega$ derives from the source's outgoing edges (and target's ingoing edges) when such node is labelled as $\varepsilon$: given that both \textbf{(i)} the embedding strategy from current literature (\S\ref{subsec:katk}) allows trace embedding just for visible (i.e., non-$\varepsilon$) transitions, and that \textbf{(ii)} such trace extraction process discards the $\varepsilon$ information but we want to preserve the transition probabilities from and to $\varepsilon$ transitions, we exploit an additional parameter $\omega$ to preserve such information.
-%\xout{selection of a trace $\tau$ implies performing a set of specific probabilistic choices, we can remove all the edges starting (and arriving) at nodes that are $\varepsilon$-labelled and move their score as the weight of the TG.}
+Table \ref{tab:proj} represents the TGs $P_\sigma\in\mathbf{T}_p^n(P)$ with weight $\omega$ generated for each weighted path $\braket{\sigma,w_\sigma}\in \mathcal{W}_0^4(P)$ of length $l=|\sigma|$ from the TG $P$ in Figure \ref{fig:closed}. The associated weight $\omega$ derives from the source's outgoing edges (and target's ingoing edges) when such node is labelled as $\tau$: given that both \textbf{(i)} the embedding strategy from current literature (\S\ref{subsec:katk}) allows trace embedding just for visible (i.e., non-$\tau$) transitions, and that \textbf{(ii)} such trace extraction process discards the $\tau$ information but we want to preserve the transition probabilities from and to $\tau$ transitions, we exploit an additional parameter $\omega$ to preserve such information.
+%\xout{selection of a trace $\sigma$ implies performing a set of specific probabilistic choices, we can remove all the edges starting (and arriving) at nodes that are $\tau$-labelled and move their score as the weight of the TG.}
 \end{example}
 	
-{We can now focus on the embedding $\phi_{\mathcal{P}}$ for each TG associated to our selected weighted traces. The main goal is use $k_{\phi_\mathcal{P}}$ for ranking all the traces generated by the Unravelling step. Walking on such footsteps, we  want to extend  previous work on embeddings (\S\ref{subsec:katk}) by both including the traces' associated probability and by making the ranking induced by $k_{\phi_\mathcal{P}}$ the inverse of the sum of the following distances: the transitions correlations $\epsilon$ and the transitions' label frequency $\nu$ (Lemma \ref{lem:approxRank}). }
+{We can now focus on the embedding $\phi_{\mathcal{P}}$ for each TG associated to our selected weighted traces. The main goal is to use $k_{\phi_\mathcal{P}}$ for ranking all the traces generated by the Unravelling step. Walking on such footsteps, we  want to extend  previous work on embeddings (\S\ref{subsec:katk}) by both including the traces' associated probability and by making the ranking induced by $k_{\phi_\mathcal{P}}$ the inverse of the sum of the following distances: the transitions correlations $\epsilon$ and the transitions label frequency $\nu$ (Lemma \ref{lem:approxRank}). }
 %\xout{Given that we previously observed that a TGs $P$ can be fully characterised (read, similarity) by their associated set of traces $\mathcal{W}_p^n(P)$  and that the trace embedding can be described as an embedding over a TG, we can characterise a TG embedding as a transition matrix embedding. In addition to that, when two Workflow Nets share similar node labellings but no ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ paths for any ${\color{green}\alpha}$ and ${\color{green}\beta}$, we should combine the former embedding with an embedding characterising the frequency on how the nodes' labels appear in the generated traces.} \ADD
-{We would also require that the desire properties of $\phi_{\mathcal{P}}$ is independent from the characterization of $\epsilon$ and $\nu$, which would only provide different embedding strategies. } We can now provide the following definition:
+{We would also require that the desired properties of $\phi_{\mathcal{P}}$ are independent from the characterization of $\epsilon$ and $\nu$, which would only provide different embedding strategies. } We can then provide the following definition:
 
 
 %\begin{table}[!t]
 %	\centering
-%	\caption{Embedding representation for the TG $P$ in Figure \ref{fig:closed} and the trace $\tau^*=\textup{caba}$ after representing it as in Figure \ref{fig:taustar}. Please note that we restrict $\Sigma_\varepsilon^2$ to the one from $P$.}\label{tab:emb1}
+%	\caption{Embedding representation for the TG $P$ in Figure \ref{fig:closed} and the trace $\sigma^*=\textup{caba}$ after representing it as in Figure \ref{fig:sigmastar}. Please note that we restrict $\Sigma_\tau^2$ to the one from $P$.}\label{tab:emb1}
 %		\begin{tabular}{l|l|l|l|l|l|l|}
 %	\toprule
 %	& a    & b                                                   & c    & aa   & ca   & cb   \\
 %	\midrule
 %	$\phi_{\mathcal{P}}(P)$ & $9.94\cdot10^{-25}$ & $1.18\cdot 10^{-26}$ & $1.04\cdot10^{-25}$ & $4.45\cdot 10^{-25}$ & $6.22\cdot10^{-25}$ & $8.29\cdot10^{-26}$\\
-%	$\phi_{\mathcal{P}}(P_{\tau^*})$ & $8.16\cdot10^{-17}$ & $4.08\cdot 10^{-17}$ & $4.08\cdot10^{-17}$ & $4.37\cdot 10^{-17}$ & $1.03\cdot10^{-16}$ & $4.37\cdot10^{-17}$\\
+%	$\phi_{\mathcal{P}}(P_{\sigma^*})$ & $8.16\cdot10^{-17}$ & $4.08\cdot 10^{-17}$ & $4.08\cdot10^{-17}$ & $4.37\cdot 10^{-17}$ & $1.03\cdot10^{-16}$ & $4.37\cdot10^{-17}$\\
 %	\bottomrule
 %\end{tabular}
 %\end{table}
 \begin{definition}[TG Embedding]\label{def:ppne}
-Given a finite set of non-empty labels $\Sigma_\varepsilon =\Sigma\backslash\{\varepsilon\}$, $\Sigma_\varepsilon^2$ denotes all the possible pair of labels associated to paths ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ and $\Sigma_\varepsilon$ denotes the set of all the possible non-$\varepsilon$ node labels. Therefore, it is always possible to enumerate $\Sigma_\varepsilon^2\cup\Sigma_\varepsilon$ via an enumeration by a bijection $\iota\colon \Sigma_\varepsilon^2\cup\Sigma_\varepsilon\to  N$, where $N\subset \mathbb{N}_{\neq 0}$ and $\max N=|N|$.
+Given a finite set of non-empty labels $\Sigma_\tau =\Sigma\backslash\{\tau\}$, $\Sigma_\tau^2$ denotes all the possible pair of labels associated to paths ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ and $\Sigma_\tau$ denotes the set of all the possible non-$\tau$ node labels. Therefore, it is always possible to enumerate $\Sigma_\tau^2\cup\Sigma_\tau$ via an enumeration by a bijection $\iota\colon \Sigma_\tau^2\cup\Sigma_\tau\to  N$, where $N\subset \mathbb{N}_{\neq 0}$ and $\max N=|N|$.
 	
-Given a TG $P=(s,t,L,R,w)$ resulting from a $\varepsilon$-closure and a tuning parameter $t_f\in[0,1]\subseteq\mathbb{R}$, the associated embedding is defined as follows:
+Given a TG $P=(s,t,L,R,w)$ resulting from a $\tau$-closure and a tuning parameter $t_f\in[0,1]\subseteq\mathbb{R}$, the associated embedding is defined as follows:
 $$\phi_{\mathcal{P}}(P)_i=\begin{cases}
 	\frac{\epsilon(P)_{\color{green}\alpha\beta}}{\|\epsilon\|_2}\omega t_f^{|R>0|} & i={\color{green}\alpha\beta}\\
 	\frac{\nu(P)_{\color{green}\alpha}}{\|\nu\|_2}t_f^{|R>0|} & i={\color{green}\alpha}\\
 \end{cases}$$
-where $\epsilon$ and $\nu$ respectively represent the non-negatively defined embedding associated to the TG's transition matrix and nodes. 
+where $\epsilon$ and $\nu$ respectively represent the non-negatively defined embedding associated to the TG's transition matrix and nodes.
 \end{definition}
 
 Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in our experiment section} we choose two possible interchangeable definitions ($x=1$ and $x=2$) for both sub-embeddings:
@@ -92,13 +94,13 @@ Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in o
 	$\epsilon^x(P)_{\color{green}\alpha\beta}:=$ & $\label{eq:epsilon}
 	\sum_{i=1}^l{\lambda^i}\frac{[LR^iL^t]_{\color{green}\alpha\beta}}{\sum_{\color{green}\alpha'\beta'}R^i_{\color{green}\alpha'\beta'}}$ & $
 	\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$\\
-	$\nu^x(P)_{\color{green}\alpha}:=$ & $\frac{1}{N}\sum_{\braket{\tau,w}\in\mathcal{W}_p^l(P)}\frac{|\Set{\tau_i\in\tau|\tau_i\neq\varepsilon\wedge \tau_i={\color{green}\alpha}}|}{|\tau|}$ & $0$ \\
+	$\nu^x(P)_{\color{green}\alpha}:=$ & $\frac{1}{N}\sum_{\braket{\sigma,w}\in\mathcal{W}_p^l(P)}\frac{|\Set{\sigma_i\in\sigma|\sigma_i\neq\tau\wedge \sigma_i={\color{green}\alpha}}|}{|\sigma|}$ & $0$ \\
 	\bottomrule
 \end{tabular}
 \end{center}
 
 
-where $l$ is the maximum path length that we want to consider as valid from Table \ref{tab:proj}, and $N$ for $\nu^1$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\varepsilon}\nu^1(P)_{\color{green}\alpha}=1$. In Example \ref{ex:cmpexample} we will see that the given definition of $\epsilon^1$ provides a better approximation than the edge embedding $\epsilon^2$.
+where $l$ is the path length indicated in Table \ref{tab:proj}, and $N$ for $\nu^1$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\tau}\nu^1(P)_{\color{green}\alpha}=1$. In Example \ref{ex:cmpexample}, we will see that the given definition of $\epsilon^1$ provides a better approximation than the edge embedding $\epsilon^2$.
 
 
 %When the transition matrix is ergodic \cite{StocasticCC},  the transition matrix embedding converges to $\epsilon(R)_{\color{green}\alpha\beta}=[(\mathbf{I}-\lambda\Lambda)^{-1}]_{\color{green}\alpha\beta}$ \cite{GartnerFW03} for $n\to+\infty$.
@@ -123,41 +125,30 @@ where $l$ is the maximum path length that we want to consider as valid from Tabl
 		\bottomrule
 	\end{tabular}
 \end{table}
-\begin{example}\label{ex:withpaths} After generating all the TGs for the unravelled traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the traces' associated $2$-grams\footnoteref{fn:caveat}. 
-	
-Given $\Sigma_\varepsilon=\Set{a,b,c}$, the embedding space should be at least of size $6$: each non-$\varepsilon$ vertex has labels in $\Sigma_\varepsilon$, and the only $2$-grams subsequences represented in all the generated traces $W^4_0(P)$ are $\{aa,ca,cb\}$. Given that the former space is required for $\nu$ and the latter is required for $\epsilon$, 	
-	 $\{a,b,c,aa,ca,cb\}\subset \Sigma_\varepsilon^2\cup\Sigma_\varepsilon$ is the whole set of features describing both the transition matrix and the nodes, so $\phi_{\mathcal{P}}$ will require at least 6 dimensions. 
-	
-	$t_f\in [0,1]\subset\mathbb{R}^+_{\geq 0}$ and $\lambda\in [0,1]\subset\mathbb{R}^+_{\geq 0}$ are tuning parameters that can be inferred from the available data \cite{DriessensRG06}. While the latter describes the previously mentioned decay factor, $t_f$ represents the relevance of our embedding representation when the number of the edges within TG increases. In both our experiments and examples, 
-	we chose $t_f=0.0001$ and $\lambda=0.07$. 
-
+\begin{example}\label{ex:withpaths} After generating all the TGs for the unravelled traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the $2$-grams included in the model traces.\footnoteref{fn:caveat}
+Given $\Sigma_\tau=\Set{a,b,c}$, the embedding space is of size $6$: three features (computed using $\epsilon$) correspond to the labels of the non-$\tau$ vertices in $\Sigma_\tau$, i.e., $\{a,b,c\}$, and other three features (computed using $\nu$) correspond to the $2$-grams subsequences that are also traces in $W^4_0(P)$, i.e., $\{aa,ca,cb\}$. Therefore, $\{a,b,c,aa,ca,cb\}\subset \Sigma_\tau^2\cup\Sigma_\tau$ is the whole set of features describing both the nodes and the transition matrix, so $\phi_{\mathcal{P}}$ is a vector with 6 dimensions.
+$t_f\in [0,1]\subset\mathbb{R}^+_{\geq 0}$ and $\lambda\in [0,1]\subset\mathbb{R}^+_{\geq 0}$ are tuning parameters that can be inferred from the available data \cite{DriessensRG06}. While the latter describes the previously mentioned decay factor, $t_f$ represents the relevance of our embedding representation when the number of the edges within TG increases. In both our experiments and examples, we chose $t_f=0.0001$ and $\lambda=0.07$.
 %\xout{The embedding associated to $P$ is described in Table \ref{tab:emb1} as $\phi_{\mathcal{P}}(P)$: it shows that doing ${\color{green}a}\rightsquigarrow{\color{green}a}$ is more probable than doing  ${\color{green}c}\rightsquigarrow{\color{green}a}$. Also, given that both the probability of performing ${\color{green}c}\overset{1}{\rightsquigarrow}{\color{green}b}$ is relatively low and trace $\color{green}cb$ is relatively infrequent, ${\color{green}c}{\rightsquigarrow}{\color{green}b}$ is less probable than any other subtrace. If we now consider the single nodes, $\color{green}c$ shares a subset of traces with $\color{green}a$ where $\color{green}a$ is more frequent than $\color{green}c$, and therefore the score of the former is higher than the one of the latter. Also, the score associated to the single node $\color{green}b$ is lower than the one for the single node $\color{green}c$ because $\color{green}b$ is less frequent and appears in less probable traces than $\color{green}c$: in particular, $\color{green}c$ appears in \textit{ca}, which is more probable than \textit{cb}.}
-
-{After representing trace $\tau^*=\textup{caba}$ to be aligned as a graph (see Example \ref{ex:tracembed}), we can represent its}
-%\xout{Similar considerations can be also drawn from the} 
-embedding $\phi_{\mathcal{P}}(P_{\tau^*})$ with strategies $\epsilon^1$ and $\nu^1$ %\xout{associated to the trace $\tau^*=\textup{caba}$ (also in Table --):} \ADD
+Table \ref{tab:emb2} represents the embeddings $\phi_{\mathcal{P}}(P_\sigma)$ generated from the sub-TGs generated in Example \ref{ex:neue}, where the $l=|\sigma|$ for each trace $\sigma$ associated to the sub-TG. This representation is completely independent from the representation associated with a trace to be aligned. Therefore it doesn't have to be recomputed at each alignment with a different $\sigma^*$.
+{After representing trace $\sigma^*=\textup{caba}$ to be aligned as a graph (see Example \ref{ex:tracembed}), we can represent its}
+%\xout{Similar considerations can be also drawn from the}
+embedding $\phi_{\mathcal{P}}(P_{\sigma^*})$ with strategies $\epsilon^1$ and $\nu^1$ %\xout{associated to the trace $\sigma^*=\textup{caba}$ (also in Table --):} \ADD
 {as follows:}
-
 \resizebox{\textwidth}{!}{\begin{tabular}{l|l|l|l|l|l|l|}
 	\toprule
 	& a    & b                                                   & c    & aa   & ca   & cb   \\
 	\midrule
 %	$\phi_{\mathcal{P}}(P)$ & $9.94\cdot10^{-25}$ & $1.18\cdot 10^{-26}$ & $1.04\cdot10^{-25}$ & $4.45\cdot 10^{-25}$ & $6.22\cdot10^{-25}$ & $8.29\cdot10^{-26}$\\
-	$\phi_{\mathcal{P}}(P_{\tau^*})$ & $8.16\cdot10^{-17}$ & $4.08\cdot 10^{-17}$ & $4.08\cdot10^{-17}$ & $4.37\cdot 10^{-17}$ & $1.03\cdot10^{-16}$ & $4.37\cdot10^{-17}$\\
+	$\phi_{\mathcal{P}}(P_{\sigma^*})$ & $8.16\cdot10^{-17}$ & $4.08\cdot 10^{-17}$ & $4.08\cdot10^{-17}$ & $4.37\cdot 10^{-17}$ & $1.03\cdot10^{-16}$ & $4.37\cdot10^{-17}$\\
 	\bottomrule
 \end{tabular}}
-
-${\color{green}a}$ is clearly the most frequent label ${\color{green}b}$ and ${\color{green}c}$ are equiprobable, as well as the path ${\color{green}c}\rightsquigarrow {\color{green}a}$ appears twice in the trace's set and then, it is more frequent than the other subtraces. {Similar considerations can be followed for possibly embedding the whole transition graph $P$.}
-
-%\xout{Last, we can observe that the representation of $\phi_{\mathcal{P}}$ only depends on the $\Sigma_\varepsilon$ of choice and on the TG that we want to represent. As a consequence, this representation is entirely independent of the alignment that we might be interested in calculating in a subsequent step.}
-
- Table \ref{tab:emb2} represents the embeddings $\phi_{\mathcal{P}}(P_\tau)$ generated from the sub-TGs generated in Example \ref{ex:neue}, where the $l=|\tau|$ for each trace $\tau$ associated to the sub-TG. This representation is completely independent from the representation associated with a trace to be aligned. Therefore it doesn't have to be recomputed at each alignment with a different $\tau^*$.
+${\color{green}a}$ is clearly the most frequent label ${\color{green}b}$ and ${\color{green}c}$ are equiprobable, as well as the path ${\color{green}c}\rightsquigarrow {\color{green}a}$ appears twice in the trace set and then, it is more frequent than the other subtraces. 
 \end{example}
 
 %\xout{After defining the embedding, we can show that this embedding establishes some desired features that are independent of the definition of $\epsilon$ and $\nu$, and that $\epsilon$ and $\nu$ only depend on the characterization of both the labelling $L$ and the transition matrix $R$. We provide a rewriting proposition that is going to be used in the incoming subsection to provide the aforementioned characterizing properties.} \ADD
 
-Given that kernel functions $k_\phi$ are defined as the dot product between the embedding $\phi$ of distinct objects $x$ (\S\ref{subsec:katk}), then we can express the kernel $k_{\phi_{\mathcal{P}}}$ as such dot product and, after normalizing $\epsilon$ and $\nu$, we can rewrite such kernel 
-{as a function of distance  $\|\hat{\epsilon}-\hat{\epsilon}'\|_2^2$ and $\|\hat{\nu}-\hat{\nu}'\|_2^2$ for both traces $\tau$ and $\tau'$ to be aligned:}
+Given that kernel functions $k_\phi$ are defined as the dot product between the embedding $\phi$ of distinct objects $x$ (\S\ref{subsec:katk}), then we can express the kernel $k_{\phi_{\mathcal{P}}}$ as such dot product and, after normalizing $\epsilon$ and $\nu$, we can rewrite such kernel
+{as a function of distance  $\|\hat{\epsilon}-\hat{\epsilon}'\|_2^2$ and $\|\hat{\nu}-\hat{\nu}'\|_2^2$ for both traces $\sigma$ and $\sigma'$ to be aligned:}
 
 \begin{proposition}\label{lem:rewritinglemma}
 Given two TGs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$, the TG Kernel is defined as follows:
@@ -169,18 +160,18 @@ k_{\phi_{\mathcal{P}}}(P,P')=&\omega\omega't_f^{|R>0|+|R'>0|}\left(1-\frac{\norm
 \begin{proof} After observing that$\|\hat{\mathbf{x}}-\hat{\mathbf{x}}'\|_2^2=(2-1\braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$ for normalized vectors (\S\ref{subsec:katk}), we can expand the former definition as follows:
 $$\begin{aligned}
 {k_{\phi_{\mathcal{P}}}(P,P')}&{=\Braket{\phi_{\mathcal{P}}(P),\phi_{\mathcal{P}}(P')}}\\
-	&{=\sum_{\alpha\beta\in \Sigma_\varepsilon^2}\frac{\epsilon_{\color{green}\alpha\beta}}{\|\epsilon\|_2}\frac{{\epsilon'}_{\color{green}\alpha\beta}}{\|\epsilon'\|_2}\omega\omega't_f^{|R>0|+|R'>0|}\quad+\quad \sum_{\alpha\in \Sigma_\varepsilon}\frac{\nu_{\color{green}\alpha}}{\|\nu\|_2}\frac{{\nu'}_{\color{green}\alpha}}{\|\nu'\|_2}t_f^{|R>0|+|R'>0|}}\\
-	&{=ww'\tau^{|Rb>0|+|R'>0|}\sum_{\alpha\beta\in \Sigma_\varepsilon^2}\frac{\epsilon_{\color{green}\alpha\beta}}{\|\epsilon\|_2}\frac{{\epsilon'}_{\color{green}\alpha\beta}}{\|\epsilon'\|_2}\quad+\quad t_f^{|R>0|+|R'>0|}\sum_{\alpha\in \Sigma_\varepsilon}\frac{\nu_{\color{green}\alpha}}{\|\nu\|_2}\frac{{\nu'}_{\color{green}\alpha}}{\|\nu'\|_2}}\\
+	&{=\sum_{\alpha\beta\in \Sigma_\tau^2}\frac{\epsilon_{\color{green}\alpha\beta}}{\|\epsilon\|_2}\frac{{\epsilon'}_{\color{green}\alpha\beta}}{\|\epsilon'\|_2}\omega\omega't_f^{|R>0|+|R'>0|}\quad+\quad \sum_{\alpha\in \Sigma_\tau}\frac{\nu_{\color{green}\alpha}}{\|\nu\|_2}\frac{{\nu'}_{\color{green}\alpha}}{\|\nu'\|_2}t_f^{|R>0|+|R'>0|}}\\
+	&{=ww'\sigma^{|Rb>0|+|R'>0|}\sum_{\alpha\beta\in \Sigma_\tau^2}\frac{\epsilon_{\color{green}\alpha\beta}}{\|\epsilon\|_2}\frac{{\epsilon'}_{\color{green}\alpha\beta}}{\|\epsilon'\|_2}\quad+\quad t_f^{|R>0|+|R'>0|}\sum_{\alpha\in \Sigma_\tau}\frac{\nu_{\color{green}\alpha}}{\|\nu\|_2}\frac{{\nu'}_{\color{green}\alpha}}{\|\nu'\|_2}}\\
 	&{=\omega\omega't_f^{|R>0|+|R'>0|}\Braket{\hat{\epsilon}, \hat{\epsilon}'}+ t_f^{|R>0|+|R'>0|}\Braket{\hat{\nu}, \hat{\nu}'}}\\
 	&{=\omega\omega't_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\epsilon}- \hat{\epsilon}'}{2}^2}{2}\right)+ t_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\nu}- \hat{\nu}'}{2}^2}{2}\right)}\\
 \end{aligned}$$
 \end{proof}
 
-%\xout{Given that we can now follow Definition \ref{def:ppne} for representing a trace $\tau$ as a proper embedding after transforming it as a TG $P_{\tau^*}$ (\S\ref{subsec:katk}), we can find the TG $P$ providing the best approximate match with  a trace $\tau$ as follows:}
+%\xout{Given that we can now follow Definition \ref{def:ppne} for representing a trace $\sigma$ as a proper embedding after transforming it as a TG $P_{\sigma^*}$ (\S\ref{subsec:katk}), we can find the TG $P$ providing the best approximate match with  a trace $\sigma$ as follows:}
 %\[\Rcancel{\underset{{P}}{\max\arg}\;k_{\phi_{\mathcal{P}}}(P,T)}\]
 %\xout{Still, this TG matching strategy does not allow to find the trace maximizing such score.} %To assess such problem, the next section is going to determine both an exact (\S\ref{subsec:exbkptap}) and an approximated strategy (\S\ref{subsec:akptap}) for probabilistically matching one single trace from the TG.
 %
-%\xout{Given the characterization of a TG as in \S\ref{subsec:ppn} and the embedding strategy proposed in Definition \ref{def:ppne}, We can \ADD{now} generate an embedding for each possible weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_p^n(P)$ for a given TG $P$ as described in the following definition:}
+%\xout{Given the characterization of a TG as in \S\ref{subsec:ppn} and the embedding strategy proposed in Definition \ref{def:ppne}, We can \ADD{now} generate an embedding for each possible weighted trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_p^n(P)$ for a given TG $P$ as described in the following definition:}
 
 
 
@@ -191,7 +182,7 @@ $$\begin{aligned}
 	\centering
 	%	\begin{tabular}{l|c|ll}
 	%		\toprule
-	%		$\tau$ & $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$ & \textit{kernel ranking} & expected ranking\\
+	%		$\sigma$ & $k_{\phi_{\mathcal{P}}}(\sigma,\sigma^*)$ & \textit{kernel ranking} & expected ranking\\
 	%		\midrule
 	%		a & $8.16\cdot 10^{-21}$ & \textbf{1} & \textbf{\color{blue}1}\\
 	%		ca & $1.89\cdot 10^{-24}$ & \textbf{2} & \textbf{\color{blue}4}\\
@@ -208,12 +199,12 @@ $$\begin{aligned}
 	\resizebox{.9\textwidth}{!}{\begin{tabular}{l|ll|cc}
 		\toprule
 		
-		{$\tau$} &
-		%\multirow{2}{*}{$d(\tau,\tau^*)$} &
-		%\multicolumn{2}{c|}{$\mu_{\tau^*}$} &
-		$( w_\tau$ &  $,\,\boldsymbol{\downarrow} s_d(\tau,\tau^*)) $ &
-		{$=k_\star(\tau,\tau^*)$} &
-		{$k_{\phi_{\mathcal{P}}}(P_\tau,P_{\tau^*})$} \\
+		{$\sigma$} &
+		%\multirow{2}{*}{$d(\sigma,\sigma^*)$} &
+		%\multicolumn{2}{c|}{$\mu_{\sigma^*}$} &
+		$( w_\sigma$ &  $,\,\boldsymbol{\downarrow} s_d(\sigma,\sigma^*)) $ &
+		{$=k_\star(\sigma,\sigma^*)$} &
+		{$k_{\phi_{\mathcal{P}}}(P_\sigma,P_{\sigma^*})$} \\
 		
 		
 		\midrule
@@ -229,8 +220,8 @@ $$\begin{aligned}
 	\end{tabular}\quad \begin{tabular}{l|c}
 	\toprule
 	
-	{$\tau$} &
-	{$\boldsymbol{\downarrow}k_\star(\tau,\tau^*)$} \\
+	{$\sigma$} &
+	{$\boldsymbol{\downarrow}k_\star(\sigma,\sigma^*)$} \\
 	
 	
 	\midrule
@@ -246,8 +237,8 @@ $$\begin{aligned}
 \end{tabular}\quad	\begin{tabular}{l|c}
 	\toprule
 	
-	{$\tau$} &
-	{$\boldsymbol{\downarrow}k_{\phi_{\mathcal{P}}}(P_\tau,P_{\tau^*})$} \\
+	{$\sigma$} &
+	{$\boldsymbol{\downarrow}k_{\phi_{\mathcal{P}}}(P_\sigma,P_{\sigma^*})$} \\
 
 	
 	\midrule
@@ -264,10 +255,10 @@ $$\begin{aligned}
 \end{table}
 
 
-At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}_p^n(P), P_\tau\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\tau, P_{\tau^*})$ returns the best approximated trace alignment $\tau$ for a query trace represented as $P_{\tau^*}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\tau^*}$ as $\underset{P}{\max\arg}\underset{ P_\tau\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\tau, P_{\tau^*})$.}¯
+At this stage, the computation of $\underset{\braket{\sigma,w_\sigma}\in \mathcal{W}_p^n(P), P_\sigma\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\sigma, P_{\sigma^*})$ returns the best approximated trace alignment $\sigma$ for a query trace represented as $P_{\sigma^*}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\sigma^*}$ as $\underset{P}{\max\arg}\underset{ P_\sigma\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\sigma, P_{\sigma^*})$.}¯
 
 \begin{example}\label{ex:11}
-	Given that $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)=\braket{\phi_{\mathcal{P}}(P_\tau),\;\phi_{\mathcal{P}}(P_{\tau^*})}$ for each weighted trace $\braket{\tau,w_\tau}\in\mathcal{W}_0^4(P)$, then the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}, where the expected ranking $k_\star$ is also showed. This similarity score approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
+	Given that $k_{\phi_{\mathcal{P}}}(\sigma,\sigma^*)=\braket{\phi_{\mathcal{P}}(P_\sigma),\;\phi_{\mathcal{P}}(P_{\sigma^*})}$ for each weighted trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_0^4(P)$, then the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}, where the expected ranking $k_\star$ is also showed. This similarity score approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
 \end{example}
 
 
@@ -277,25 +268,25 @@ At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}
 %	\Rcancel{\mathcal{W}_0^4(P)=\{}&\Rcancel{\braket{cb,0.35},\braket{a,0.05},\braket{aa,0.045},\braket{aaa,0.0405},}\\
 %	&\Rcancel{\braket{aaaa,0.03645},\braket{ca,0.015},\braket{caa,0.0135},\braket{caaa,0.01215}\}}\\
 %	\end{aligned}$$
-%	\xout{Let us also assume that we want to align these traces in a probabilistic way with the query $\tau^*=\textup{caba}$: the distance ($d$) and similarity ($s_d$) scores will be still the same, while the associated probabilities will vary. The expected ranking by multiplying weight with similarity is represented in Table \ref{tab:witherror}.}
+%	\xout{Let us also assume that we want to align these traces in a probabilistic way with the query $\sigma^*=\textup{caba}$: the distance ($d$) and similarity ($s_d$) scores will be still the same, while the associated probabilities will vary. The expected ranking by multiplying weight with similarity is represented in Table \ref{tab:witherror}.}
 %	
-%	%\xout{As a consequence of the different probability distribution associated to the edges, a different set of embedding will be generated for each trace of interest while the TG $T$ associated to $\tau^*$ will be kept the same. Table \ref{tab:witherror} represents the ranking induced by the kernel $k_{\phi_{\mathcal{P}}}$ over this different set of vectors by ranking the traces in descendant order of $k_{\phi_{\mathcal{P}}}$. As we might notice, the more skewed edge probability distribution introduced more errors in the ranking result: while the largest ranking subsequence (marked in blue) always starts from the best-expected trace \textit{cb}, this element now appears in the third position, and the position of traces \textit{caa} and \textit{aaaa} is swapped.}
+%	%\xout{As a consequence of the different probability distribution associated to the edges, a different set of embedding will be generated for each trace of interest while the TG $T$ associated to $\sigma^*$ will be kept the same. Table \ref{tab:witherror} represents the ranking induced by the kernel $k_{\phi_{\mathcal{P}}}$ over this different set of vectors by ranking the traces in descendant order of $k_{\phi_{\mathcal{P}}}$. As we might notice, the more skewed edge probability distribution introduced more errors in the ranking result: while the largest ranking subsequence (marked in blue) always starts from the best-expected trace \textit{cb}, this element now appears in the third position, and the position of traces \textit{caa} and \textit{aaaa} is swapped.}
 %	
 %\end{example}
 %\begin{table}[!t]
 %	\centering
-%	\caption{Expected ranking of the paths from Example \ref{ex:moreskew} with the trace $\tau^*=\textup{caba}$. The cost function is the one from \cite{LeoniM17} and its normalized similarity score has $c=5$. Traces are ranked by decreasing kernel $k_{\phi_{\mathcal{P}}}$ value: slight changes in the expected expected order are circled, the others are marked in red.}\label{tab:witherror}
+%	\caption{Expected ranking of the paths from Example \ref{ex:moreskew} with the trace $\sigma^*=\textup{caba}$. The cost function is the one from \cite{LeoniM17} and its normalized similarity score has $c=5$. Traces are ranked by decreasing kernel $k_{\phi_{\mathcal{P}}}$ value: slight changes in the expected expected order are circled, the others are marked in red.}\label{tab:witherror}
 %	\begin{tabular}{lc|ll|cc|l}
 %		\toprule
 %		
-%		\multirow{2}{*}{$\tau$} &
-%		\multirow{2}{*}{$d(\tau,\tau^*)$} &
-%		\multicolumn{2}{c|}{$\mu_{\tau^*}$} &
-%		\multirow{2}{*}{$\approx s_d(\tau,\tau^*)\cdot w_\tau$} &
-%		\multirow{2}{*}{$k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$}&
+%		\multirow{2}{*}{$\sigma$} &
+%		\multirow{2}{*}{$d(\sigma,\sigma^*)$} &
+%		\multicolumn{2}{c|}{$\mu_{\sigma^*}$} &
+%		\multirow{2}{*}{$\approx s_d(\sigma,\sigma^*)\cdot w_\sigma$} &
+%		\multirow{2}{*}{$k_{\phi_{\mathcal{P}}}(\sigma,\sigma^*)$}&
 %		\multirow{2}{*}{\textit{expected ranking}}\\
 %		
-%		\cline{3-4} &&  $\langle w_\tau$ &  $,\,s_d(\tau,\tau^*)\rangle $ && \\
+%		\cline{3-4} &&  $\langle w_\sigma$ &  $,\,s_d(\sigma,\sigma^*)\rangle $ && \\
 %		
 %		\midrule
 %		{a}  & $3$ & $0.05$ & $\;\; 0.6250$  & $0.03125$ & $8.16497\cdot 10^{-16}$ & \textbf{\color{red}3}\\
@@ -308,19 +299,19 @@ At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}
 %		{caaa}  & $1$  & $0.01215$ & $\;\; 0.8333$ & $0.01012$ & $9.52398\cdot 10^{-31}$ & \textbf{\color{blue}8}\\
 %		\bottomrule
 %	\end{tabular}
-%\end{table} 
+%\end{table}
 \begin{table}[!t]
 	\caption{Comparison between the ranking induced by the expected ranking $k_\star$ and the proposed kernel $k_{\phi_{\mathcal{P}}}$ with embedding strategies $\epsilon^2$ and $\nu^1$: arrows $\boldsymbol{\downarrow}$ remark the column of choice under which we sort the rows (i.e., ranking).}\label{tab:compLit}
 	
 	\resizebox{.9\textwidth}{!}{\begin{tabular}{l|ll|cc}
 			\toprule
 			
-			{$\tau$} &
-			%\multirow{2}{*}{$d(\tau,\tau^*)$} &
-			%\multicolumn{2}{c|}{$\mu_{\tau^*}$} &
-			$( w_\tau$ &  $,\,\boldsymbol{\downarrow} s_d(\tau,\tau^*)) $ &
-			{$=k_\star(\tau,\tau^*)$} &
-			{$k_{\phi_{\mathcal{P}}}(P_\tau,P_{\tau^*})$} \\
+			{$\sigma$} &
+			%\multirow{2}{*}{$d(\sigma,\sigma^*)$} &
+			%\multicolumn{2}{c|}{$\mu_{\sigma^*}$} &
+			$( w_\sigma$ &  $,\,\boldsymbol{\downarrow} s_d(\sigma,\sigma^*)) $ &
+			{$=k_\star(\sigma,\sigma^*)$} &
+			{$k_{\phi_{\mathcal{P}}}(P_\sigma,P_{\sigma^*})$} \\
 			
 			
 			\midrule
@@ -336,8 +327,8 @@ At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}
 		\end{tabular}\quad \begin{tabular}{l|c}
 			\toprule
 			
-			{$\tau$} &
-			{$\boldsymbol{\downarrow}k_\star(\tau,\tau^*)$} \\
+			{$\sigma$} &
+			{$\boldsymbol{\downarrow}k_\star(\sigma,\sigma^*)$} \\
 			
 			
 			\midrule
@@ -353,8 +344,8 @@ At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}
 		\end{tabular}\quad	\begin{tabular}{l|c}
 			\toprule
 			
-			{$\tau$} &
-			{$\boldsymbol{\downarrow}k_{\phi_{\mathcal{P}}}(P_\tau,P_{\tau^*})$} \\
+			{$\sigma$} &
+			{$\boldsymbol{\downarrow}k_{\phi_{\mathcal{P}}}(P_\sigma,P_{\sigma^*})$} \\
 			
 			
 			\midrule
@@ -375,8 +366,8 @@ At this stage, the computation of $\underset{\braket{\tau,w_\tau}\in \mathcal{W}
 %		%\multicolumn{3}{c||}{Example \ref{ex:withpaths}} %&
 %		%\multicolumn{3}{c}{Example \ref{ex:moreskew}}\\
 %		%\hline
-%		$\tau$ &  $k_{\phi_{\mathcal{P}}}(P_\tau,P_{\tau^*})$ & $k_\star(\tau,\tau^*)$\\ %&
-%		%$\tau$ &  $k_{\phi_{\mathcal{P}}}(\tau,\tau^*)$ & \textit{exp. ranking}\\
+%		$\sigma$ &  $k_{\phi_{\mathcal{P}}}(P_\sigma,P_{\sigma^*})$ & $k_\star(\sigma,\sigma^*)$\\ %&
+%		%$\sigma$ &  $k_{\phi_{\mathcal{P}}}(\sigma,\sigma^*)$ & \textit{exp. ranking}\\
 %		\midrule
 %		
 %		a & $\;8.16497\cdot10^{-21}$ & \textbf{\color{blue}1} \\%& a & $\;8.16497\cdot 10^{-21}$ & \textbf{\color{red}3} \\
@@ -406,7 +397,7 @@ As a first property, we want to show that when the two traces are equivalent,  t
 	\caption{Two TGs, $Q$ (left) and $R$ (right), having a different set of traces but the same embedding representation.}\label{fig:counterexample}
 \end{figure}
 \begin{example}
-	If we use $\epsilon$ (or $\epsilon^2$) and $\nu$ (or $\nu^2$) for $\phi_{\mathcal{P}}$, we might have a false positive for ``weak equality'' if $Q=(s,s,L,R,w)$ and $R=(s',s',L,R,w)$ are both cycle graphs with $s\neq s'$, $\textit{label}(s)\neq\textit{label}(s')$, $\textit{label}(s)\neq\varepsilon$, and $\textit{label}(s')\neq\varepsilon$. An intuitive example of such situation is presented in Figure \ref{fig:counterexample}: both graphs will have the same frequency for both subtraces and nodes, and therefore have the same  $\epsilon$ and $\nu$ by construction. By having different initial and accepting node with  different labels, we have $\mathcal{W}_0^{\aleph_0}(Q)=\Set{\textup{a(bca)}^n|n\in\mathbb{N}}$ and $\mathcal{W}_0^{\aleph_0}(R)=\Set{\textup{c(abc)}^n|n\in\mathbb{N}}$, thus implying $\mathcal{W}_0^{\aleph_0}(Q)\neq\mathcal{W}_0^{\aleph_0}(R)$ but $k_{\phi_{\mathcal{P}}}(Q,R)=1$ for $t_f=1$.
+	If we use $\epsilon$ (or $\epsilon^2$) and $\nu$ (or $\nu^2$) for $\phi_{\mathcal{P}}$, we might have a false positive for ``weak equality'' if $Q=(s,s,L,R,w)$ and $R=(s',s',L,R,w)$ are both cycle graphs with $s\neq s'$, $\textit{label}(s)\neq\textit{label}(s')$, $\textit{label}(s)\neq\tau$, and $\textit{label}(s')\neq\tau$. An intuitive example of such situation is presented in Figure \ref{fig:counterexample}: both graphs will have the same frequency for both subtraces and nodes, and therefore have the same  $\epsilon$ and $\nu$ by construction. By having different initial and accepting node with  different labels, we have $\mathcal{W}_0^{\aleph_0}(Q)=\Set{\textup{a(bca)}^n|n\in\mathbb{N}}$ and $\mathcal{W}_0^{\aleph_0}(R)=\Set{\textup{c(abc)}^n|n\in\mathbb{N}}$, thus implying $\mathcal{W}_0^{\aleph_0}(Q)\neq\mathcal{W}_0^{\aleph_0}(R)$ but $k_{\phi_{\mathcal{P}}}(Q,R)=1$ for $t_f=1$.
 \end{example}
 
 
@@ -417,8 +408,8 @@ As a first property, we want to show that when the two traces are equivalent,  t
 %	\xout{Given Proposition \ref{lem:rewritinglemma} and the positive definition of $\epsilon$ and $\nu$,  we have that $\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}\to 0$ as well as $\norm{\hat{\nu}-\hat{\nu}'}{2}\to 0$, for which we can immediately close the goal.}
 %\end{proof}
 
-%\xout{As per previous observations, we know that} 
-Two TGs should have the maximum dissimilarity when all the non $\varepsilon$-nodes have different labels, thus making it impossible to find an alignment, thus implying that they share an utterly dissimilar set of weighted traces:
+%\xout{As per previous observations, we know that}
+Two TGs should have the maximum dissimilarity when all the non $\tau$-nodes have different labels, thus making it impossible to find an alignment, thus implying that they share an utterly dissimilar set of weighted traces:
 
 \begin{lemma}[Strong Dissimilarity]
 	Given two TGs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$, $k_{\phi_{\mathcal{P}}}(P,P')=0$ iff. $P$ and $P'$ have a different set of labels with $t_f,w,w'>0$.
