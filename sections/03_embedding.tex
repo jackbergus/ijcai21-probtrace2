@@ -62,23 +62,34 @@ The reachability graph $(\mathcal{M},\mathcal{E})$ generated from an initial mar
 We can show that the TG obtained in Definition \ref{def:transf} preserves the same set of probabilistic traces associated by the reachability graph. The proof is omitted due to the lack of space.
 
 \begin{example}
-Figure \ref{fig:lmc} provides the output of such transformation if Figure \ref{fig:rg} is used as an input. All the nodes are labelled using the firing transitions' labels (in green), while the edges preserve the probabilistic information from the Reachability Graph (in red). Intuitively, when a new initial node \textit{\textbf{i}} is inserted, we preserve all the initial probabilistic choices that a transition is fired from an initial marking $M$, while all the intermediate edges inherit the probabilisitc choice of the firing transition from the subsequent choices. When a new final node \textit{\textbf{f}} is added, such edges always have probability $1$, and therefore we do not interfere with the initial traces' probability.
+Figure \ref{fig:lmc} shows the TG obtained from the reachability graph in Figure \ref{fig:rg}. Nodes are labelled with the firing 
+transition labels (in green), and edges preserve the probabilistic information from the reachability graph (in red). Intuitively, when a 
+new initial node \textit{\textbf{i}} is inserted, we preserve all the initial probabilistic choices that a transition is fired from an initial 
+marking $M$, while the intermediate edges inherit the probabilisitc choice of the firing transition from the subsequent choices. When 
+a new final node \textit{\textbf{f}} is added, such edges always have probability $1$, and thus do not interfere with the 
+initial traces' probability.
 \end{example}
 
 \subsection{$\varepsilon$-closure}\label{sec:clos}
-The $\varepsilon$-closure process has two main purposes: first, it reduces the size of the Transition Graph generated in the previous step by removing all the $\varepsilon$-labelled nodes \texttt{\color{blue}w} and preserving the connection between  the nodes \texttt{\color{blue}u} from its ingoing edges   $\texttt{\color{blue}u}\xrightarrow{\color{red}p_i}\texttt{\color{blue}w}$ with the nodes \texttt{\color{blue}v} from its ingoing edges   $\texttt{\color{blue}w}\xrightarrow{\color{red}p_j}\texttt{\color{blue}v}$ by establishing new edges $\texttt{\color{blue}u}\xrightarrow{\color{red}p_ip_j}\texttt{\color{blue}v}$. $\varepsilon$-labelled initial (or accepting) nodes are removed if and only if they have only one outgoing (ingoing) edge with probability $1$.
+The $\varepsilon$-closure process has two main purposes: first, reduce the size of the previously generated TG by removing all 
+$\varepsilon$-labelled nodes \texttt{\color{blue}w} and preserving the connection between  the nodes \texttt{\color{blue}u} 
+from its ingoing edges   $\texttt{\color{blue}u}\xrightarrow{\color{red}p_i}\texttt{\color{blue}w}$ with the nodes \texttt{\color{blue}v} from its ingoing edges   $\texttt{\color{blue}w}\xrightarrow{\color{red}p_j}\texttt{\color{blue}v}$ by establishing new edges $\texttt{\color{blue}u}\xrightarrow{\color{red}p_ip_j}\texttt{\color{blue}v}$. $\varepsilon$-labelled initial (or accepting) nodes are removed iff they have only one outgoing (ingoing) edge with probability $1$.
 
-\begin{example}
-	The $\varepsilon$-closure remotes the non-initial and non-accepting nodes within such automaton, while preserving the probabilistic trace equivalence of the two automata: node \texttt{\color{blue}10} is then removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{red}p_4}\texttt{\color{blue}4}$ and $\texttt{\color{blue}3}\xrightarrow{\color{red}p_5}\texttt{\color{blue}5}$ are introduced. The resulting TG $P$ is represented with the same graphical depiction Figure \ref{fig:closed}.
+\begin{example}\todo{this example is incomplete! what is this node 10, etc?}
+	The $\varepsilon$-closure removes the non-initial and non-accepting nodes within an automaton, while preserving the probabilistic trace equivalence of the two automata: node \texttt{\color{blue}10} is removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{red}p_4}\texttt{\color{blue}4}$ and $\texttt{\color{blue}3}\xrightarrow{\color{red}p_5}\texttt{\color{blue}5}$ are introduced. The resulting TG $P$ is represented with the same graphical depiction Figure \ref{fig:closed}.
 \end{example}
-
-Consequently, it is always possible to minimize a TG  (e.g., Figure \ref{fig:orig}) via $\varepsilon$-closure, so that the only nodes that are labelled as $\varepsilon$ are the source and the target nodes (Figure \ref{fig:closed}) and the set of weighted traces is preserved. From now on, we always that all the TGs are minimized via $\varepsilon$-closure. 
+%
+Consequently, it is always possible to minimize a TG  via $\varepsilon$-closure, so that the only nodes labelled as $\varepsilon$ 
+are the source and the target nodes and the set of weighted traces is preserved. From now on, we consider only minimised TGs. 
 
 \subsection{Unraveller}\label{sec:unrav}
-Being that both the graph isomorphism problem is NP-Complete and the TGs are fully characterized by the set of the probabilistic traces that they generate,  we can say that two TGs are (probabilistic-trace) equivalent if and only if they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and maximum length $n$. Under these assumptions, the probabilistic trace equivalence is deterministic.
+%Being that both the graph isomorphism problem is NP-Complete and the 
+Since TGs are fully characterized by the set of the probabilistic traces that they generate,  we say that two TGs are 
+(probabilistic-trace) equivalent iff they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and maximum length $n$. Under these assumptions, the probabilistic trace equivalence is deterministic.
 
 \begin{example}
-	The TG in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces:
+	The set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces of the TG in Figure \ref{fig:orig} is
+%	The TG in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces:
 $$\set{\braket{\underbrace{\color{green}a\dots a}_{n},{\color{red}p_1p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup \set{\braket{{\color{green}c}\underbrace{\color{green}a\dots a}_{n},{\color{red}p_2p_4p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup\{\braket{{\color{green}cb},{\color{red}p_2p_5}}\}$$
 After the $\varepsilon$-closure process, $\mathcal{W}_0^{\aleph_0}(P^*)=\mathcal{W}_0^{\aleph_0}(P)$, so the two TGs are (probabilistic-trace) equivalent.
 \end{example}
