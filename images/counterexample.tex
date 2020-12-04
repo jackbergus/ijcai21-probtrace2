@@ -4,7 +4,7 @@
 \begin{document}
 \begin{tikzpicture}[align=center,node distance=1cm]
 \node (init1) {};
-\node[state,right=3mm of init1,label=above:\color{green}$a$] (s1) {1};
+\node[state,accepting,right=3mm of init1,label=above:\color{green}$a$] (s1) {1};
 \node[state,right=of s1,label=above:\color{green}$b$]       (s2) {2};
 \node[state,below=of $(s1)!0.5!(s2)$,label=below:\color{green}$c$]       (s3) {3};
 
@@ -17,7 +17,7 @@
 \node[right=of s2] (init2) {};
 \node[state,right=3mm of init2,label=above:\color{green}$a$] (s1) {1};
 \node[state,right=of s1,label=above:\color{green}$b$]       (s2) {2};
-\node[state,below=of $(s1)!0.5!(s2)$,label=below:\color{green}$c$]       (s3) {3};
+\node[state,accepting,below=of $(s1)!0.5!(s2)$,label=below:\color{green}$c$]       (s3) {3};
 \node[left=3mm of s3] (init3) {};
 
 \draw[link] (init3) -- (s3);
