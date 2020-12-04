@@ -27,7 +27,7 @@
       fill=gray,
     },
     arc/.style={
-        -triangle 45,
+        -angle 90,
         thick,
     }
 }
@@ -35,7 +35,7 @@
 
 \begin{document}
 	
-	\begin{tikzpicture}[node distance=0.3cm and 0.8cm,>=stealth',bend angle=45,auto]
+	\begin{tikzpicture}[node distance=0.4cm and 0.5cm,>=stealth',bend angle=45,auto]
 	\node [place,tokens=1] (i) {};
     \node [below=-0.5mm of i] {$i$};
 	\node [
@@ -125,12 +125,12 @@
 	\node  (b3) [right=of b2] {};
 	\node  (b4) [right=of b3] {};
 	\node  (b5) [right=of b4] {};
-	\node [place] (f) [right=of b5] {};
+	\node [place] (f) [right=8mm of b5] {};
     \node [below=-0.5mm of f] {$f$};
 
     \node [
       transitionH,
-      above=4.5mm of p6,
+      above=5mm of p6,
       label=left:$\color{green}a$,
       label=right:$\color{magenta}v_{a_3}$,
     ] (ta3) {};
