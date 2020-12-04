@@ -35,14 +35,14 @@ The reachability graph $\rg{\net,\marking_0}$ of a marked \uswn $(\net,\marking_
 \end{compactitem}
 \end{definition}
 
-Notice that, in the definition of the transition probability function, we have to account for the possible case where we have distinct net transitions that share the same label and are so that, in a given state, produce the same consequent state. In this case, they are indistinguishable when observing the execution traces of the net, and in fact they collapse into a single transition relation in the reachability graph. This is why, in this case, we need to accumulate all their firing probabilities into a single value.
+Notice that, in the definition of the transition probability function, we have to account for the possible case where, in a given state, distinct net transitions share the same label produce the same consequent state. In this case, they are indistinguishable when observing the execution traces of the net, and in fact they collapse into a single edge of the reachability graph. This is why, in this case, we accumulate all their firing probabilities into a single value.
 
 The following two observations hold for the so-defined reachability graph:
 \begin{compactitem}
-\item if the marked \uswn is bounded then its reachability graph contains finitely many states; from now on, whenever we refer to an \uswn we implicitly assume that it is bounded.
-\item Every marking contained in the reachability graph is so that by summing up all the probabilities associated to its outgoing edges, one gets $1$.
+\item If the marked \uswn is bounded then its reachability graph contains finitely many states; from now on, whenever we refer to an \uswn, \emph{we implicitly assume that it is bounded}.
+\item As desired, every state contained in the reachability graph is so that by summing up all the probabilities associated to its outgoing edges, $1$ is obtained.
 \end{compactitem}
-This makes our notion of reachability graph essentially equivalent to that of discrete Markov chains.
+This makes our notion of reachability graph essentially equivalent to that of a discrete Markov chain.
 
 
 
@@ -71,15 +71,18 @@ This makes our notion of reachability graph essentially equivalent to that of di
 	\subfloat[A sample \uswn. Labels are shown in green, invisible transitions in grey, and weights in magenta.]{\label{fig:spn}\includegraphics[width=.48\textwidth]{images/petri.pdf}}\hfill
     \subfloat[Reachability Graph of the \uswn in (a). Probabilities are shown in violet.]{\label{fig:rg}\includegraphics[width=.48\textwidth]{images/rg.pdf}}\\
 	\subfloat[Reachability Graph Transformed as a Transition Graph.]{\label{fig:lmc}\label{fig:orig}\includegraphics[width=.45\textwidth]{images/running_example.pdf}}\subfloat[Transition Graph after $\varepsilon$-closure.]{\label{fig:closed}\includegraphics[width=.45\textwidth]{images/closed_example.pdf}}
-	\caption{Steps required to transform the set of probabilistic traces associated to a Untimed Stochastic Petri Net into a Transition Graph.}
+	\caption{An \uswn and the application of the three transformation steps to convert it into a minimal, trace-preserving transition graph.}
 	\label{transformspn}
 \end{figure}
-\begin{example}
-Figure \ref{fig:spn} provides an example of a Stocastic Petri Net defined as such, and \ref{fig:rg} provides its associated Reachability Graph. This representation can be beneficial when such USWNs are inferred and extracted from log files \cite{PPNFromLog} for extracting the set of the probabilistic traces associated to the USWN.
-\end{example}
+Figures \ref{fig:spn} and \ref{fig:rg} respectively show a sample \uswn and its corresponding reachability graph. This net will be our running example throughout the paper.
 
 
-We use USWNs for modelling business processes: in fact, it can be shown \cite{RaedtsPUWGS07} that it is always possible to convert BPMNs to USWNs. Last, we also assume that a transition is enabled when all of its input places contain at least one token and that, when a transition fires, we remove one token from each of its input places and depose tokens for each of its output places.
+%\begin{example}
+%Figure \ref{fig:spn} provides a sample \uswn defined as such, and \ref{fig:rg} provides its associated Reachability Graph. This representation can be beneficial when such USWNs are inferred and extracted from log files \cite{PPNFromLog} for extracting the set of the probabilistic traces associated to the USWN.
+%\end{example}
+%
+%
+%We use USWNs for modelling business processes: in fact, it can be shown \cite{RaedtsPUWGS07} that it is always possible to convert BPMNs to USWNs. Last, we also assume that a transition is enabled when all of its input places contain at least one token and that, when a transition fires, we remove one token from each of its input places and depose tokens for each of its output places.
 
 
 
