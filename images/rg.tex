@@ -21,35 +21,8 @@
 }
 
 \begin{document}
-	
-<<<<<<< HEAD
-	\begin{tikzpicture}[node distance=0.5cm and 1.8cm,>=stealth',bend angle=45,auto]
-=======
-	\begin{tikzpicture}[node distance=0.4cm and 1cm,>=stealth',bend angle=45,auto]
-	
-	
-\node[draw=black,rectangle,label=right:{\texttt{i}}] (i) {$(1,0,0,0,0,0,0)$};
-\node[draw=black,rectangle,label=right:{\texttt{ii}}] (ii) [below=of i] {$(0,1,0,0,0,0,0)$};
 
-
-\node[draw=black,rectangle,label=right:{\texttt{iii}}] (iii) [below=of ii] {$(0,0,1,0,0,0,0)$};
-\node[draw=black,rectangle,label=left:{\texttt{iv}}] (iv) [below left=of ii] {$(0,0,0,1,0,0,0)$};
-
-\node[draw=black,rectangle,label=right:{\texttt{v}}] (v) [below=of iii] {$(0,0,0,0,1,0,0)$};
-\node[draw=black,rectangle,label=left:{\texttt{vi}}] (vi) [below=of iv] {$(0,0,0,0,0,1,0)$};
-\node[draw=black,rectangle,label=right:{\texttt{vii}}] (vii) [below=of v] {$(0,0,0,0,0,0,1)$};
-
-\draw[->] (i) -- (ii) node [midway,right] {$\color{green}\tau_\texttt{\color{blue}1}$} node [midway,left] {$\color{red}1$};
-\draw[->] (ii) -- (iii) node [midway,right] {$\color{green}\tau_\texttt{\color{blue}2}$} node [midway,left] {$\color{red}p_1$};
-\draw[->] (ii) -- (iv) node [midway,above] {$\color{green}c$} node [midway,below] {$\color{red}p_2$};
-\draw[->] (v.south east) .. controls +(2,-2) and +(2,2) .. (v.north east) node [midway,right] {$\color{green}a$} node [midway,left] {$\color{red}p_3$};
-\draw[->] (vi) -- (v) node [midway] {$\color{green}a$} node [midway,above right] {$\color{red}p_4$};
-\draw[->] (iii) -- (v) node [midway] {$\color{green}a$} node [midway,left] {$\color{red}1$};
-\draw[->] (iv) -- (vi) node [midway] {$\color{green}\tau_\texttt{\color{blue}3}$} node [midway,left] {$\color{red}1$};
-\draw[->] (vi) -- (vii) node [midway,below] {$\color{green}b$} node [pos=0.9,above] {$\color{red}p_5$};
-\draw[->] (v) -- (vii) node [midway] {$\color{green}\tau_\texttt{\color{blue}4}$} node [midway,left] {$\color{red}p_6$};
->>>>>>> aafffc441080c9ca11f0f9eee95704ff0d5bb264
-	
+\begin{tikzpicture}[node distance=0.5cm and 1.8cm,>=stealth',bend angle=45,auto]
 	
 \node[state] (i) {$i$};
 \node[state] (ii) [below=of i] {$p_2$};
@@ -64,20 +37,20 @@
   (i) 
   -- 
   node[right]{\color{violet}$1$} 
-  node[left]{\color{gray}$\varepsilon$}
+  node[left]{\color{gray}$\tau$}
   (ii);
 
 \draw[link] 
   (ii) 
   -- 
-  node[above,font=\scriptsize]{\color{violet}$\prob_{23} = \frac{v_{\varepsilon_2}}{v_{\varepsilon_2}+v_c}$} 
-  node[below]{\color{gray}$\varepsilon$}
+  node[above,font=\scriptsize]{\color{violet}$\prob_{23} = \frac{v_{\tau_2}}{v_{\tau_2}+v_c}$} 
+  node[below]{\color{gray}$\tau$}
   (iii);
 
 \draw[link] 
   (ii) 
   -- 
-  node[above,font=\scriptsize]{\color{violet}$\prob_{24} = \frac{v_c}{v_{\varepsilon_2}+v_c}$} 
+  node[above,font=\scriptsize]{\color{violet}$\prob_{24} = \frac{v_c}{v_{\tau_2}+v_c}$} 
   node[below]{\color{green}$c$}
   (iv);
 
@@ -92,23 +65,23 @@
   (iv) 
   -- 
   node[right]{\color{violet}$1$} 
-  node[left]{\color{gray}$\varepsilon$}
+  node[left]{\color{gray}$\tau$}
   (vi);
 
 
 \draw[link,rounded corners=4pt,] 
   (v) 
   |-
-  node[above left,font=\scriptsize]{\color{violet}$\prob_{5\mathit{f}} = \frac{v_{\varepsilon_3}}{v_{a_2}+v_{\varepsilon_3}}$} 
-  node[below left,xshift=-10mm]{\color{gray}$\varepsilon$}
+  node[above left,font=\scriptsize]{\color{violet}$\prob_{5\mathit{f}} = \frac{v_{\tau_3}}{v_{a_2}+v_{\tau_3}}$} 
+  node[below left,xshift=-10mm]{\color{gray}$\tau$}
   (vii);
 
 \draw[link,rounded corners=4pt] 
   ($(v.south)+(2mm,0)$) 
   |-
   ($(v.south east)+(4mm,-5mm)$)  
-  node[below,font=\scriptsize,yshift=1mm,xshift=-3mm]{\color{violet}$\prob_{55} = \frac{v_{a_2}}{v_{a_2}+v_{\varepsilon_3}}$} 
-  node[above left,xshift=-1.5mm]{\color{gray}$\varepsilon$}
+  node[below,font=\scriptsize,yshift=1mm,xshift=-3mm]{\color{violet}$\prob_{55} = \frac{v_{a_2}}{v_{a_2}+v_{\tau_3}}$} 
+  node[above left,xshift=-1.5mm]{\color{gray}$\tau$}
   |-
   (v.east);
 
@@ -116,7 +89,7 @@
 \draw[link] 
   (ii) 
   -- 
-  node[above,font=\scriptsize]{\color{violet}$\prob_{24} = \frac{v_c}{v_{\varepsilon_2}+v_c}$} 
+  node[above,font=\scriptsize]{\color{violet}$\prob_{24} = \frac{v_c}{v_{\tau_2}+v_c}$} 
   node[below]{\color{green}$c$}
   (iv);
 

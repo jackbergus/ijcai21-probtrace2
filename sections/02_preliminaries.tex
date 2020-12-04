@@ -10,11 +10,11 @@
 \subsection{Untimed Stochastic Workflow Nets (USWN)}\label{subsec:spn}
 As customary in probabilistic conformance checking \cite{lavori-su-prob-conformance}, we adopt stochastic Petri nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13} as the underlying formal basis to represent processes. More specifically, we consider an interesting class of Stochastic Petri Nets with only immediate transitions (i.e., no timed ones), namely untimed stochastic bounded workflow nets (\uswn for short). 
 
-We assume to have a set $\Sigma$ of labels indicating either a process task of an invisible task. In the latter case, we employ the special label $\varepsilon$.\footnote{This corresponds to the standard notion of $\tau$-transitions in Petri nets, but we use $\varepsilon$ since in the remainder of the paper $\tau$ is used to refer to an execution trace.}
- 
+We assume to have a set $\Sigma$ of labels indicating either a process task of an invisible task. In the latter case, we employ the special label $\tau$.
+
 An \uswn is a tuple $\net = (P,T,F,i,f,W)$ where:
 \begin{compactitem}
-\item $(P,T,F,i,f)$ is a standard workflow net with places $P$, transitions $T$, flow relation $F$, input place $i \in P$, and output place $f \in P$; each transition $t \in T$ is associated to a label $\ell(t) \in \Sigma$ to indicate the task executed upon firing $t$, or the fact that $t$ is an invisible transition (in the latter case, we then have $\ell(t) = \varepsilon$). 
+\item $(P,T,F,i,f)$ is a standard workflow net with places $P$, transitions $T$, flow relation $F$, input place $i \in P$, and output place $f \in P$; each transition $t \in T$ is associated to a label $\ell(t) \in \Sigma$ to indicate the task executed upon firing $t$, or the fact that $t$ is an invisible transition (in the latter case, we then have $\ell(t) = \tau$). 
 \item $W\colon T\to \mathbb{R}^+$ is a weighting function assigning a positive firing weight to each transition of the net; this provides the basis for capturing the stochastic behavior of the net, as described next.
 \end{compactitem}
 
