@@ -145,21 +145,29 @@ $$L:=\kbordermatrix{
 }$$
 \end{example}
 
-
-
-
 \subsection{Kernels and Trace Kernels}\label{subsec:katk}
-Given a set of data examples $\mathcal{X}$, (e.g., string or traces, TGs) a (positive definite) \textbf{kernel} function $k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product $\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$. 
-A kernel is said to \textbf{perform ideally} \cite{Gartner03} when $k(x,x')=1\Leftrightarrow x=x'$ (\textit{strong equality}) and $k(x,x')=0\Leftrightarrow x\not\simeq x'$ (\textit{strong dissimilarity}). A kernel is also said to be \textbf{appropriate} when similar elements $x,x'\in\mathcal{X}$ are also close in the feature space: appropriateness can be only assessed  empirically \cite{Gartner03}.
-Any positive definite kernel induces a distance metric as \cite{Raedt}:
+Given a set of data examples $\mathcal{X}$, (e.g., string or traces, TGs) a (positive definite) \textbf{kernel} function 
+$k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product 
+$\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$. 
+A kernel \textbf{performs ideally} if $k(x,x')=1\Leftrightarrow x=x'$ (\textit{strong equality}) and 
+$k(x,x')=0\Leftrightarrow x\not\simeq x'$ (\textit{strong dissimilarity}) \cite{Gartner03}. It is \textbf{appropriate} when similar 
+elements $x,x'\in\mathcal{X}$ appear close in the feature space; this can only be assessed  empirically \cite{Gartner03}.
+Any positive definite kernel induces a distance metric \cite{Raedt}:
 \begin{equation}\label{eq:dofk}
 d_k(\mathbf{x},\mathbf{x}'):=\sqrt{k(\mathbf{x},\mathbf{x})-2k(\mathbf{x},\mathbf{x}')+k(\mathbf{x}',\mathbf{x}')}
 \end{equation}
-When the kernel of choice is the inner product, the resulting distance is the well known Euclidean distance $\norm{\mathbf{x}-\mathbf{x}'}{2}$. A normalized vector (versor) $\hat{\mathbf{x}}$ is defined as $\mathbf{x}/\norm{\mathbf{x}}{2}$: we can easily prove for normalized vectors that $\norm{\hat{\mathbf{x}}-\hat{\mathbf{x}}'}{2}^2=2(1-\Braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$.
+When the kernel is the inner product, the resulting distance is the Euclidean distance $\norm{\mathbf{x}-\mathbf{x}'}{2}$. 
+A normalized vector (versor) $\hat{\mathbf{x}}$ is defined as $\mathbf{x}/\norm{\mathbf{x}}{2}$: we can easily prove for normalized vectors that $\norm{\hat{\mathbf{x}}-\hat{\mathbf{x}}'}{2}^2=2(1-\Braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$.
+%
+If $\mathcal{X}$ does not represent a $d$-dimensional Euclidean space, we can use an \textbf{embedding} 
+$\phi\colon\mathcal{X}\to \mathbb{R}^d$ to define a kernel $k_\phi\colon \mathcal{X}\times \mathcal{X}\to\mathbb{R}$ as $k_\phi(x,x'):=\Braket{\phi(x),\phi(x')}$. As a result, $k_\phi(x,x')=k_\phi(x',x)$ for each $x,x'\in\mathcal{X}$.
 
-When $\mathcal{X}$ does not necessarily represent a $d$-dimensional Euclidean space, we can use an \textbf{embedding} $\phi\colon\mathcal{X}\to \mathbb{R}^d$ to define a kernel $k_\phi\colon \mathcal{X}\times \mathcal{X}\to\mathbb{R}$ as $k_\phi(x,x'):=\Braket{\phi(x),\phi(x')}$. As a result, $k_\phi(x,x')=k_\phi(x',x)$ for each $x,x'\in\mathcal{X}$.
-
-Current literature also provides kernel representations for traces (referred as strings in Database literature \cite{LodhiSSCW02,Raedt,GartnerFW03}). We now provide an intuition describing the desired features of such representation \cite{LodhiSSCW02}: if we associate each dimension in $\mathbb{R}^d$ to a different subtrace ${\color{green}\alpha\beta}\in(\Sigma\backslash\{\varepsilon\})^2$ of size $2$ ($2$-grams\footnote{\label{fn:caveat}For our experiments, we choose to consider only $2$-grams, but any $p$-grams of arbitrary length $p\geq 2$ might be considered \cite{Gartner03}. Still, an increased size of $p$ allows to increase precision to the detriment of computational complexity, as all the arbitrary sequences of length $p$ occurring at distance $i<|\tau|$ must be considered.}), the associated coordinate should represent how frequently and ``compatctly'' such subtrace is embedded in the original trace. Therefore, we need to introduce a \textbf{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ weighting the presence of each subtrace ``${\color{green}\alpha\beta}/L$'' as $\lambda^Lm$, where $m$ is the frequency of $\color{green}\alpha\beta$ appearing in the given trace at a distance $L$. Given a trace $\tau\in\Sigma^*$, we can represent it as a TG \cite{Myers1989} $(1,{|\tau|},L_\tau,R_\tau,1)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. Under these assumptions, we can simplify the definition of the embedding from \cite{LodhiSSCW02,Raedt} as $\phi_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
+Kernel representations also exist for traces (or strings in Databases~\cite{LodhiSSCW02,Raedt,GartnerFW03}). We 
+provide an intuition of the desired features of such representation: if we associate each dimension in $\mathbb{R}^d$ to a different subtrace ${\color{green}\alpha\beta}\in(\Sigma\backslash\{\varepsilon\})^2$ of size $2$ ($2$-grams\footnote{\label{fn:caveat}In our experiments, we consider only $2$-grams, but traces of any length $p\geq 2$ can be used \cite{Gartner03}. A larger $p$ increases precision to the detriment of efficiency, as all the arbitrary sequences of length $p$ occurring at distance $i<|\tau|$ must be considered.}), the associated coordinate represents how frequently and ``compatctly'' such subtrace is embedded in the original trace. Therefore, we need to introduce a \textbf{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ weighting the presence of each subtrace ``${\color{green}\alpha\beta}/L$'' as $\lambda^Lm$, where $m$ is the frequency of $\color{green}\alpha\beta$ appearing in the given trace at a distance $L$. Given a trace $\tau\in\Sigma^*$, we represent it as a TG \cite{Myers1989} $(1,{|\tau|},L_\tau,R_\tau,1)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. 
+We can thus simplify the definition of the embedding from \cite{LodhiSSCW02,Raedt} as 
+$\phi_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. 
+Note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series: 
+$\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
 
 \begin{figure}[!t]
 	\centering
@@ -167,7 +175,9 @@ Current literature also provides kernel representations for traces (referred as 
 	\caption{Graphical representation of $\tau^*=\textup{caba}$ as a Thompson automaton.}\label{fig:taustar}
 \end{figure}
 \begin{example}\label{ex:tracembed}
-	{Let us suppose that we want to align a trace $\tau^*$ to one of the traces from a transition graph: in order to carry out an approximate alignment, we need to transform it to a transition graph first.} A trace $\tau^*=\textup{caba}$ can be graphically represented in Figure \ref{fig:taustar}. The associated TG $T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ has matrices $L$ and $R$  defined as follows:
+	{Suppose that we want to align a trace $\tau^*=\textup{caba}$ (Figure \ref{fig:taustar}) to one of the traces from a TG. 
+	For an approximate alignment, we need to transform $\tau^*$ to a TG first.} The associated TG 
+	$T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ is given by:
 	$$L:=\kbordermatrix{
 		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
 		\color{green}a            & 0&\textbf{1}&0&\textbf{1}\\
@@ -180,7 +190,7 @@ Current literature also provides kernel representations for traces (referred as 
 		\texttt{\color{blue}3}  & 0&0&0&\color{red}1\\
 		\texttt{\color{blue}4}  & 0& 0& 0& 0\\
 	}$$
-We can similarly represent all the traces from the USPN.
+We can similarly represent all the traces from the \uswn.
 \end{example}
 
 %\begin{example}
