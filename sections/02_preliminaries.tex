@@ -1,5 +1,10 @@
 % !TeX root=../main.tex
-
+\newcommand{\pa}{\rho_{23}}
+\newcommand{\pb}{\rho_{24}}
+\newcommand{\pc}{\rho_{55}}
+\newcommand{\pd}{\rho_{65}}
+\newcommand{\pe}{\rho_{6f}}
+\newcommand{\pf}{\rho_{5f}}
 \newcommand{\uswn}{USWN\xspace}
 \newcommand{\net}{\ensuremath{N}}
 \newcommand{\marking}{m}
@@ -132,16 +137,16 @@ $$L:=\kbordermatrix{
 }\qquad \qquad
  R:=\kbordermatrix{
 & \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}&\texttt{\color{blue}5}&\texttt{\color{blue}6}&\texttt{\color{blue}7}&\texttt{\color{blue}8}&\texttt{\color{blue}9}&\texttt{\color{blue}10}\\
-\texttt{\color{blue}1}  & 0&0&{\color{red}p_2}&0&0&0&0&0&{\color{red}p_1}&0\\
-\texttt{\color{blue}2}  & 0&0&0&0&0&{\color{red}p_3}&{\color{red}p_6}&0&0&0\\
-\texttt{\color{blue}3}  & 0&0&0&0&0&0&0&0&0&{\color{red}1}\\
-\texttt{\color{blue}4}  & 0&0&0&0&0&{\color{red}p_3}&{\color{red}p_6}&0&0&0\\
-\texttt{\color{blue}5}  & 0&0&0&0&0&0&0&{\color{red}1}&0&0\\
-\texttt{\color{blue}6}  & 0&0&0&0&0&{\color{red}p_3}&{\color{red}p_6}&0&0&0\\
-\texttt{\color{blue}5}  & 0&0&0&0&0&0&0&{\color{red}1}&0&0\\
+\texttt{\color{blue}1}  & 0&0&{\color{violet}\pb}&0&0&0&0&0&{\color{violet}\pa}&0\\
+\texttt{\color{blue}2}  & 0&0&0&0&0&{\color{violet}\pc}&{\color{violet}\pf}&0&0&0\\
+\texttt{\color{blue}3}  & 0&0&0&0&0&0&0&0&0&{\color{violet}1}\\
+\texttt{\color{blue}4}  & 0&0&0&0&0&{\color{violet}\pc}&{\color{violet}\pf}&0&0&0\\
+\texttt{\color{blue}5}  & 0&0&0&0&0&0&0&{\color{violet}1}&0&0\\
+\texttt{\color{blue}6}  & 0&0&0&0&0&{\color{violet}\pc}&{\color{violet}\pf}&0&0&0\\
+\texttt{\color{blue}5}  & 0&0&0&0&0&0&0&{\color{violet}1}&0&0\\
 \texttt{\color{blue}8}  & 0&0&0&0&0&0&0&0&0&0\\
-\texttt{\color{blue}9}  & 0&{\color{red}1}&0&0&0&0&0&0&0&0\\
-\texttt{\color{blue}10}  & 0&0&0&{\color{red}p_4}&{\color{red}p_5}&0&0&0&0&0\\
+\texttt{\color{blue}9}  & 0&{\color{violet}1}&0&0&0&0&0&0&0&0\\
+\texttt{\color{blue}10}  & 0&0&0&{\color{violet}\pd}&{\color{violet}\pe}&0&0&0&0&0\\
 }$$
 \end{example}
 
@@ -185,9 +190,9 @@ $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$.
 		\color{green}c            & \textbf{1}&0&0&0\\
 	}\qquad R:=\kbordermatrix{
 		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
-		\texttt{\color{blue}1}  & 0&\color{red}1&0&0\\
-		\texttt{\color{blue}2}  & 0&0&\color{red}1&0\\
-		\texttt{\color{blue}3}  & 0&0&0&\color{red}1\\
+		\texttt{\color{blue}1}  & 0&\color{violet}1&0&0\\
+		\texttt{\color{blue}2}  & 0&0&\color{violet}1&0\\
+		\texttt{\color{blue}3}  & 0&0&0&\color{violet}1\\
 		\texttt{\color{blue}4}  & 0& 0& 0& 0\\
 	}$$
 We can similarly represent all the traces from the \uswn.
