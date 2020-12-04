@@ -1,5 +1,23 @@
 \documentclass[tikz]{standalone}
 
+\usetikzlibrary{arrows,shapes,automata,petri,positioning,calc}
+
+\tikzset{
+	state/.style={
+		circle,
+        rounded corners=5pt,
+        draw,
+		very thick,
+        fill=black,
+		minimum height=2mm,
+		minimum width=2mm,
+        font=\tiny\color{white}
+	},
+    link/.style={
+        -angle 90,
+        thick,
+    }
+}
 
 \tikzstyle{node}=[draw=#1,fill=#1!20]
 
@@ -12,40 +30,80 @@
 
 
 \begin{document}
-\begin{tikzpicture}[align=center,node distance=3cm]
-    % equidistant points and arc
-    \vertex{above}{$\color{green}\tau_\texttt{\color{blue}1}$}{s}{initial}{right}{1}
-    \vertex{above left}{$\color{green}\tau_\texttt{\color{blue}2}$}{bp}{above right of=s}{below right}{9}
-    \vertex{above left}{$\color{green}a$}{bp2}{right of=bp}{below right}{2}
-    \vertex{above}{$\color{green}a$}{b1}{right of=bp2}{below right}{6}
-    
-    
-    \vertex{above}{$\color{green}c$}{b2}{below right of=s}{below right}{3}
-    \vertex{above left}{$\color{green}\tau_\texttt{\color{blue}3}$}{e2}{right of=b2}{below right}{10}
-    
-    \node[shape=circle,fill=black, scale=0.5,label=left:{\color{green}$a$},label=below right:{\tiny\texttt{\color{blue}4}}] (a2) at ($(e2)!0.5!(bp2)$) {};
-    
-    \vertex{above}{$\color{green}b$}{b}{right of=e2}{below right}{5}
-    \vertex{above}{$\color{green}\tau_\texttt{\color{blue}f}$}{bk}{right of=b,accepting,state,scale=0.4}{below right}{8}
-    \vertex{above right}{$\color{green}\tau_\texttt{\color{blue}4}$}{f}{right of=b1}{below right}{7}
-    
-    %
-    \myedge{s}{above}{$\scriptscriptstyle{\color{red}p_1}$}{bp}
-    \myedge{bp}{above}{$\scriptscriptstyle{\color{red}1}$}{bp2}
-    \myedge{bp2}{above}{$\scriptscriptstyle{\color{red}p_3}$}{b1}
-    \draw (bp2) edge [->,bend left=90] node [midway,above] {$\scriptscriptstyle{\color{red}p_6}$} (f);
-    
-    \myedge{s}{above}{$\scriptscriptstyle{\color{red}p_2}$}{b2}
-    \myedge{b2}{above}{$\scriptscriptstyle{\color{red}1}$}{e2}
-    \myedge{e2}{above}{$\scriptscriptstyle{\color{red}p_4}$}{a2}
-    \myedge{a2}{above}{$\scriptscriptstyle{\color{red}p_3}$}{b1}
-    \myedge{a2}{below}{$\scriptscriptstyle{\color{red}p_6}$}{f}
-    \myedge{e2}{above}{$\scriptscriptstyle{\color{red}p_5}$}{b}
-    \myedge{b}{above}{$\scriptscriptstyle{\color{red}1}$}{bk}
-    \myedge{f}{right}{$\scriptscriptstyle{\color{red}1}$}{bk}
-    \myedge{b1}{above}{$\scriptscriptstyle{\color{red}p_6}$}{f}
-    
-    \draw[->,shorten >=1pt] (b1) edge [in=135,out=45,loop,looseness=20] node [above] {$\scriptscriptstyle{\color{red}p_3}$} (b1);
+
+\begin{tikzpicture}[align=center,node distance=.5cm]
+  \node (init) {};
+  \node[
+    state,
+    right=3mm of init,
+    label=above:\color{gray}$\tau$
+  ]
+  (s1)
+  {1};
+  \node[right=of s1] (s1r) {};
+  \node[
+    state,
+    above=of s1r,
+    label=above:\color{gray}$\tau$
+  ] (s9) {9};
+  \node[
+    state,
+    below=of s1r,
+    label=below:\color{green}$c$
+  ] (s3) {3};
+
+  \draw[link] (init) -- (s1);
+  \draw[link] 
+      (s1) 
+      -- 
+      node[xshift=2mm,yshift=-2mm]{\color{violet}$\rho_{23}$}
+      (s9);
+  \draw[link] 
+      (s1) 
+      -- 
+      node[xshift=2mm,yshift=2mm]{\color{violet}$\rho_{24}$}
+      (s3);
 \end{tikzpicture}
 
+
+%
+%\begin{tikzpicture}[align=center,node distance=3cm]
+%    % equidistant points and arc
+%
+%    \node[state] {\color{blue}1};    
+%
+%    \vertex{above}{$\color{green}\tau_\texttt{\color{blue}1}$}{s}{initial}{right}{1}
+%    \vertex{above left}{$\color{green}\tau_\texttt{\color{blue}2}$}{bp}{above right of=s}{below right}{9}
+%    \vertex{above left}{$\color{green}a$}{bp2}{right of=bp}{below right}{2}
+%    \vertex{above}{$\color{green}a$}{b1}{right of=bp2}{below right}{6}
+%    
+%    
+%    \vertex{above}{$\color{green}c$}{b2}{below right of=s}{below right}{3}
+%    \vertex{above left}{$\color{green}\tau_\texttt{\color{blue}3}$}{e2}{right of=b2}{below right}{10}
+%    
+%    \node[shape=circle,fill=black, scale=0.5,label=left:{\color{green}$a$},label=below right:{\tiny\texttt{\color{blue}4}}] (a2) at ($(e2)!0.5!(bp2)$) {};
+%    
+%    \vertex{above}{$\color{green}b$}{b}{right of=e2}{below right}{5}
+%    \vertex{above}{$\color{green}\tau_\texttt{\color{blue}f}$}{bk}{right of=b,accepting,state,scale=0.4}{below right}{8}
+%    \vertex{above right}{$\color{green}\tau_\texttt{\color{blue}4}$}{f}{right of=b1}{below right}{7}
+%    
+%    %
+%    \myedge{s}{above}{$\scriptscriptstyle{\color{red}p_1}$}{bp}
+%    \myedge{bp}{above}{$\scriptscriptstyle{\color{red}1}$}{bp2}
+%    \myedge{bp2}{above}{$\scriptscriptstyle{\color{red}p_3}$}{b1}
+%    \draw (bp2) edge [->,bend left=90] node [midway,above] {$\scriptscriptstyle{\color{red}p_6}$} (f);
+%    
+%    \myedge{s}{above}{$\scriptscriptstyle{\color{red}p_2}$}{b2}
+%    \myedge{b2}{above}{$\scriptscriptstyle{\color{red}1}$}{e2}
+%    \myedge{e2}{above}{$\scriptscriptstyle{\color{red}p_4}$}{a2}
+%    \myedge{a2}{above}{$\scriptscriptstyle{\color{red}p_3}$}{b1}
+%    \myedge{a2}{below}{$\scriptscriptstyle{\color{red}p_6}$}{f}
+%    \myedge{e2}{above}{$\scriptscriptstyle{\color{red}p_5}$}{b}
+%    \myedge{b}{above}{$\scriptscriptstyle{\color{red}1}$}{bk}
+%    \myedge{f}{right}{$\scriptscriptstyle{\color{red}1}$}{bk}
+%    \myedge{b1}{above}{$\scriptscriptstyle{\color{red}p_6}$}{f}
+%    
+%    \draw[->,shorten >=1pt] (b1) edge [in=135,out=45,loop,looseness=20] node [above] {$\scriptscriptstyle{\color{red}p_3}$} (b1);
+%\end{tikzpicture}
+%
 \end{document}
