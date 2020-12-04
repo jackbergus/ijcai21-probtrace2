@@ -1,0 +1,41 @@
+\documentclass[tikz]{standalone}
+\input{tgstyle}
+\newcommand{\pa}{$\rho_{23}$}
+\newcommand{\pb}{$\rho_{24}$}
+\newcommand{\pc}{$\rho_{55}$}
+\newcommand{\pd}{$\rho_{65}$}
+\newcommand{\pe}{$\rho_{6f}$}
+\newcommand{\pf}{$\rho_{5f}$}
+\begin{document}
+\begin{tikzpicture}[align=center,node distance=1cm]
+    \node (init1) {};
+\node[state,right=of init1,label=above:\color{gray}$\tau$] (s) {1};
+\draw[link] (init1) -- (s);
+\node[state,above right=of s,label=above:\color{gray}$\tau$] (bp) {9};
+\node[state,right=of bp,label=above:\color{green}$a$] (bp2) {2};
+\node[state,right=of bp2,label=above:\color{green}$a$] (b1) {6};
+\node[state,below right=of s,label=above:\color{green}$c$] (b2) {3};
+\node[state,right=of b2,label=above:\color{gray}$\tau$] (e2) {10};
+\node[state,label=above:\color{green}$a$] at ($(e2)!0.5!(bp2)$) (a2) {4};
+\node[state,right=of e2,label=above:\color{green}$b$]  (b) {5};
+\node[state,accepting,right=of b,label=above:\color{gray}$\tau$]  (bk) {8};
+\node[state,right=of b1,label=above:\color{gray}$\tau$]  (f) {7};
+
+
+\draw[link] (s) -- node[midway,above]{\color{violet}\pa} (bp);
+\draw[link] (bp) -- node[midway,above]{\color{violet}1} (bp2);
+\draw[link] (bp2.north west) edge [bend left=90] node[midway,above]{\color{violet}\pf} (f.north west);
+\draw[link] (s) -- node[midway,above]{\color{violet}\pb} (b2);
+\draw[link] (b2) -- node[midway,above]{\color{violet}1} (e2);
+\draw (e2) edge [link,bend right] node[midway,right]{\color{violet}\pd} (a2);
+\draw[link] (a2) -- node[midway,right]{\color{violet}\pc} (b1);
+\draw[link] (a2) -- node[midway,below]{\color{violet}\pf} (f);
+\draw[link] (e2) -- node[midway,above]{\color{violet}\pe} (b);
+\draw[link] (b) -- node[midway,above]{\color{violet}1} (bk);
+\draw (f.south east) edge [link,bend left] node[midway,right]{\color{violet}1} (bk.north east);
+\draw[link] (b1) -- node[midway,above]{\color{violet}\pf} (f);
+\draw[link] (bp2) -- node[midway,above]{\color{violet}\pc} (b1);
+\draw[->,shorten >=1pt] (b1) edge [in=135,out=45,loop,looseness=6] node [above] {\color{violet}\pc} (b1);
+\end{tikzpicture}
+
+\end{document}
