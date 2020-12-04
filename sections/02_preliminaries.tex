@@ -38,26 +38,32 @@ Petri nets is that, being the net stochastic, in each marking the set of enabled
 probability distribution. Given a marking $\marking$ of $N$ and an enabled transition $t \in \enaset{\marking}{\net}$, the 
 \emph{firing probability} of $t$ in $\marking$ is $\prob{t}{\marking}{\net} = \frac{W(t)}{\sum_{t'\in \enaset{\marking}{\net}}W(t')}$.
 
-To capture the execution semantics of an \uswn $\net$, we fix an initial marking $\marking_0$ over $\net$, obtaining the \emph{marked} \uswn $(\net,\marking_0)$. We then interpret concurrency by interleaving, consequently obtaining a standard reachability graph, whose edges are labelled by probabilities.
+To capture the execution semantics of an \uswn $\net$, we fix an initial marking $\marking_0$ over $\net$, obtaining the \emph{marked} \uswn $(\net,\marking_0)$. We interpret concurrency by interleaving, consequently obtaining a standard reachability graph, whose edges are labelled by probabilities.
 
 
 \begin{definition}[Reachability Graph]
 The reachability graph $\rg{\net,\marking_0}$ of a marked \uswn $(\net,\marking_0)$ with (initial) marking $M_0$ is a triple $(M,E,P)$ where:
-\begin{compactitem}[$\bullet$]
-\item $M$ is the set of all reachable markings from $\marking_0$ (including $\marking_0$ itself), called states.
-\item $E \subseteq M \times \Sigma \times M$ is the $\Sigma$-labeled transition relation induced by the transition firings of $\net$, that is, for $\marking,\marking' \in M$, we have that edge $(\marking,a,\marking') \in E$ if and only if there exists transition $t$ in $\net$ with label $\ell(t) = a$ and such that $\fire{\marking}{t}{\marking'}{\net}$.
-\item $P:E \rightarrow [0,1]$ is the transition probability function assigning to each transition $(\marking,a,\marking') \in E$ its corresponding probability, obtained from the firing probability of the \uswn transition(s) that lead from $\marking$ to $\marking'$ and are labeled by $a$: $P(\marking,a,\marking') = \sum_{t_i \in \enaset{\marking}{\net} \text{ s.t.~} \ell(t) = a \text{ and } \fire{\marking}{t}{\marking'}{\net}} \prob{t}{\marking}{\net}$.
-\end{compactitem}
+%\begin{compactitem}[$\bullet$]
+	$M$ is the set of all reachable markings from $\marking_0$, called states;
+	$E \subseteq M \times \Sigma \times M$ is the $\Sigma$-labeled transition relation induced by the transition firings of $\net$; 
+	 i.e., for $\marking,\marking' \in M$, we have $(\marking,a,\marking') \in E$ iff there is a transition $t$ in $\net$ with label 
+	 $\ell(t) = a$ such that $\fire{\marking}{t}{\marking'}{\net}$; and
+	$P:E \rightarrow [0,1]$ is the transition probability function assigning to each transition $(\marking,a,\marking') \in E$ its
+	 corresponding probability, obtained from the firing probability of the transitions that lead from $\marking$ to 
+	 $\marking'$ and are labeled by $a$: 
+	 $P(\marking,a,\marking') = \sum_{t_i \in \enaset{\marking}{\net} \text{ s.t.~} \ell(t) = a \text{ and } \fire{\marking}{t}{\marking'}{\net}} \prob{t}{\marking}{\net}$.
+%\end{compactitem}
 \end{definition}
+%
+In the definition of the transition probability function, we have to account for the possible case where, in a given state, distinct 
+net transitions sharing the same label produce the same consequent state. In this case, they are indistinguishable when 
+observing the execution traces of the net, and collapse to a single edge of the reachability graph. This is why we accumulate 
+all their firing probabilities into a single value.
 
-Notice that, in the definition of the transition probability function, we have to account for the possible case where, in a given state, distinct net transitions share the same label produce the same consequent state. In this case, they are indistinguishable when observing the execution traces of the net, and in fact they collapse into a single edge of the reachability graph. This is why, in this case, we accumulate all their firing probabilities into a single value.
-
-The following two observations hold for the so-defined reachability graph:
-\begin{compactitem}
-\item If the marked \uswn is bounded then its reachability graph contains finitely many states; from now on, whenever we refer to an \uswn, \emph{we implicitly assume that it is bounded}.
-\item As desired, every state contained in the reachability graph is so that by summing up all the probabilities associated to its outgoing edges, $1$ is obtained.
-\end{compactitem}
-This makes our notion of reachability graph essentially equivalent to that of a discrete Markov chain.
+Note that if a marked \uswn is bounded, its reachability graph contains finitely many states; from now on, we implicitly assume that every \uswn considered is bounded.
+Moreover, every state contained in the reachability graph is so that the probabilities associated to its outgoing edges add up 
+to $1$.
+This makes the reachability graph essentially equivalent to a discrete Markov chain.
 
 
 
@@ -85,11 +91,12 @@ This makes our notion of reachability graph essentially equivalent to that of a 
 	\centering
 	\subfloat[A sample \uswn. Labels are shown in green, invisible transitions in grey, and weights in magenta.]{\label{fig:spn}\includegraphics[width=.48\textwidth]{images/petri.pdf}}\hfill
     \subfloat[Reachability Graph of the \uswn in (a). Probabilities are shown in violet.]{\label{fig:rg}\includegraphics[width=.48\textwidth]{images/rg.pdf}}\\
-	\subfloat[Reachability Graph Transformed as a Transition Graph.]{\label{fig:lmc}\label{fig:orig}\includegraphics[width=.45\textwidth]{images/running_example.pdf}}\subfloat[Transition Graph after $\varepsilon$-closure.]{\label{fig:closed}\includegraphics[width=.45\textwidth]{images/closed_example.pdf}}
+	\subfloat[Reachability Graph Transformed as a Transition Graph.]{\label{fig:lmc}\label{fig:orig}\includegraphics[width=.45\textwidth,trim=-1.2cm 0cm -1.2cm 0cm]{images/running_example.pdf}} \hfill 
+	\subfloat[Transition Graph after $\varepsilon$-closure.]{\label{fig:closed}\includegraphics[width=.45\textwidth]{images/closed_example.pdf}}
 	\caption{An \uswn and the application of the three transformation steps to convert it into a minimal, trace-preserving transition graph.}
 	\label{transformspn}
 \end{figure}
-Figures \ref{fig:spn} and \ref{fig:rg} respectively show a sample \uswn and its corresponding reachability graph. This net will be our running example throughout the paper.
+Figures \ref{fig:spn} and \ref{fig:rg} show a sample \uswn and its corresponding reachability graph, respectively. This net will be our running example throughout the paper.
 
 
 %\begin{example}
@@ -102,17 +109,19 @@ Figures \ref{fig:spn} and \ref{fig:rg} respectively show a sample \uswn and its 
 
 
 \subsection{Transition Graphs (TGs)}\label{subsec:ppn}
-Current graph embedding and trace embedding literature uses a different representation of graphs, where nodes (and not edges) are labelled, and where edges are still associated to a transition probability value.
+Current graph and trace embedding methods use a different graph representation, where nodes (and not edges) are labelled, 
+and edges are still associated to a transition probability value.
 
-Given a finite set of labels $\Sigma$ and a finite set of nodes $V\subset \mathbb{N}$,  a \textsc{(Probabilistic) Transition Graph} $(s,t,L,R,\omega)$ \cite{GartnerFW03} can be uniquely be described by a initial node $s\in V$, an accepting node $t\in V$, its labels, and a {Markov Chain having} $R$ as a transition matrix. The label matrix is defined by $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow {\color{green}\alpha}=\textit{label}(\texttt{\color{blue}i})$ and $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and the transition matrix is defined by the probability $[R]_{\texttt{\color{blue}ij}}$ that the process will, when in node $\texttt{\color{blue}i}$, make a transition into node $\texttt{\color{blue}j}$ \cite{Prob} with $\sum_{\texttt{\color{blue}j}\in V}[R]_{\color{blue}\texttt{ij}}=1$. $[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\overset{n}{\rightsquigarrow}{\color{green}\beta}$). We denote as ${\color{green}\alpha}{\rightsquigarrow}{\color{green}\beta}$ an aforementioned path of arbitrary length. 
-We can also associate a weight $\omega\in[0,1]\subseteq\mathbb{R}$ to a TG, so to express the probability associated with the TG itself as valid. 
+Given finite sets $\Sigma$ of labels and $V\subset \mathbb{N}$ of nodes,  a \emph{(Probabilistic) Transition Graph} 
+$(s,t,L,R,\omega)$ \cite{GartnerFW03} is uniquely described by an initial node $s\in V$, an accepting node $t\in V$, its labels, 
+and a {Markov Chain with transition matrix $R$. The label matrix is defined by $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow {\color{green}\alpha}=\textit{label}(\texttt{\color{blue}i})$ and $[L]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and the transition matrix is defined by the probability $[R]_{\texttt{\color{blue}ij}}$ that the process will, when in node $\texttt{\color{blue}i}$, make a transition into node $\texttt{\color{blue}j}$ \cite{Prob} with $\sum_{\texttt{\color{blue}j}\in V}[R]_{\color{blue}\texttt{ij}}=1$. $[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability of reaching
+from a node labelled $\color{green}\alpha$ a node labelled $\color{green}\beta$ in $n$ steps (${\color{green}\alpha}\overset{n}{\rightsquigarrow}{\color{green}\beta}$). We denote as ${\color{green}\alpha}{\rightsquigarrow}{\color{green}\beta}$ an aforementioned path of arbitrary length. 
+We can also associate a weight $\omega\in[0,1]\subseteq\mathbb{R}$ to a TG, to express the probability associated with the TG itself as valid. We represent such TG as in \cite{Myers1989}.
+%
+ Given a TG $P=(s,t,L,R,\omega)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. 
 
 
-
-
-
-\begin{example}
-We can graphically represent such TG as in \cite{Myers1989}. 
+\begin{example} 
 Figure \ref{fig:orig} is a  TG $P^*=(\mathtt{\color{blue}1},\mathtt{\color{blue}8},L,R,1)$ where $\omega=1$, where the matrices $L$ and $R$ can be both defined as follows:
 $$L:=\kbordermatrix{
              & \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}&\texttt{\color{blue}5}&\texttt{\color{blue}6}&\texttt{\color{blue}7}&\texttt{\color{blue}8}&\texttt{\color{blue}9}&\texttt{\color{blue}10}\\
@@ -120,7 +129,8 @@ $$L:=\kbordermatrix{
 \color{green}a            & 0&\textbf{1}&0&\textbf{1}&0&\textbf{1}&0&0&0&0\\
 \color{green}b            & 0&0&0&0&\textbf{1}&0&0&0&0&0\\
 \color{green}c            & 0&0&\textbf{1}&0&0&0&0&0&0&0\\
-}\qquad R:=\kbordermatrix{
+}\qquad \qquad
+ R:=\kbordermatrix{
 & \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}&\texttt{\color{blue}5}&\texttt{\color{blue}6}&\texttt{\color{blue}7}&\texttt{\color{blue}8}&\texttt{\color{blue}9}&\texttt{\color{blue}10}\\
 \texttt{\color{blue}1}  & 0&0&{\color{red}p_2}&0&0&0&0&0&{\color{red}p_1}&0\\
 \texttt{\color{blue}2}  & 0&0&0&0&0&{\color{red}p_3}&{\color{red}p_6}&0&0&0\\
@@ -134,8 +144,6 @@ $$L:=\kbordermatrix{
 \texttt{\color{blue}10}  & 0&0&0&{\color{red}p_4}&{\color{red}p_5}&0&0&0&0&0\\
 }$$
 \end{example}
-
- Given a TG $P=(s,t,L,R,\omega)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. 
 
 
 
