@@ -202,7 +202,7 @@ We can similarly represent all the traces from the \uswn.
 \begin{table}[!t]
 \caption{Embedding for both $\tau^*=cacb$ and some traces caaa, caa and cb generated from the USPN $\mathcal{U}$ in Figure \ref{fig:spn}}\label{tb:embedding}
 \begin{center}
-	\begin{tabular}{l|l|l|l|l|l|l|l|l|l|}
+	\begin{tabular}{l@{\quad }l@{\quad }l@{\quad }l@{\quad }l@{\quad }l@{\quad }l@{\quad }l@{\quad }l@{\quad }l}
 		\toprule
 		& aa    & ab   & ac    & ba   & bb   & bc & ca & cb & cc   \\
 		\midrule
@@ -215,16 +215,32 @@ We can similarly represent all the traces from the \uswn.
 \end{center}
 \end{table}
 \begin{example}\label{ex:wheredotiszero}
-Given $\Sigma_\varepsilon=\Set{a,b,c}$, we have that $\Set{aa,ab,ac,ba,bb,bc,ca,cb,cc}\\=\Sigma^2_\varepsilon$ defines the set of all the possible $2$-grams represented by the grammar $\Sigma_\varepsilon$ induced by the non-$\varepsilon$ transitions within the USPN $\mathcal{U}$ in Figure \ref{fig:spn}. For each $2$-gram ${\color{green}\alpha\beta}\in\Sigma_\varepsilon^2$ in a given trace $\tau$, we will have a non-zero component $\phi_{\mathcal{T}}(\tau)_{\color{green}\alpha\beta}$ describing a penalty \cite{Gartner03}, while the kernel between two traces will describe the sum of such penalties. Given a trace $cb$ associated to $\mathcal{U}$,  the only non-zero component of $\phi_{\mathcal{T}}(cb)$ will be $cb$ itself where $\phi_{\mathcal{T}}(cb)_{\color{green}cb}=\lambda$ (Table \ref{tb:embedding}). On the other hand, the trace $caa$ from $\mathcal{U}$ will have a $2$-gram $ca$ with occurring lengths $1$ (\textbf{ca}a) and $2$ (\textbf{c}a\textbf{a}), and $aa$ with occurring length $1$; therefore, $\phi_{\mathcal{T}}(caa)_{\color{green}ca}=\lambda+\lambda^2$ and  $\phi_{\mathcal{T}}(caa)_{\color{green}aa}=\lambda$.  Similar considerations can be carried out for the other traces cacb and caaa, which embeddings are represented in Figure \ref{tb:embedding}. 
+Given $\Sigma_\varepsilon=\{a,b,c\}$, $\Sigma^2_\varepsilon=\{aa,ab,ac,ba,bb,bc,ca,cb,cc\}$ is the set of all $2$-grams 
+from $\Sigma_\varepsilon$ induced by the non-$\varepsilon$ transitions within the \uswn $\mathcal{U}$ in Figure \ref{fig:spn}. 
+For each $2$-gram ${\color{green}\alpha\beta}\in\Sigma_\varepsilon^2$ in a given trace $\tau$, we have a non-zero component 
+$\phi_{\mathcal{T}}(\tau)_{\color{green}\alpha\beta}$ describing a penalty \cite{Gartner03}, while the kernel between two 
+traces is the sum of such penalties. Given a trace $cb$ associated to $\mathcal{U}$,  the only non-zero component of 
+$\phi_{\mathcal{T}}(cb)$ is $cb$ itself, where $\phi_{\mathcal{T}}(cb)_{\color{green}cb}=\lambda$ (Table \ref{tb:embedding}). 
+On the other hand, the trace $caa$ from $\mathcal{U}$ has a $2$-gram $ca$ with occurring lengths $1$ (\textbf{ca}a) and $2$ (\textbf{c}a\textbf{a}), and $aa$ with occurring length $1$; therefore, $\phi_{\mathcal{T}}(caa)_{\color{green}ca}=\lambda+\lambda^2$ and  $\phi_{\mathcal{T}}(caa)_{\color{green}aa}=\lambda$.  Similar considerations can be carried out for the other traces cacb and caaa, whose embeddings are represented in Figure \ref{tb:embedding}. 
 
-If we want to evaluate the similarity $k_{\phi_{\mathcal{T}}}$ between $\tau^*=cacb$ and the remaining traces, we will obtain the following results: $k_{\phi_{\mathcal{T}}}(cacb,caaa)=\lambda(\lambda+\lambda^2+\lambda^3)$,  $k_{\phi_{\mathcal{T}}}(cacb,caa)=\lambda(\lambda+\lambda^2)$, and $k_{\phi_{\mathcal{T}}}(cacb,cb)=\lambda(\lambda+\lambda^3)$, thus obtaining an induced traces ranking $k_{\phi_{\mathcal{T}}}(cacb,caaa)>k_{\phi_{\mathcal{T}}}(cacb,caa)>k_{\phi_{\mathcal{T}}}(cacb,cb)$. For this trace kernel, we have strong dissimilarity when the two traces have no shared $2$-grams at any arbitrary occurring length ($k_{\phi_{\mathcal{T}}}(caa,cb)=0$) but no strong equality ($k_{\phi_{\mathcal{T}}}(cb,cb)=\lambda^2$ with $\lambda^2\neq 1$ for $0\leq \lambda<1$).
+Evaluating the similarity between $\tau^*=cacb$ and the other traces, we obtain: 
+$k_{\phi_{\mathcal{T}}}(cacb,caaa)=\lambda(\lambda+\lambda^2+\lambda^3)$,  
+$k_{\phi_{\mathcal{T}}}(cacb,caa)=\lambda(\lambda+\lambda^2)$, 
+and $k_{\phi_{\mathcal{T}}}(cacb,cb)=\lambda(\lambda+\lambda^3)$, yielding the ranking $k_{\phi_{\mathcal{T}}}(cacb,caaa)>k_{\phi_{\mathcal{T}}}(cacb,caa)>k_{\phi_{\mathcal{T}}}(cacb,cb)$. For this trace kernel, we have strong dissimilarity when the two traces have no shared $2$-grams at any arbitrary occurring length ($k_{\phi_{\mathcal{T}}}(caa,cb)=0$) but no strong equality ($k_{\phi_{\mathcal{T}}}(cb,cb)=\lambda^2$ with $\lambda^2\neq 1$ for $0\leq \lambda<1$).
 \end{example}
 
 \subsection{Graph Embedding}\label{ssec:ge}
-Graph kernels allow mapping graph data structures to feature spaces (usually an Eulcidean space in $\mathbb{R}^n$ for $n\in \mathbb{N}_{>0}$) \cite{Samatova} so to express graph similarity functions that can then be adopted for both classification \cite{TsudaS10} and clustering \cite{Raedt} algorithms. One of the first approaches used in literature involved the definition of topological description vectors \cite{Sidere} for each graph in a graph database, for then defining the graph similarity function as an inner product of their associated vectors. One inconvenience of such a technique is that it is required to perform NP-complete subgraph isomorphisms among a collection of graphs. It has been already proved that the definition of a graph kernel function fully recognising the structure the graph always boils down solving such  NP-Complete problem \cite{GartnerFW03}, as exact embeddings generable in polynomial can be inferred just for loop-free Direct Acyclic Graphs \cite{BergamiBM20}.  
-
-
-Consequently, most recent literature focused on extracting relevant features of such graphs, that are then used to define a graph similarity function. The most common approach adopted in the kernel to extract such features is called \textit{propositionalisation}: we might extract all the possible features (e.g., subsequences), and then define a kernel function based on the occurrence and similarity of these features \cite{Gartner03}. 
+Graph kernels map graph data structures to feature spaces (usually an Eulcidean space) to express graph similarity functions 
+that can be adopted for classification \cite{TsudaS10} and clustering \cite{Raedt} algorithms. One of the first approaches used 
+\cite{Sidere} involved the definition of topological description vectors for each graph in a graph database, and defining the graph 
+similarity function as an inner product of their associated vectors. One inconvenience of this technique is that it is required to 
+perform NP-complete subgraph isomorphisms among a collection of graphs. It has been already proved that the definition of a 
+graph kernel function fully recognising the structure the graph always boils down solving such  NP-Complete problem 
+\cite{GartnerFW03}, as exact embeddings generable in polynomial can be inferred just for loop-free DAGs \cite{BergamiBM20}.  
+%
+Consequently, most recent methods focus on extracting relevant features of graphs, which are used to define a similarity function. 
+The most common approach adopted is called \textit{propositionalisation}: extract all the possible features (e.g., 
+subsequences), and define a kernel function based on the occurrence and similarity of these features \cite{Gartner03}. 
 
 %\section{LTL over Finite Traces and the Declare Framework}
 %\label{sec:preliminaries}
