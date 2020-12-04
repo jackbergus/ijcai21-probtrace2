@@ -1,5 +1,4 @@
 % !TeX root=../main.tex
-
 \begin{figure}[!t]
 	\hspace*{-4cm}\includegraphics[width=1.7\textwidth]{images/pipeline}
 	\caption{Proposed pipeline to assess the Probabilistic Trace Alignment}\label{fig:pipe}
@@ -13,14 +12,14 @@ is a set of model traces satisfying $p_\theta$ with an alignment ranking.
 %
 The pipeline has the following phases: after representing the USWN as a graph of all the sequentially scheduled transitions 
 (\S\ref{sec:seqZ}), we shift the labels from the edges towards the nodes while preserving the set of probabilistic traces 
-(\S\ref{sec:LSift}) and minimize the graph representation by removing the $\varepsilon$-labelled nodes while preserving the 
+(\S\ref{sec:LSift}) and minimize the graph representation by removing the $\tau$-labelled nodes while preserving the 
 trace probability (\S\ref{sec:clos}). We extract the set of all traces having probability above $p_\theta$ threshold (\S\ref{sec:unrav}) and  apply two different alignment strategies; one exact  (\S\ref{subsec:eta}), and one approximated. 
 
 
 We later discuss how to rank traces in the exact and approximated scenarios by reducing the alignment process to a k-nearest 
-neighbour problem. While the exact trace alignment requires to perform the alignment process each time a novel trace $\tau^*$ is 
+neighbour problem. While the exact trace alignment requires to perform the alignment process each time a novel trace $\sigma^*$ is 
 introduced (\S\ref{subsec:exbkptap}), the approximated alignment can split the alignment into a preliminary loading phase and a 
-query phase. In the former, each stochastic trace from the USWN is represented as a vector (\S\ref{subsec:ate}), and in the latter the to-be-aligned trace $\tau^*$ is first represented as a vector and then compared to all the other vectorial representations.  
+query phase. In the former, each stochastic trace from the USWN is represented as a vector (\S\ref{subsec:ate}), and in the latter the to-be-aligned trace $\sigma^*$ is first represented as a vector and then compared to all the other vectorial representations.  
 
 \subsection{Sequentialization}\label{sec:seqZ}
 The sequentialization step transforms a USWN with an initial marking $M$ into a Reachability Graph $(\mathcal{M},\mathcal{E})$ 
@@ -54,7 +53,7 @@ The reachability graph $(\mathcal{M},\mathcal{E})$ generated from an initial mar
 \begin{itemize}
 	\item If is a single edge $M_1\overset{t}{\to}M_2\in\mathcal{E}$ where $M_1=M$, then $s=M\overset{t}{\to}M_2$; otherwise, define a new node $\textbf{i}$ and set it as the initial node for TG: $s=\textbf{i}$.
 	\item If is a single edge $M_1\overset{t}{\to}M_2\in\mathcal{E}$ without outgoing edges in the reachability graph, then $t=M_1\overset{t}{\to}M_2$; otherwise, define a new node $\textbf{f}$ and set it as the accepting node for TG:  $t=\textbf{f}$.
-	\item $[L]_{\lambda(t),\;M\overset{t}{\to} M'}=1$ for each $M\overset{t}{\to} M'\in\mathcal{E}$; if $\textbf{i}$ is defined then $[L]_{\varepsilon\textbf{i}}=1$; if $\textbf{f}$ is defined, then $[L]_{\varepsilon\textbf{f}}=1$; $[L]_{ij}=0$ otherwise.
+	\item $[L]_{\lambda(t),\;M\overset{t}{\to} M'}=1$ for each $M\overset{t}{\to} M'\in\mathcal{E}$; if $\textbf{i}$ is defined then $[L]_{\tau\textbf{i}}=1$; if $\textbf{f}$ is defined, then $[L]_{\tau\textbf{f}}=1$; $[L]_{ij}=0$ otherwise.
 	\item $[R]_{M\overset{t}{\to} M',\;M'\overset{t'}{\to} M''}=\frac{W(t')}{\sum_{\textbf{t}\in E(M')}W(\textbf{t})}$ for each $M\overset{t}{\to} M',M'\overset{t'}{\to} M''\in\mathcal{E}$; if $\textbf{i}$ is defined, $[R]_{\textbf{i},\;M\overset{t}{\to}M'}=\frac{W(t)}{\sum_{\textbf{t}\in E(M)}W(\textbf{t})}$; if $\textbf{f}$ is defined, then $[R]_{M\overset{t}{\to}M',\;\textbf{i}}=1$ for each $M'$ without outgoing edges in the reachability graph; $[R]_{ij}=0$ ow.
 \end{itemize}
 \end{definition}
@@ -70,16 +69,16 @@ a new final node \textit{\textbf{f}} is added, such edges always have probabilit
 initial traces' probability.
 \end{example}
 
-\subsection{$\varepsilon$-closure}\label{sec:clos}
-The $\varepsilon$-closure process has two main purposes: first, reduce the size of the previously generated TG by removing all 
-$\varepsilon$-labelled nodes \texttt{\color{blue}w} and preserving the connection between  the nodes \texttt{\color{blue}u} 
-from its ingoing edges   $\texttt{\color{blue}u}\xrightarrow{\color{red}p_i}\texttt{\color{blue}w}$ with the nodes \texttt{\color{blue}v} from its ingoing edges   $\texttt{\color{blue}w}\xrightarrow{\color{red}p_j}\texttt{\color{blue}v}$ by establishing new edges $\texttt{\color{blue}u}\xrightarrow{\color{red}p_ip_j}\texttt{\color{blue}v}$. $\varepsilon$-labelled initial (or accepting) nodes are removed iff they have only one outgoing (ingoing) edge with probability $1$.
+\subsection{$\tau$-closure}\label{sec:clos}
+The $\tau$-closure process has two main purposes: first, reduce the size of the previously generated TG by removing all 
+$\tau$-labelled nodes \texttt{\color{blue}w} and preserving the connection between  the nodes \texttt{\color{blue}u} 
+from its ingoing edges   $\texttt{\color{blue}u}\xrightarrow{\color{violet}\rho}\texttt{\color{blue}w}$ with the nodes \texttt{\color{blue}v} from its ingoing edges   $\texttt{\color{blue}w}\xrightarrow{\color{violet}\rho'}\texttt{\color{blue}v}$ by establishing new edges $\texttt{\color{blue}u}\xrightarrow{\color{violet}\rho\rho'}\texttt{\color{blue}v}$. $\tau$-labelled initial (or accepting) nodes are removed iff they have only one outgoing (ingoing) edge with probability $1$.
 
-\begin{example}\todo{this example is incomplete! what is this node 10, etc?}
-	The $\varepsilon$-closure removes the non-initial and non-accepting nodes within an automaton, while preserving the probabilistic trace equivalence of the two automata: node \texttt{\color{blue}10} is removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{red}p_4}\texttt{\color{blue}4}$ and $\texttt{\color{blue}3}\xrightarrow{\color{red}p_5}\texttt{\color{blue}5}$ are introduced. The resulting TG $P$ is represented with the same graphical depiction Figure \ref{fig:closed}.
+\begin{example}\todo{Is it now ok?}
+	The $\tau$-closure removes the non-initial and non-accepting nodes within an automaton, while preserving the probabilistic trace equivalence of the two automata. Let us suppose to apply the $\tau$-closure to the automata in Figure \ref{fig:orig}: node \texttt{\color{blue}10} is removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{violet}\rho_{65}}\texttt{\color{blue}4}$ and $\texttt{\color{blue}3}\xrightarrow{\color{violet}\rho_{6f}}\texttt{\color{blue}5}$ are introduced. The resulting TG $P$ is represented with the same graphical depiction Figure \ref{fig:closed}.
 \end{example}
 %
-Consequently, it is always possible to minimize a TG  via $\varepsilon$-closure, so that the only nodes labelled as $\varepsilon$ 
+Consequently, it is always possible to minimize a TG  via $\tau$-closure, so that the only nodes labelled as $\tau$ 
 are the source and the target nodes and the set of weighted traces is preserved. From now on, we consider only minimised TGs. 
 
 \subsection{Unraveller}\label{sec:unrav}
@@ -90,6 +89,6 @@ Since TGs are fully characterized by the set of the probabilistic traces that th
 \begin{example}
 	The set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces of the TG in Figure \ref{fig:orig} is
 %	The TG in Figure \ref{fig:orig} has the following set $\mathcal{W}_0^{\aleph_0}(P^*)$ of weighted traces:
-$$\set{\braket{\underbrace{\color{green}a\dots a}_{n},{\color{red}p_1p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup \set{\braket{{\color{green}c}\underbrace{\color{green}a\dots a}_{n},{\color{red}p_2p_4p_3^np_6}}|n\in \mathbb{N}_{>0}}\cup\{\braket{{\color{green}cb},{\color{red}p_2p_5}}\}$$
-After the $\varepsilon$-closure process, $\mathcal{W}_0^{\aleph_0}(P^*)=\mathcal{W}_0^{\aleph_0}(P)$, so the two TGs are (probabilistic-trace) equivalent.
+$$\set{\braket{\underbrace{\color{green}a\dots a}_{n},{\color{violet}\pa\pc^n\pf}}|n\in \mathbb{N}_{>0}}\cup \set{\braket{{\color{green}c}\underbrace{\color{green}a\dots a}_{n},{\color{violet}\pb\pd\pc^n\pf}}|n\in \mathbb{N}_{>0}}\cup\{\braket{{\color{green}cb},{\color{violet}\pb\pe}}\}$$
+After the $\tau$-closure process, $\mathcal{W}_0^{\aleph_0}(P^*)=\mathcal{W}_0^{\aleph_0}(P)$, so the two TGs are (probabilistic-trace) equivalent.
 \end{example}

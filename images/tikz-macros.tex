@@ -1,0 +1,92 @@
+\definecolor{darkblue}{rgb}{0.2,0.2,0.6}
+\definecolor{darkred}{rgb}{0.6,0.1,0.1}
+\definecolor{darkgreen}{rgb}{0.2,0.6,0.2}
+
+\definecolor{acsiorange}{RGB}{180,88,26}
+\definecolor{acsired}{RGB}{150,0,0}
+\definecolor{acsigreen}{RGB}{128,198,54}
+\definecolor{acsiblue}{RGB}{43,80,150}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{swimmyred}{RGB}{206,19,55}
+\definecolor{marcofucsia1}{RGB}{203,41,123}
+\definecolor{marcofucsia1}{RGB}{203,41,123}
+\definecolor{marcofucsia2}{RGB}{153,25,94}
+\definecolor{marcofucsia3}{RGB}{102,29,70}
+\definecolor{marcoblue1}{RGB}{17,183,225}
+\definecolor{marcoblue2}{RGB}{16,163,201}
+\definecolor{marcoblue3}{RGB}{5,132,165}
+\definecolor{marcoblue4}{RGB}{4,105,131}
+\definecolor{marcoblue5}{RGB}{0,77,128}
+\definecolor{marcoorange}{RGB}{255,147,0}
+\definecolor{marcogreen1}{RGB}{82,174,139}
+\definecolor{marcogreen2}{RGB}{56,122,101}
+
+
+\newcommand{\tcolor}{\color{darkgreen}}
+\newcommand{\wcolor}{\color{marcofucsia1}}
+\newcommand{\pcolor}{\color{violet}}
+
+%%%%%%%%%%%%%%%%%%% PETRI %%%%%%%%%%%%%%%%%%%%%%%%
+\usetikzlibrary{arrows,shapes,automata,petri,positioning,calc}
+
+\tikzset{
+	place/.style={
+		circle,
+		very thick,
+		draw=acsiblue!90,
+		fill=acsiblue!10,
+		minimum size=6mm,
+	},
+	transitionH/.style={
+		rectangle,
+		thick,
+		fill=black,
+		minimum width=6mm,
+		inner ysep=2pt
+	},
+	transitionV/.style={
+		rectangle,
+		thick,
+		fill=black,
+		minimum height=6mm,
+		inner xsep=2pt
+	},
+    tau/.style={
+      fill=gray,
+    },
+    arc/.style={
+        -angle 90,
+        thick,
+    },
+	state/.style={
+		rectangle,
+        rounded corners=5pt,
+        draw,
+		very thick,
+		fill=orange!10,
+		minimum height=5mm,
+		minimum width=10mm,
+	},
+    link/.style={
+        -stealth,
+        thick,
+    },
+	config/.style={
+		circle,
+        rounded corners=5pt,
+        draw,
+		very thick,
+        fill=black,
+		minimum height=2mm,
+		minimum width=2mm,
+        font=\tiny\color{white}
+	},
+    hconfig/.style={
+		circle,
+        rounded corners=5pt,
+     	minimum height=2mm,
+		minimum width=2mm,
+        font=\tiny\color{white}
+	},
+}

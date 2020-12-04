@@ -1,41 +1,78 @@
+
+
 \documentclass[tikz]{standalone}
 \input{tgstyle}
 \newcommand{\pa}{$\rho_{23}$}
 \newcommand{\pb}{$\rho_{24}$}
 \newcommand{\pc}{$\rho_{55}$}
 \newcommand{\pd}{$\rho_{65}$}
-\newcommand{\pe}{$\rho_{6f}$}
-\newcommand{\pf}{$\rho_{5f}$}
+\newcommand{\pe}{$\rho_{67}$}
+\newcommand{\pf}{$\rho_{57}$}
 \begin{document}
+
+\input{tikz-macros}
+
 \begin{tikzpicture}[align=center,node distance=1cm]
     \node (init1) {};
-\node[state,right=of init1,label=above:\color{gray}$\tau$] (s) {1};
+\node[
+  config,
+  right=3mm of init1,
+  label={right,xshift=-1mm}:\tcolor $\tau$
+  ] (s) {\makebox[0pt]{1}};
 \draw[link] (init1) -- (s);
-\node[above right=of s] (bp) {};
-\node[state,right=of bp,label=above:\color{green}$a$] (bp2) {2};
-\node[state,right=of bp2,label=above:\color{green}$a$] (b1) {6};
-\node[state,below right=of s,label=above:\color{green}$c$] (b2) {3};
-\node[right=of b2] (e2) {};
-\node[state,label=above:\color{green}$a$] at ($(e2)!0.5!(bp2)$) (a2) {4};
-\node[state,right=of e2,label=above:\color{green}$b$]  (b) {5};
-%\node[state,accepting,right=of b,label=above:\color{gray}$\tau$]  (bk) {8};
-\node[state,accepting,right=of b1,label=above:\color{gray}$\tau$]  (f) {7};
+\node[
+  hconfig,
+  above right=of s,
+] (bp) {\makebox[0pt]{9}};
+\node[
+  config,
+  right=of bp,
+  label={below,xshift=2mm,yshift=1mm}:\tcolor $a$
+] (bp2) {\makebox[0pt]{2}};
+\node[
+  config,
+  right=of bp2,
+  label={below,xshift=2mm,yshift=1mm}:\tcolor $a$
+] (b1) {\makebox[0pt]{6}};
+\node[
+  config,
+  below right=of s,
+  label={below,xshift=2mm,yshift=1mm}:\tcolor $c$
+] (b2) {\makebox[0pt]{3}};
+\node[
+  hconfig,
+  right=of b2,
+] (e2) {\makebox[0pt]{10}};
+\node[
+  config,
+  right=of e2,
+  label={below,xshift=3mm,yshift=2mm}:\tcolor $b$
+]  (b) {\makebox[0pt]{5}};
+\node[
+  config,
+  above=6mmof b,
+  label={below,xshift=2mm,yshift=1mm}:\tcolor $a$
+] (a2) {\makebox[0pt]{4}};
+
+\node[
+  config,
+  accepting,
+  right=of b1,
+  label={below,xshift=2mm,yshift=1mm}:\tcolor $\tau$
+]  (f) {\makebox[0pt]{7}};
 
 
-\draw[link] (s) -- node[midway,above]{\color{violet}\pa} (bp2);
-%\draw[link] (bp) -- node[midway,above]{\color{violet}1} (bp2);
-\draw[link] (bp2.north west) edge [bend left=90] node[midway,above]{\color{violet}\pf} (f.north west);
-\draw[link] (s) -- node[midway,above]{\color{violet}\pb} (b2);
-%\draw[link] (b2) -- node[midway,above]{\color{violet}1} (e2);
-\draw (b2) edge [link] node[midway,above]{\color{violet}\pd} (a2);
-\draw[link] (a2) -- node[midway,right]{\color{violet}\pc} (b1);
-\draw[link] (a2) -- node[midway,below]{\color{violet}\pf} (f);
-\draw[link] (b2) -- node[midway,above]{\color{violet}\pe} (b);
-\draw[link] (b) -- node[midway,below]{\color{violet}1} (f);
-%\draw (f.south east) edge [link,bend left] node[midway,right]{\color{violet}1} (bk.north east);
-\draw[link] (b1) -- node[midway,above]{\color{violet}\pf} (f);
-\draw[link] (bp2) -- node[midway,above]{\color{violet}\pc} (b1);
-\draw[->,shorten >=1pt] (b1) edge [in=135,out=45,loop,looseness=6] node [above] {\color{violet}\pc} (b1);
+\draw[link,out=45,in=180] (s) edge node[below]{\pcolor \pa} (bp2);
+\draw[link,out=90,in=90] (bp2) edge  node[midway,above]{\pcolor \pf} (f);
+\draw[link] (s) -- node[right]{\pcolor \pb} (b2);
+\draw[link,out=45,in=180] (b2) edge node[below]{\pcolor \pd} (a2);
+\draw[link] (a2) -- node[left]{\pcolor \pc} (b1);
+\draw[link] (a2) -- node[below]{\pcolor \pf} (f);
+\draw[link] (b2) -- node[below]{\pcolor \pe} (b);
+\draw[link,out=30,in=-90] (b) edge node[below]{\pcolor 1} (f);
+\draw[link] (b1) -- node[above]{\pcolor \pf} (f);
+\draw[link] (bp2) -- node[above]{\pcolor \pc} (b1);
+\draw[link] (b1) edge [in=135,out=45,loop,looseness=6] node [above] {\pcolor \pc} (b1);
 \end{tikzpicture}
 
 \end{document}

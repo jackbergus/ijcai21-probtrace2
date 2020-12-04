@@ -1,49 +1,23 @@
-\documentclass[tikz]{standalone}
-\usetikzlibrary{arrows,shapes,automata,petri,positioning}
 
-\tikzset{
-	place/.style={
-		circle,
-		very thick,
-		draw=blue!90,
-		fill=blue!10,
-		minimum size=6mm,
-	},
-	transitionH/.style={
-		rectangle,
-		thick,
-		fill=black,
-		minimum width=6mm,
-		inner ysep=2pt
-	},
-	transitionV/.style={
-		rectangle,
-		thick,
-		fill=black,
-		minimum height=6mm,
-		inner xsep=2pt
-	},
-    tau/.style={
-      fill=gray,
-    },
-    arc/.style={
-        -angle 90,
-        thick,
-    }
-}
+\documentclass[tikz]{standalone}
+
+\usetikzlibrary{arrows,shapes,automata,petri,positioning}
+\usepackage{xcolor}
+\input{tikz-macros}
+
 
 
 \begin{document}
 	
 	\begin{tikzpicture}[node distance=0.4cm and 0.5cm,>=stealth',bend angle=45,auto]
 	\node [place,tokens=1] (i) {};
-    \node [below=-0.5mm of i] {$i$};
+    \node [below=-0.5mm of i] {$p_1$};
 	\node [
       transitionV,
       tau,
       right= of i,
-      label=below:$\color{gray}\tau$,
-      label=above:$\color{magenta}v_{\tau_1}$,
+      label=below:$\tcolor\tau$,
+      label=above:$\wcolor v_{\tau_1}$,
     ] (t1) {};
 	\node [
       place,
@@ -58,8 +32,8 @@
       transitionV,
       tau,
       above right=of p2,
-      label=below:$\color{gray}\tau$,
-      label=above:$\color{magenta}v_{\tau_2}$,
+      label=below:$\tcolor \tau$,
+      label=above:$\wcolor v_{\tau_2}$,
     ] (te1) {};
 	\node [
       place, 
@@ -71,8 +45,8 @@
     \node [
       transitionV,
       right=of p3,
-      label=below:$\color{green}a$,
-      label=above:$\color{magenta}v_{a_1}$,
+      label=below:$\tcolor a$,
+      label=above:$\wcolor v_{a_1}$,
     ] (ta1) {};
 	\node [
       place,
@@ -84,21 +58,21 @@
     \node [
       transitionH,
       above=of p5,
-      label=left:$\color{green}a$,
-      label=right:$\color{magenta}v_{a_2}$,
+      label=left:$\tcolor a$,
+      label=right:$\wcolor v_{a_2}$,
       yshift=4mm
     ] (ta2) {};
 	\node [
       transitionV,
       tau,
       right=of p5,
-      label=below:$\color{gray}\tau$,
-      label=above:$\color{magenta}v_{\tau_3}$,
+      label=below:$\tcolor\tau$,
+      label=above:$\wcolor v_{\tau_3}$,
     ] (te2) {};
 	\node [
       transitionV,
       below right=of p2,
-      label=below:$\color{green}c$,
+      label=below:$\tcolor c$,
       label=above:$\color{magenta}v_{c}$
     ] (tc1) {};
 	\node [
@@ -112,27 +86,27 @@
       transitionV,
       tau,
       right=of p4,
-      label=below:$\color{gray}\tau$,
-      label=above:$\color{magenta}v_{\tau_3}$
+      label=below:$\tcolor \tau$,
+      label=above:$\wcolor v_{\tau_3}$
     ] (te3) {};
 	\node [place] (p6) [right=of te3] {};
     \node [below=-0.5mm of p6] {$p_6$};
 	\node [
       transitionV,
-      label=below:$\color{green}b$,
-      label=above:$\color{magenta}v_b$
+      label=below:$\tcolor b$,
+      label=above:$\wcolor v_b$
     ] (tb1) [right=of p6] {};
 	\node  (b3) [right=of b2] {};
 	\node  (b4) [right=of b3] {};
 	\node  (b5) [right=of b4] {};
 	\node [place] (f) [right=8mm of b5] {};
-    \node [below=-0.5mm of f] {$f$};
+    \node [below=-0.5mm of f] {$p_7$};
 
     \node [
       transitionH,
       above=5mm of p6,
-      label=left:$\color{green}a$,
-      label=right:$\color{magenta}v_{a_3}$,
+      label=left:$\tcolor a$,
+      label=right:$\wcolor v_{a_3}$,
     ] (ta3) {};
     
     \draw[arc] (i) -- (t1);
