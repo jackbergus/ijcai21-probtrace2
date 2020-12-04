@@ -4,74 +4,159 @@
 \tikzset{
 	place/.style={
 		circle,
-		thick,
-		draw=blue!75,
-		fill=blue!20,
+		very thick,
+		draw=blue!90,
+		fill=blue!10,
 		minimum size=6mm,
 	},
 	transitionH/.style={
 		rectangle,
 		thick,
 		fill=black,
-		minimum width=8mm,
+		minimum width=6mm,
 		inner ysep=2pt
 	},
 	transitionV/.style={
 		rectangle,
 		thick,
 		fill=black,
-		minimum height=8mm,
+		minimum height=6mm,
 		inner xsep=2pt
-	}
+	},
+    tau/.style={
+      fill=gray,
+    },
+    arc/.style={
+        -triangle 45,
+        thick,
+    }
 }
+
 
 \begin{document}
 	
-	\begin{tikzpicture}[node distance=0.4cm and 1cm,>=stealth',bend angle=45,auto]
-	\node [place,label=above:$p^\prime$,tokens=1] (p1) {};
-	\node [transitionV,label=above:$\color{green}\tau_\texttt{\color{blue}1}$] (t1) [right= of p1] {} edge[pre] (p1);
-	\node [place,label=above:$p''$] (p2) [right=of t1] {} edge[pre] (t1);
-	\node [transitionV,label=above:$\color{green}\tau_\texttt{\color{blue}2}$] (eplus) [above right=of p2] {} edge[pre] (p2);
-	\node [place,label=above:$p'''$] (pk) [right=of eplus] {} edge[pre] (eplus);
-	\node [transitionV,label=above:$\color{green}a$] (a) [right=of pk] {} edge[pre] (pk);
-	\node [place,label=above:$p^\mathit{v}$] (p3) [right=of a] {} edge[pre] (a);
-	\node [transitionV,label=above:$\color{green}\tau_\texttt{\color{blue}4}$] (e4) [right=of p3] {} edge[pre] (p3);
-	\draw[->] (p3.north east) .. controls +(2,2) and +(-2,2) .. (a.north west);
-	\node [transitionV,label=above:$\color{green}c$] (e2) [below right=of p2] {} edge[pre] (p2);
-	\node [place,label=above right:$p^\mathit{iv}$] (p4) [right=of e2] {} edge[pre] (e2);
-	\node [transitionV,label=above:$\color{green}\tau_\texttt{\color{blue}3}$] (e3) [right=of p4] {} edge[pre] (p4);
-	\node [place,label=above:$p^\mathit{vi}$] (p6) [right=of e3] {} edge[pre] (e3);
-	\draw[->] (p6) .. controls +(-2,2) and +(-2,-2) .. (a);
-	\node [transitionV,label=above:$\color{green}b$] (b) [right=of p6] {} edge[pre] (p6);
+	\begin{tikzpicture}[node distance=0.3cm and 0.8cm,>=stealth',bend angle=45,auto]
+	\node [place,tokens=1] (i) {};
+    \node [below=-0.5mm of i] {$i$};
+	\node [
+      transitionV,
+      tau,
+      right= of i,
+      label=below:$\color{gray}\varepsilon$,
+      label=above:$\color{magenta}v_{\varepsilon_1}$,
+    ] (t1) {};
+	\node [
+      place,
+      right=of t1
+    ] (p2){};
+    \node [
+      below=-0.5mm of p2
+    ] {$p_2$};
 	\node  (b1) [right=of p2] {};
 	\node  (b2) [right=of b1] {};
+	\node [
+      transitionV,
+      tau,
+      above right=of p2,
+      label=below:$\color{gray}\varepsilon$,
+      label=above:$\color{magenta}v_{\varepsilon_2}$,
+    ] (te1) {};
+	\node [
+      place, 
+      right=of te1
+    ] (p3) {};
+    \node [
+      below=-0.5mm of p3
+    ] {$p_3$};
+    \node [
+      transitionV,
+      right=of p3,
+      label=below:$\color{green}a$,
+      label=above:$\color{magenta}v_{a_1}$,
+    ] (ta1) {};
+	\node [
+      place,
+      right=of ta1
+    ] (p5) {};
+    \node [
+      below right=-1mm of p5
+    ] {$p_5$};
+    \node [
+      transitionH,
+      above=of p5,
+      label=left:$\color{green}a$,
+      label=right:$\color{magenta}v_{a_2}$,
+      yshift=4mm
+    ] (ta2) {};
+	\node [
+      transitionV,
+      tau,
+      right=of p5,
+      label=below:$\color{gray}\varepsilon$,
+      label=above:$\color{magenta}v_{\varepsilon_3}$,
+    ] (te2) {};
+	\node [
+      transitionV,
+      below right=of p2,
+      label=below:$\color{green}c$,
+      label=above:$\color{magenta}v_{c}$
+    ] (tc1) {};
+	\node [
+      place,
+      right=of tc1
+    ] (p4) {};
+    \node [
+      below=-0.5mm of p4
+    ] {$p_4$};
+	\node [
+      transitionV,
+      tau,
+      right=of p4,
+      label=below:$\color{gray}\varepsilon$,
+      label=above:$\color{magenta}v_{\varepsilon_3}$
+    ] (te3) {};
+	\node [place] (p6) [right=of te3] {};
+    \node [below=-0.5mm of p6] {$p_6$};
+	\node [
+      transitionV,
+      label=below:$\color{green}b$,
+      label=above:$\color{magenta}v_b$
+    ] (tb1) [right=of p6] {};
 	\node  (b3) [right=of b2] {};
 	\node  (b4) [right=of b3] {};
 	\node  (b5) [right=of b4] {};
-	\node [place,label=above:$p^\textit{vii}$] (b4) [right=of b5] {} edge[pre] (e4) edge[pre] (b);
+	\node [place] (f) [right=of b5] {};
+    \node [below=-0.5mm of f] {$f$};
 
-	
-%	
-%	\node [place,label=above:$p_2$] (p2) [above right= of t1] {} edge[pre] (t1);
-%	\node [transitionV,label=above:$t_2$] (t2) [above right= of p2] {} edge[pre] (p2);
-%	\node [place,label=above:$p_3$] (p3) [right= of t2] {} edge[pre] (t2);
-%	\node [transitionV,label=above:$t_4$] (t4) [right= of p3] {} edge[pre] (p3);
-%	\node [transitionV,label=above:$t_5$] (t5) [below right= of p2] {} edge[pre] (p2);
-%	\node [place,label=above:$p_5$] (p5) [below right= of t1] {} edge[pre] (t1);
-%	\node [transitionV,label=below:$t_3$] (t3) [right= of p5] {} edge[pre] (p5);
-%	\node (b1) [right = of p2] {};
-%	\node (b2) [right = of b1] {};
-%	\node (b3) [right = of b2] {};
-%	\node [place,label=above:$p_4$] (p4) [right= of b3] {} edge[pre] (t4) edge[pre] (t5);
-%	\node (b1) [right = of t3] {};
-%	\node (b3) [right = of b1] {};
-%	\node [place,label=above:$p_6$] (p6) [right= of b3] {} edge[pre] (t3);
-%	\node (b1) [right = of t5] {};
-%	\node (b2) [right = of b1] {};
-%	\node (b3) [right = of b2] {};
-%	\node [transitionV,label=below:$t_6$] (t6) [right= of b3] {} edge[pre] (p4) edge[pre] (p6);
-%	\node [place,label=above:$p_7$] (p7) [right= of t6] {} edge[pre] (t6);
-%	
+    \node [
+      transitionH,
+      above=4.5mm of p6,
+      label=left:$\color{green}a$,
+      label=right:$\color{magenta}v_{a_3}$,
+    ] (ta3) {};
+    
+    \draw[arc] (i) -- (t1);
+    \draw[arc] (t1) -- (p2);
+    \draw[arc] (p2) -- (te1);
+    \draw[arc] (te1) -- (p3);
+    \draw[arc] (p3) -- (ta1);
+    \draw[arc] (ta1) -- (p5);
+    \draw[arc,out=120,in=-120] (p5) edge (ta2);
+    \draw[arc,out=-30,in=60] (ta2) edge (p5);
+    \draw[arc] (p5) -- (te2);
+    \draw[arc] (te2) -- (f);
+
+    \draw[arc] (p2) -- (tc1);
+    \draw[arc] (tc1) -- (p4);
+    \draw[arc] (p4) -- (te3);
+    \draw[arc] (te3) -- (p6);
+    \draw[arc] (tc1) -- (p4);
+    \draw[arc] (p6) -- (tb1);
+    \draw[arc] (tb1) -- (f);
+
+    \draw[arc] (p6) -- (ta3);
+    \draw[arc] (ta3) -- (p5);
+    
 	\end{tikzpicture}
 	
 \end{document}

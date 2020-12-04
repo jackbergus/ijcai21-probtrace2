@@ -1,10 +1,11 @@
 \newcommand{\uswn}{USWN\xspace}
-\newcommand{\net}{N}
-\newcommand{\enaset}[1]{E(#1)}
-\newcommand{\fire}[3]{#1\xrightarrow{#2}#3}
-\newcommand{\prob}[2]{\mathbb{P}_{#2}(#1)}
+\newcommand{\net}{\ensuremath{N}}
+\newcommand{\marking}{m}
+\newcommand{\enaset}[2]{E_{#2}(#1)}
+\newcommand{\fire}[4]{#1\xrightarrow{#2}_{#4}#3}
+\newcommand{\prob}[3]{\mathbb{P}_{#2,#3}(#1)}
 \newcommand{\rg}[1]{RG(#1)}
-
+ 
 \section{Preliminaries}
 \subsection{Untimed Stochastic Workflow Nets (USWN)}\label{subsec:spn}
 As customary in probabilistic conformance checking \cite{lavori-su-prob-conformance}, we adopt stochastic Petri nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13} as the underlying formal basis to represent processes. More specifically, we consider an interesting class of Stochastic Petri Nets with only immediate transitions (i.e., no timed ones), namely untimed stochastic bounded workflow nets (\uswn for short). 
@@ -20,26 +21,28 @@ An \uswn is a tuple $\net = (P,T,F,i,f,W)$ where:
 As usual, the current state of execution is captured using a marking of the net, that is, a multiset over places $P$ indicating how many tokens populate each place. As pointed out above, we always assume, as customary in BPM, that the input \uswn is \emph{bounded}, that is, the number of tokens associated to each place by a marking cannot exceed a maximum, fixed threshold.
 
 
-The notions of transition enablement and firing are also the standard ones. We use the following symbols: given a marking $M$ over \uswn $\net$, we denote by $\enaset{M}$ the set of enabled transitions in $M$, and given transition $t \in \enaset{M}$, we indicate with $\fire{M}{t}{M'}$ the fact that firing $t$ in $M$ results in the new marking $M'$. When executing a \uswn, the crucial addition to the standard execution semantics of Petri nets is that, being the net stochastic, in each marking the set of enabled transitions gets associated to a discrete probability distribution. This is defined as follows: given a marking $M$ of $N$ and an enabled transition $t \in \enaset{M}$, the \emph{firing probability} of $t$ in $M$ is $\prob{t}{M} = \frac{W(t)}{\sum_{t'\in \enaset{M}}W(t')}$.
+The notions of transition enablement and firing are also the standard ones. We use the following symbols: given a marking $\marking$ over \uswn $\net$, we denote by $\enaset{\marking}{\net}$ the set of enabled transitions in $\marking$; given transition $t \in \enaset{\marking}{\net}$, we indicate with $\fire{\marking}{t}{\marking'}{\net}$ the fact within $\net$, firing $t$ in $\marking$ results in the new marking $\marking'$. When executing an \uswn, the crucial addition to the standard execution semantics of Petri nets is that, being the net stochastic, in each marking the set of enabled transitions gets associated to a discrete probability distribution. This is defined as follows: given a marking $\marking$ of $N$ and an enabled transition $t \in \enaset{\marking}{\net}$, the \emph{firing probability} of $t$ in $\marking$ is $\prob{t}{\marking}{\net} = \frac{W(t)}{\sum_{t'\in \enaset{\marking}{\net}}W(t')}$.
 
-To capture the execution semantics of an \uswn, we interpret concurrency by interleaving, consequently obtaining a standard reachability graph, whose edges are labelled by probabilities. 
+To capture the execution semantics of an \uswn $\net$, we fix an initial marking $\marking_0$ over $\net$, obtaining the \emph{marked} \uswn $(\net,\marking_0)$. We then interpret concurrency by interleaving, consequently obtaining a standard reachability graph, whose edges are labelled by probabilities.
 
 
 \begin{definition}[Reachability Graph]
-Given an \uswn \net and an (initial) marking $M_0$, the reachability graph $\rg{\net,M_0}$ is a triple $(\mathcal{M},E,P)$ where:
-\begin{compactitem}
-\item $\mathcal{M}$ is the set of all reachable markings from $M_0$ (including $M_0$ itself);
-\item $E \subseteq \mathcal{M} \times \Sigma \times \mathcal{M}$ is the transition relation induced by the notion of transition firing, that is, for $M,M' \in \mathcal{M}$, we have that $(M,M') \in E$ if and only if    
+The reachability graph $\rg{\net,\marking_0}$ of a marked \uswn $(\net,\marking_0)$ with (initial) marking $M_0$ is a triple $(M,E,P)$ where:
+\begin{compactitem}[$\bullet$]
+\item $M$ is the set of all reachable markings from $\marking_0$ (including $\marking_0$ itself), called states.
+\item $E \subseteq M \times \Sigma \times M$ is the $\Sigma$-labeled transition relation induced by the transition firings of $\net$, that is, for $\marking,\marking' \in M$, we have that edge $(\marking,a,\marking') \in E$ if and only if there exists transition $t$ in $\net$ with label $\ell(t) = a$ and such that $\fire{\marking}{t}{\marking'}{\net}$.
+\item $P:E \rightarrow [0,1]$ is the transition probability function assigning to each transition $(\marking,a,\marking') \in E$ its corresponding probability, obtained from the firing probability of the \uswn transition(s) that lead from $\marking$ to $\marking'$ and are labeled by $a$: $P(\marking,a,\marking') = \sum_{t_i \in \enaset{\marking}{\net} \text{ s.t.~} \ell(t) = a \text{ and } \fire{\marking}{t}{\marking'}{\net}} \prob{t}{\marking}{\net}$.
 \end{compactitem}
-
-
-
-	Given an initial marking $M$ for a USWN $\mathcal{U}$,  the \textit{Reachability Graph} for $\mathcal{U}$ is a graph $(\mathcal{M},\mathcal{E})$ where the nodes  $\mathcal{M}$ are composed of of all the reachable markings from $M$, $M$ included, and all the edges $\mathcal{E}$ are induced by the aforementioned relation $M\overset{t}{\to}M'$ among the reachability graph's nodes. To each of such edges $M\overset{t}{\to}M'$, we associate a transition probability $\mathbb{P}\left(M\overset{t}{\to}M'\right)=\frac{W(t)}{\sum_{t'\in E(M)}W(t')}$ \cite{spdwe}. 
 \end{definition}
 
+Notice that, in the definition of the transition probability function, we have to account for the possible case where we have distinct net transitions that share the same label and are so that, in a given state, produce the same consequent state. In this case, they are indistinguishable when observing the execution traces of the net, and in fact they collapse into a single transition relation in the reachability graph. This is why, in this case, we need to accumulate all their firing probabilities into a single value.
 
-
- Since the input net is bounded, this reachability graph always contains finitely many states.  
+The following two observations hold for the so-defined reachability graph:
+\begin{compactitem}
+\item if the marked \uswn is bounded then its reachability graph contains finitely many states; from now on, whenever we refer to an \uswn we implicitly assume that it is bounded.
+\item Every marking contained in the reachability graph is so that by summing up all the probabilities associated to its outgoing edges, one gets $1$.
+\end{compactitem}
+This makes our notion of reachability graph essentially equivalent to that of discrete Markov chains.
 
 
 
