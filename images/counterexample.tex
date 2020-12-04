@@ -1,6 +1,8 @@
 \documentclass[tikz]{standalone}
 \input{tgstyle}
 
+
+
 \begin{document}
 \begin{tikzpicture}[align=center,node distance=1cm]
 \node (init1) {};
@@ -25,24 +27,4 @@
 \draw[link] (s2) -- node[midway,below]{\color{violet}$1$} (s3);
 \draw[link] (s3) -- node[midway,below]{\color{violet}$1$} (s1);
 \end{tikzpicture}
-
-%    \vertex{above }{$\color{green}a$}{b2}{initial,accepting,state,scale=0.4}{below right}{1}
-%    \vertex{above }{$\color{green}b$}{b}{right =of b2}{below right}{2}
-%    \vertex{above }{$\color{green}c$}{b3}{below = of $(b2)!0.5!(b)$}{below right}{3}
-%    
-%        \vertex{above }{$\color{green}a$}{a2}{right = of b}{below right}{1}
-%    \vertex{above }{$\color{green}b$}{a}{right =of a2}{below right}{2}
-%    \vertex{above }{$\color{green}c$}{a3}{below = of $(a2)!0.5!(a)$, initial,accepting,state,scale=0.4}{below right}{3}
-%    
-%    
-%    \myedge{b2}{above}{$\scriptscriptstyle{\color{red}1}$}{b}
-%    \myedge{b}{below}{$\scriptscriptstyle{\color{red}1}$}{b3}
-%    \myedge{b3}{below}{$\scriptscriptstyle{\color{red}1}$}{b2}
-%    
-%    
-%    \myedge{a2}{above}{$\scriptscriptstyle{\color{red}1}$}{a}
-%    \myedge{a}{below}{$\scriptscriptstyle{\color{red}1}$}{a3}
-%    \myedge{a3}{below}{$\scriptscriptstyle{\color{red}1}$}{a2}
-%\end{tikzpicture}
-
 \end{document}
