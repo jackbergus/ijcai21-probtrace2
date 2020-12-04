@@ -15,7 +15,7 @@
 \node[state,right=of bp,label=above:\color{green}$a$] (bp2) {2};
 \node[state,right=of bp2,label=above:\color{green}$a$] (b1) {6};
 \node[state,below right=of s,label=above:\color{green}$c$] (b2) {3};
-\node[state,right=of b2,label=above:\color{gray}$\tau$] (e2) {10};
+\node[right=of b2] (e2) {};
 \node[state,label=above:\color{green}$a$] at ($(e2)!0.5!(bp2)$) (a2) {4};
 \node[state,right=of e2,label=above:\color{green}$b$]  (b) {5};
 %\node[state,accepting,right=of b,label=above:\color{gray}$\tau$]  (bk) {8};
@@ -26,11 +26,11 @@
 %\draw[link] (bp) -- node[midway,above]{\color{violet}1} (bp2);
 \draw[link] (bp2.north west) edge [bend left=90] node[midway,above]{\color{violet}\pf} (f.north west);
 \draw[link] (s) -- node[midway,above]{\color{violet}\pb} (b2);
-\draw[link] (b2) -- node[midway,above]{\color{violet}1} (e2);
-\draw (e2) edge [link,bend right] node[midway,right]{\color{violet}\pd} (a2);
+%\draw[link] (b2) -- node[midway,above]{\color{violet}1} (e2);
+\draw (b2) edge [link] node[midway,above]{\color{violet}\pd} (a2);
 \draw[link] (a2) -- node[midway,right]{\color{violet}\pc} (b1);
 \draw[link] (a2) -- node[midway,below]{\color{violet}\pf} (f);
-\draw[link] (e2) -- node[midway,above]{\color{violet}\pe} (b);
+\draw[link] (b2) -- node[midway,above]{\color{violet}\pe} (b);
 \draw[link] (b) -- node[midway,below]{\color{violet}1} (f);
 %\draw (f.south east) edge [link,bend left] node[midway,right]{\color{violet}1} (bk.north east);
 \draw[link] (b1) -- node[midway,above]{\color{violet}\pf} (f);
