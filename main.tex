@@ -34,7 +34,7 @@
 \author{
 	Giacomo Bergami\inst{1} \and
 	Fabrizio Maria Maggi\inst{1} \and
-	Marco Montali\inst{1} \and
+	Marco Montali\inst{1} \and \\
 	Rafael Pe\~naloza\inst{2}}
 
 \authorrunning{G.~Bergami, F.M.~Maggi, M.~Montali and R.~Pe\~naloza}
@@ -55,8 +55,18 @@
 %\vspace{-0.5cm}
 
 \begin{abstract}
-Conformance checking techniques verify whether the observed behavior recorded in an event log matches a modeled behavior. This type of analysis is crucial, because often real process executions deviate from the reference process models. In the existing literature on conformance checking, one of the most common approaches is based on trace alignments. Alignments provide sophisticated diagnostics that pinpoint where deviations occur in a trace with respect to a process model and how severe they are. However, the proposed approaches based on trace alignments use crisp process models as reference models. On the other hand, recently, probabilistic conformance checking approaches are gaining momentum, but the existing approaches are used to check the degree of conformance of an event log with respect to a stochastic process model instead of finding trace alignments.
-In this paper, for the first time, we provide a conformance checking approach based on trace alignments using a stochastic Petri net. Conceptually, this requires to handle the two possibly contrasting forces of the cost of the alignment on the one hand and the likelihood of the model trace with respect to which the alignment is computed on the other. If the cost of the alignment is too high, even if the considered model trace is very likely, applying too many changes in the original trace is not always the best option. The approach has been evaluated using both synthetic and real-life logs.
+Conformance checking techniques verify whether the observed behavior recorded in an event log matches a modeled behavior. 
+This type of analysis is crucial, because often real process executions deviate from the reference process models. Currently, 
+one of the most common approaches to conformance checking is based on trace alignments. Alignments provide sophisticated 
+diagnostics that pinpoint deviations in a trace with respect to a process model and their severity. However, approaches based on 
+trace alignments use crisp process models as reference. Recently, probabilistic conformance checking approaches are gaining 
+momentum, but the existing approaches are used to check the degree of conformance of an event log with respect to a stochastic 
+process model instead of finding trace alignments.
+In this paper, for the first time, we provide a conformance checking approach based on trace alignments using a stochastic Petri net. 
+Conceptually, this requires to handle the two possibly contrasting forces of the cost of the alignment on the one hand and the 
+likelihood of the model trace with respect to which the alignment is computed on the other. If the cost of the alignment is too high, 
+even if the considered model trace is very likely, applying too many changes in the original trace is not always the best option. The 
+approach has been evaluated using both synthetic and real-life logs.
 \end{abstract}
 
 \keywords{Declarative Process Models, Probabilistic Temporal Logics, Conformance Checking}
