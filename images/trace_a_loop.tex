@@ -12,10 +12,11 @@
 \begin{document}
 \begin{tikzpicture}[align=center,node distance=3cm]
 
-        \vertex{above}{$\color{green}a$}{b1}{initial,accepting,state,scale=0.4}{below right}{2}
+        \vertex{above}{$\color{green}a$}{b}{initial}{below right}{2}
+        \vertex{above}{$\color{green}a$}{b1}{right of=b,accepting,state,scale=0.4}{below right}{6}
 
     
-   
+   \draw[->] (b) edge node [above] {$\scriptscriptstyle{\color{red}p_3}$} (b1);
     \draw[->,shorten >=1pt] (b1) edge [in=135,out=45,loop,looseness=20] node [above] {$\scriptscriptstyle{\color{red}p_3}$} (b1);
 \end{tikzpicture}
 

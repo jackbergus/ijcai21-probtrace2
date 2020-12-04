@@ -14,11 +14,13 @@
 
 
     \vertex{above}{$\color{green}c$}{b2}{initial}{below right}{3}
-        \vertex{above}{$\color{green}a$}{b1}{right of=b2,accepting,state,scale=0.4}{below right}{2}
+        \vertex{above}{$\color{green}a$}{b}{right of=b2}{below right}{4}
+        \vertex{above}{$\color{green}a$}{b1}{right of=b,accepting,state,scale=0.4}{below right}{6}
 
     
    
-    \myedge{b2}{above}{$\scriptscriptstyle{\color{red}p_4}$}{b1}
+    \myedge{b2}{above}{$\scriptscriptstyle{\color{red}p_4}$}{b}
+    \myedge{b}{above}{$\scriptscriptstyle{\color{red}p_4}$}{b1}
     
     \draw[->,shorten >=1pt] (b1) edge [in=135,out=45,loop,looseness=20] node [above] {$\scriptscriptstyle{\color{red}p_3}$} (b1);
 \end{tikzpicture}

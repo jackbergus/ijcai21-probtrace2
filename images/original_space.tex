@@ -2,12 +2,12 @@
 \usepackage{tikz}
 \begin{document}    
 \begin{tikzpicture}
-  \draw[->] (0, 0) -- (4.2, 0) node[right] {$p$};
-  \draw[->] (0, 0) -- (0, 4.2) node[above] {$s$};
-  \draw[scale=4, domain=0.9:1, smooth, variable=\x, blue] plot ({\x}, {0.9/\x}) node[above right]{$\scriptscriptstyle{ps=0.9}$};
-  \draw[scale=4, domain=0.7:1, smooth, variable=\x, blue] plot ({\x}, {0.7/\x}) node[above right]{$\scriptscriptstyle ps=0.7$};
-  \draw[scale=4, domain=0.5:1, smooth, variable=\x, blue] plot ({\x}, {0.5/\x}) node[above right]{$\scriptscriptstyle ps=0.5$};
-  \draw[scale=4, domain=0.3:1, smooth, variable=\x, blue] plot ({\x}, {0.3/\x}) node[above right]{$\scriptscriptstyle ps=0.3$};
+  \draw[->] (0, 0) -- (4.2, 0) node[right] {$w_\tau$};
+  \draw[->] (0, 0) -- (0, 4.2) node[above] {$s_d(\tau,\tau^*)$};
+  \draw[scale=4, domain=0.9:1, smooth, variable=\x, blue] plot ({\x}, {0.9/\x}) node[above right]{$\scriptscriptstyle{k_\star(\tau,\tau^*)=0.9}$};
+  \draw[scale=4, domain=0.7:1, smooth, variable=\x, blue] plot ({\x}, {0.7/\x}) node[above right]{$\scriptscriptstyle k_\star(\tau,\tau^*)=0.7$};
+  \draw[scale=4, domain=0.5:1, smooth, variable=\x, blue] plot ({\x}, {0.5/\x}) node[above right]{$\scriptscriptstyle k_\star(\tau,\tau^*)=0.5$};
+  \draw[scale=4, domain=0.3:1, smooth, variable=\x, blue] plot ({\x}, {0.3/\x}) node[above right]{$\scriptscriptstyle k_\star(\tau,\tau^*)=0.3$};
   %\draw[scale=4, domain=0.1:1, smooth, variable=\x, blue] plot ({\x}, {0.1/\x}) node[above right]{$\scriptscriptstyle xy=0.1$};
   \draw[dashed] (0,4) -- (4,4);
   \draw[dashed] (4,0) -- (4,4);
