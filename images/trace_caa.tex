@@ -5,7 +5,7 @@
 	\node (init1) {};
 	\node[state,right=3mm of init1,label=above:\color{green}$c$] (s1) {3};
 	\node[state,right=of s1,label=above:\color{green}$a$]       (s2) {4};
-	\node[state,accepting,right=of s2,label=above:\color{green}$a$]       (s3) {4};
+	\node[state,accepting,right=of s2,label=above:\color{green}$a$]       (s3) {6};
 	
 	\draw[link] (init1) -- (s1);
 	\draw[link] (s1) -- node[midway,above]{\color{violet}$\rho_{65}$} (s2);
