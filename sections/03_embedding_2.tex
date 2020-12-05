@@ -32,11 +32,12 @@ a normalized similarity score $s_d(\sigma,\sigma'):=1/(d(\sigma,\sigma')/c+1)$ w
 \subsubsection{Approximate-Ranking Trace Embedder}\label{subsec:ate}
 As previously observed, ranking optimality comes at the cost of a brute-force recomputation of all the embeddings $\phi$ for each novel trace $\sigma^*$ to align\footnote{By embedding  all the \unravelled\ model traces via $\phi_{\sigma^*}(\braket{\sigma,w_\sigma})=\Big(\frac{1}{w_\sigma\sqrt{w_\sigma^2+s_d^2(\sigma,\sigma^*)}},\frac{1}{s_d(\sigma,\sigma^*)\sqrt{w_\sigma^2+s_d^2(\sigma,\sigma^*)}}\Big)$ over a specific $\sigma^*$, by representing all the $\sigma^*$ as $(0,0)$, and by using the Euclidean Distance as a distance, we ensure that all the neighbours of $(0,0)$ will represent the top-$k$ best alignments for $\sigma^*$.}. This is not optimal for $k$NN-based techniques, as this entails the  redefinition of the multidimensional search space $\mathcal{X}$ for each new alignment $\sigma^*$. The ``recomputation cost'' could be completely avoided by providing an embedding strategy $\phi_{\mathcal{P}}$ that is independent from the to-be-aligned trace $\sigma^*$. Given that each embedding $\phi$ entails an associated similarity metric $k_\phi$ (\S\ref{subsec:katk}) and therefore an associated distance $d_{k_\phi}$ (Equation \ref{eq:dofk}), we can compute all the embeddings $\phi_{\mathcal{P}}$ for all the \unravelled\ traces before peforming the top-$k$ search, thus avoiding the brute-force cost. This computational gain comes with a loss in precision, as the generation of precise embeddings for graphs either boils down to NP-Complete (thus intractable) problems \cite{GartnerFW03} or, in its approximated version, is enable to accurately graph data with loops using low-dimensional vectors \cite{Seshadhri5631}. So, our proposed definition of $\phi_{\mathcal{P}}$ performs  weakly-ideally (\S\ref{subsec:katk} and \cite{Gartner03}).
 
-The embedding $\phi_{\mathcal{T}}$ \cite{LodhiSSCW02,Raedt} has several shortcomings: one of them is that \begin{alphalist} \item such embedding does not perform weakly-ideally, thus implying that we cannot numerically assess when two embedding represent equivalent traces (Example \ref{ex:wheredotiszero}). Secondly, \item such embedding does not  characterize $\tau$-moves, and therefore we need to use an $\omega$ value to preserve the probability of initial $\tau$-moves that do not produce visible transitions (Example \ref{ex:neue}). Third, \item current literature does not take into consideration numerical errors coming from the finite arithmetics representation of numerical vecotrs (e.g., double, float): longer traces $\sigma$ will suffer from truncation errors, as smaller $\lambda^i$ components for bigger $i<|\sigma|$ will be ignored, thus preventing a complete numerical characterization of  $\sigma$.
+\ADD{The embedding strategy} $\phi_{\mathcal{T}}$ (\S\ref{subsec:katk} and \cite{LodhiSSCW02,Raedt}9 \ADD{from current literature has several short\-comings: firstly,} \begin{alphalist} \item it does not perform weakly-ideally, so we cannot numerically assess when two embedding represent equivalent traces (Example \ref{ex:wheredotiszero}). Secondly, \item it does not characterize $\tau$-moves, so initial $\tau$-moves' probabilities are not preserved (Example \ref{ex:neue}). Thirdly, \item it is affected by numerical errors from finite arithmetics (e.g., double, float): longer traces $\sigma$ generated from skewed probability distributions $\Lambda^i$ will suffer from greater truncation errors, as smaller $\lambda^i$ components for bigger $i<|\sigma|$ will be ignored, thus preventing a complete numerical vector characterization of  $\sigma$ in practice.
 \end{alphalist}
 
-We overcome these shortcomings by \begin{alphalist}
-	\item proposing a weakly-ideal embedding (p. \pageref{subsub:prop})
+\ADD{We overcome these shortcomings by} \begin{alphalist}
+	\item proposing a weakly-ideal embedding (p. \pageref{subsub:prop}):
+	this is guaranteed by \item exploiting an $\omega$ factor preserving probabilities from and to $\tau$ transitions (Example \ref{ex:neue}). Furthermore, \item we mitigate the numerical truncation errors induced by trace length and probability distribution's skeweness by introducing two sub-embedding strategies, $\epsilon^x$ and $\nu^x$, where the former descends from $\phi_{\mathcal{T}}$ and the latter approximates the trace similarity via label frequencies' similarity. 
 \end{alphalist}
 
 Given that the embedding of a (weighted) trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_{p_\theta}^n(P)$ requires an intermediate $TG$ representation, we can map each of these traces to the subgraph of $P$ generating $\braket{\sigma,w_\sigma}$ with at most $|\sigma|$ steps:}
@@ -84,7 +85,7 @@ Table \ref{tab:proj} represents the TGs $P_\sigma\in\mathbf{T}_0^4(P)$ with weig
 %\xout{selection of a trace $\sigma$ implies performing a set of specific probabilistic choices, we can remove all the edges starting (and arriving) at nodes that are $\tau$-labelled and move their score as the weight of the TG.}
 \end{example}
 	
-{We can now focus on the embedding $\phi_{\mathcal{P}}$ for each TG associated to our selected weighted traces. The main goal is to use $k_{\phi_\mathcal{P}}$ for ranking all the traces generated by the \unravelling\\ step. Walking on such footsteps, we  want to extend  previous work on embeddings (\S\ref{subsec:katk}) by both including the traces' associated probability and by making the ranking induced by $k_{\phi_\mathcal{P}}$ the inverse of the ranking induced by the sum of the following distances: the transitions correlations $\epsilon$ and the transitions label frequency $\nu$ (\ADD{Proof omitted due to lack of space}). }
+{We can now focus on the embedding $\phi_{\mathcal{P}}$ for each TG associated to our selected weighted traces. The main goal is to use $k_{\phi_\mathcal{P}}$ for ranking all the traces generated by the \unravelling step. Walking on such footsteps, we  want to extend  previous work on embeddings (\S\ref{subsec:katk}) by both including the traces' associated probability and by making the ranking induced by $k_{\phi_\mathcal{P}}$ the inverse of the ranking induced by the sum of the following distances: the transitions correlations $\epsilon$ and the transitions label frequency $\nu$ ({Proof omitted due to lack of space}). }
 %\xout{Given that we previously observed that a TGs $P$ can be fully characterised (read, similarity) by their associated set of traces $\mathcal{W}_p^n(P)$  and that the trace embedding can be described as an embedding over a TG, we can characterise a TG embedding as a transition matrix embedding. In addition to that, when two Workflow Nets share similar node labellings but no ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ paths for any ${\color{green}\alpha}$ and ${\color{green}\beta}$, we should combine the former embedding with an embedding characterising the frequency on how the nodes' labels appear in the generated traces.} \ADD
 {We also require that the desired properties of $\phi_{\mathcal{P}}$ are independent from the characterization of $\epsilon$ and $\nu$, which  provide different embedding strategies. } The final embedding is defined as follows:
 
@@ -114,7 +115,21 @@ where $\epsilon$ and $\nu$ respectively represent the non-negatively defined emb
 
 At this stage, the computation of $\underset{\braket{\sigma,w_\sigma}\in \mathcal{W}_p^n(P), P_\sigma\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\sigma, P_{\sigma^*})$ returns the best approximated trace alignment $\sigma$ for a query trace represented as $P_{\sigma^*}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\sigma^*}$ as $\underset{P}{\max\arg}\underset{ P_\sigma\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\sigma, P_{\sigma^*})$.}¯
 
-Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in our experiment section} we choose two possible interchangeable definitions ($x=1$ and $x=2$) for both sub-embeddings (Table \ref{tab:embedstrat}): $l$ is the path length indicated in Table \ref{tab:proj}, and $N$ for $\nu^1$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\tau}\nu^1(P)_{\color{green}\alpha}=1$. In Example \ref{ex:cmpexample}, we will see that the given definition of $\epsilon^1$ provides a better approximation than the edge embedding $\epsilon^2$.
+\begin{table}[!t]
+	\caption{Different sub-embedding definitions ($\epsilon^1$, $\epsilon^2$, $\nu^1$, and $\nu^2$) for $\phi_{\mathcal{P}}$.}\label{tab:embedstrat}
+	\centering
+	\begin{tabular}{c|c|c}
+		\toprule
+		& $x=1$ & $x=2$ \\
+		\midrule
+		$\epsilon^x(P)_{\color{green}\alpha\beta}:=$ & $\label{eq:epsilon}
+		\sum_{i=1}^l{\lambda^i}\frac{[LR^iL^t]_{\color{green}\alpha\beta}}{\sum_{\color{green}\alpha'\beta'}R^i_{\color{green}\alpha'\beta'}}$ & $
+		\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$\\
+		$\nu^x(P)_{\color{green}\alpha}:=$ & $\frac{1}{N}\sum_{\braket{\sigma,w}\in\mathcal{W}_p^l(P)}\frac{|\Set{\sigma_i\in\sigma|\sigma_i\neq\tau\wedge \sigma_i={\color{green}\alpha}}|}{|\sigma|}$ & $0$ \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in our experiment section} we choose two possible interchangeable definitions ($x=1$ and $x=2$) for both sub-embeddings (Table \ref{tab:embedstrat}): $l$ is the path length indicated in Table \ref{tab:proj}, and $N$ for $\nu^1$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\tau}\nu^1(P)_{\color{green}\alpha}=1$. \ADD{While $\nu^2$ implies to completely ignore the label's frequency contribution, $\epsilon^2$ is the direct implementation of $\phi_{\mathcal{T}}$ from \S\ref{subsec:katk}, and $\epsilon^1$ and $\epsilon^2$ only differ from the normalization perspective.} %In Example \ref{ex:cmpexample}, we will see that the given definition of $\epsilon^1$ provides a better approximation than the edge embedding $\epsilon^2$.
 
 
 %When the transition matrix is ergodic \cite{StocasticCC},  the transition matrix embedding converges to $\epsilon(R)_{\color{green}\alpha\beta}=[(\mathbf{I}-\lambda\Lambda)^{-1}]_{\color{green}\alpha\beta}$ \cite{GartnerFW03} for $n\to+\infty$.
@@ -140,20 +155,7 @@ Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in o
 				$\phi_{\mathcal{P}}(P_{\sigma^*})$ & $8.16\cdot10^{-17}$ & $4.08\cdot 10^{-17}$ & $4.08\cdot10^{-17}$ & $4.37\cdot 10^{-17}$ & $1.03\cdot10^{-16}$ & $4.37\cdot10^{-17}$\\
 		\bottomrule
 	\end{tabular}
-\end{table}  \begin{table}[!t]
-\caption{Different sub-embedding definitions ($\epsilon^1$, $\epsilon^2$, $\nu^1$, and $\nu^2$) for $\phi_{\mathcal{P}}$.}\label{tab:embedstrat}
-\centering
-\begin{tabular}{c|c|c}
-	\toprule
-	& $x=1$ & $x=2$ \\
-	\midrule
-	$\epsilon^x(P)_{\color{green}\alpha\beta}:=$ & $\label{eq:epsilon}
-	\sum_{i=1}^l{\lambda^i}\frac{[LR^iL^t]_{\color{green}\alpha\beta}}{\sum_{\color{green}\alpha'\beta'}R^i_{\color{green}\alpha'\beta'}}$ & $
-	\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$\\
-	$\nu^x(P)_{\color{green}\alpha}:=$ & $\frac{1}{N}\sum_{\braket{\sigma,w}\in\mathcal{W}_p^l(P)}\frac{|\Set{\sigma_i\in\sigma|\sigma_i\neq\tau\wedge \sigma_i={\color{green}\alpha}}|}{|\sigma|}$ & $0$ \\
-	\bottomrule
-\end{tabular}
-\end{table}
+\end{table}  
 \begin{example}\label{ex:withpaths} After generating all the TGs for the \unravelled\ traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the $2$-grams included in the model traces.\footnoteref{fn:caveat}
 Given $\Sigma_\tau=\Set{a,b,c}$, the embedding space is of size $6$: three features (computed using $\epsilon$) correspond to the labels of the non-$\tau$ vertices in $\Sigma_\tau$, i.e., $\{a,b,c\}$, and other three features (computed using $\nu$) correspond to the $2$-grams subsequences that are also traces in $W^4_0(P)$, i.e., $\{aa,ca,cb\}$. Therefore, $\{a,b,c,aa,ca,cb\}\subset \Sigma_\tau^2\cup\Sigma_\tau$ is the whole set of features describing both the label and the transition matrix, so $\phi_{\mathcal{P}}$ is a vector with 6 dimensions.
 $t_f\in [0,1]\subset\mathbb{R}^+_{\geq 0}$ and $\lambda\in [0,1]\subset\mathbb{R}^+_{\geq 0}$ are tuning parameters that can be inferred from the available data \cite{DriessensRG06}. While the latter describes the previously mentioned decay factor, $t_f$ represents the relevance of our embedding representation when the number of the edges within TG increases. In both our experiments and examples, we chose $t_f=0.0001$ and $\lambda=0.07$.
@@ -188,6 +190,8 @@ k_{\phi_{\mathcal{P}}}(P,P')=&\omega\omega't_f^{|R>0|+|R'>0|}\left(1-\frac{\norm
 %	&{=\omega\omega't_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\epsilon}- \hat{\epsilon}'}{2}^2}{2}\right)+ t_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\nu}- \hat{\nu}'}{2}^2}{2}\right)}\\
 %\end{aligned}$$
 \end{proof}
+
+Please note that, when the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numerical cancellation due to the aforementioned truncation error (i.e., $\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}^2\to 0$), the $\nu$ strategy intervenes as a backup ranking strategy. The first term of the sum does not affect the ranking, as it reduces to a constant factor.
 
 %\xout{Given that we can now follow Definition \ref{def:ppne} for representing a trace $\sigma$ as a proper embedding after transforming it as a TG $P_{\sigma^*}$ (\S\ref{subsec:katk}), we can find the TG $P$ providing the best approximate match with  a trace $\sigma$ as follows:}
 %\[\Rcancel{\underset{{P}}{\max\arg}\;k_{\phi_{\mathcal{P}}}(P,T)}\]
