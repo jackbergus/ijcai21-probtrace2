@@ -1,19 +1,19 @@
 \begin{table}[!t]
-\caption{Distinct USWNs and associated sets of \unravelled traces from a single Sepsis Cases Event Log \cite{mannhardt_2016}.}\label{tab:dataset}
+\caption{Distinct USWNs and associated sets of \unravelled traces from a single Sepsis Cases Event Log \cite{mannhardt_2016}. $\varepsilon$ represents the machine epsilon \ifdefined\WWITHN and $n=20$ \fi.}\label{tab:dataset}
  \begin{adjustbox}{max width=\textwidth}
 	\begin{tabular}{crl||cl|c}
 		\toprule
-		\textbf{Experiment Conf.} $(\mathcal{U})$ & \textit{Model} & $+$\textit{W. Estimator} & $n$ & $p_\theta$& $\;\;|\mathcal{W}_{p_\theta}^n(P_{\mathcal{U}})|$ \\
+		\textbf{Experiment Conf.} $(\mathcal{U})$ & \textit{Model} & $+$\textit{W. Estimator} & $p_\theta$& $\;\;|\WCal{p_\theta}{n}(P_{\mathcal{U}})|$ \\
 		\midrule
 		
-		\textbf{SM\_CONS\_20} &SplitMiner 2.0  \cite{AugustoCDRP19}       & +\texttt{Constant} & $20$ & $\;\;0$ & $157$  \\
+		\textbf{SM\_CONS\_20} &SplitMiner 2.0  \cite{AugustoCDRP19}       & +\texttt{Constant} &  $\;\;\varepsilon$ & $157$  \\
 		
-		\textbf{SM\_FORK\_20} & SplitMiner 2.0  \cite{AugustoCDRP19}      & +Fork \cite{spdwe} & $20$ & $\;\;0$ & $32$  \\
+		\textbf{SM\_FORK\_20} & SplitMiner 2.0  \cite{AugustoCDRP19}      & +Fork \cite{spdwe} &  $\;\;\varepsilon$ & $32$  \\
 		
 		
-		\textbf{SM\_PAIR\_20} & SplitMiner 2.0  \cite{AugustoCDRP19}      & +PairScale \cite{spdwe} & $20$ & $\;\;0$ & $157$ \\
+		\textbf{SM\_PAIR\_20} & SplitMiner 2.0  \cite{AugustoCDRP19}      & +PairScale \cite{spdwe} &  $\;\;\varepsilon$ & $157$ \\
 		
-		\textbf{SM\_PETRI\_20} & \multicolumn{2}{c||}{Rogge-Solti \cite{RoggeSoltiAW13}} & $20$ & $10^{-5}$ & $1612$ \\
+		\textbf{SM\_PETRI\_20} & \multicolumn{2}{c||}{Rogge-Solti \cite{RoggeSoltiAW13}} & $10^{-5}$ & $1612$ \\
 		\bottomrule
 	\end{tabular}
 \end{adjustbox}
@@ -42,4 +42,4 @@ In general, we can see from the plots that the sub-embeddings considering only i
 
 \subsection{Efficiency}\label{subsec:efficio}
 With reference to the plots in Figure \ref{fig:kronos},
-we evaluated the efficiency of computing the trace alignment over both Optimal- ({\color{ggplotPurple}Purple} and {\color{ggplotGreen}Green}) and Approximated-ranking ({\color{ggplotBlue}Blue} and {\color{ggplotRed}Red}) strategies over two different data structures enabling $k$NN queries, i.e., VP-Trees ({\color{ggplotBlue}Blue} and {\color{ggplotPurple}Purple}) and KD-Trees ({\color{ggplotRed}Red} and {\color{ggplotGreen}Green}). We conduct our experiments for $k=20$\ADD{, and we use the Levenshtein distance as a baseline distance for the alignment cost function}. While the query time for the Optimal-Ranking  includes the additional \textit{indexing time} for generating all the vectors to the neighbourhood search, the Approximated-Ranking  adds the neighbourhood search time with the embedding transformation of $x$; in particular, we consider the average embedding time for all the possible embedding strategies described in the previous experiment setting. Figure \ref{fig:kronos} plots the result of such experiments: the time required to generate and load all the $\phi_\star$ truly dominates the cost of generating the embedding $\phi_{\mathcal{P}}(x)$ for bigger datasets such as \textbf{STPETRI\_20}, while the cost for $\phi_{\mathcal{P}}(x)$ becomes non-negligible when we have just a few traces to align (\textbf{SM\_FORK\_20}). Last, while the $k$NN alignments over $\phi_{\mathcal{P}}$ always provide the best timing results via KD-Trees, we cannot elect a best data structure $\phi_\star$ that is valid for all datasets and all trace lengths. 
+we evaluated the efficiency of computing the trace alignment over both Optimal- ({\color{ggplotPurple}Purple} and {\color{ggplotGreen}Green}) and Approximated-ranking ({\color{ggplotBlue}Blue} and {\color{ggplotRed}Red}) strategies over two different data structures enabling $k$NN queries, i.e., VP-Trees ({\color{ggplotBlue}Blue} and {\color{ggplotPurple}Purple}) and KD-Trees ({\color{ggplotRed}Red} and {\color{ggplotGreen}Green}). We conduct our experiments for $k=20$\ADD{, and we use the Levenshtein distance as a baseline distance for the alignment cost function}. While the query time for the Optimal-Ranking  includes the additional \textit{indexing time} for generating all the vectors to the neighbourhood search, the Approximated-Ranking  adds the neighbourhood search time with the embedding transformation of $x$, \ADD{while the indexing cost is performed only once before the query time, as $\phi_{\mathcal{P}}$ does not require to recompute the search space for each trace $\sigma^*$}; in particular, we consider the average embedding time for all the possible embedding strategies described in the previous experiment setting. Figure \ref{fig:kronos} plots the result of such experiments: the time required to generate and load all the $\phi_\star$ truly dominates the cost of generating the embedding $\phi_{\mathcal{P}}(x)$ for bigger datasets such as \textbf{STPETRI\_20}, while the cost for $\phi_{\mathcal{P}}(x)$ becomes non-negligible when we have just a few traces to align (\textbf{SM\_FORK\_20}). Last, while the $k$NN alignments over $\phi_{\mathcal{P}}$ always provide the best timing results via KD-Trees, we cannot elect a best data structure $\phi_\star$ that is valid for all datasets and all trace lengths. 
