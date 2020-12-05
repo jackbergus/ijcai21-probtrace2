@@ -4,11 +4,14 @@ bibtex := /usr/bin/bibtex
 SOURCES := $(wildcard images/*.tex)
 IMAGES := $(patsubst images/%.tex, images/%.pdf, $(SOURCES))
 
-all:	$(IMAGES)
+paper:
 	$(pdflatex)  -interaction nonstopmode main.tex
 	$(bibtex) main.aux
 	$(pdflatex)  -interaction nonstopmode main.tex
 	$(pdflatex)  -interaction nonstopmode main.tex
+
+all:	$(IMAGES) paper
+
 clean:
 	rm -rf *.soc *.out *.log *.blg *.bbl *.aux *.thm *.pgf-plot.gnuplot *.pdf *.loc *.synctex.gz *.upa *.upb
 	cd images && rm -rf *.soc *.out *.log *.blg *.bbl *.aux *.thm *.pgf-plot.gnuplot  *.loc *.synctex.gz *.upa *.upb && cd ..
