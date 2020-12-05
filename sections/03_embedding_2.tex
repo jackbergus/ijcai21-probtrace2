@@ -32,13 +32,20 @@ a normalized similarity score $s_d(\sigma,\sigma'):=1/(d(\sigma,\sigma')/c+1)$ w
 \subsubsection{Approximate-Ranking Trace Embedder}\label{subsec:ate}
 As previously observed, ranking optimality comes at the cost of a brute-force recomputation of all the embeddings $\phi$ for each novel trace $\sigma^*$ to align\footnote{By embedding  all the \unravelled\ model traces via $\phi_{\sigma^*}(\braket{\sigma,w_\sigma})=\Big(\frac{1}{w_\sigma\sqrt{w_\sigma^2+s_d^2(\sigma,\sigma^*)}},\frac{1}{s_d(\sigma,\sigma^*)\sqrt{w_\sigma^2+s_d^2(\sigma,\sigma^*)}}\Big)$ over a specific $\sigma^*$, by representing all the $\sigma^*$ as $(0,0)$, and by using the Euclidean Distance as a distance, we ensure that all the neighbours of $(0,0)$ will represent the top-$k$ best alignments for $\sigma^*$.}. This is not optimal for $k$NN-based techniques, as this entails the  redefinition of the multidimensional search space $\mathcal{X}$ for each new alignment $\sigma^*$. The ``recomputation cost'' could be completely avoided by providing an embedding strategy $\phi_{\mathcal{P}}$ that is independent from the to-be-aligned trace $\sigma^*$. Given that each embedding $\phi$ entails an associated similarity metric $k_\phi$ (\S\ref{subsec:katk}) and therefore an associated distance $d_{k_\phi}$ (Equation \ref{eq:dofk}), we can compute all the embeddings $\phi_{\mathcal{P}}$ for all the \unravelled\ traces before peforming the top-$k$ search, thus avoiding the brute-force cost. This computational gain comes with a loss in precision, as the generation of precise embeddings for graphs either boils down to NP-Complete (thus intractable) problems \cite{GartnerFW03} or, in its approximated version, is enable to accurately graph data with loops using low-dimensional vectors \cite{Seshadhri5631}. So, our proposed definition of $\phi_{\mathcal{P}}$ performs  weakly-ideally (\S\ref{subsec:katk} and \cite{Gartner03}).
 
+The embedding $\phi_{\mathcal{T}}$ \cite{LodhiSSCW02,Raedt} has several shortcomings: one of them is that \begin{alphalist} \item such embedding does not perform weakly-ideally, thus implying that we cannot numerically assess when two embedding represent equivalent traces (Example \ref{ex:wheredotiszero}). Secondly, \item such embedding does not  characterize $\tau$-moves, and therefore we need to use an $\omega$ value to preserve the probability of initial $\tau$-moves that do not produce visible transitions (Example \ref{ex:neue}). Third, \item current literature does not take into consideration numerical errors coming from the finite arithmetics representation of numerical vecotrs (e.g., double, float): longer traces $\sigma$ will suffer from truncation errors, as smaller $\lambda^i$ components for bigger $i<|\sigma|$ will be ignored, thus preventing a complete numerical characterization of  $\sigma$.
+\end{alphalist}
+
+We overcome these shortcomings by \begin{alphalist}
+	\item proposing a weakly-ideal embedding (p. \pageref{subsub:prop})
+\end{alphalist}
+
 Given that the embedding of a (weighted) trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_{p_\theta}^n(P)$ requires an intermediate $TG$ representation, we can map each of these traces to the subgraph of $P$ generating $\braket{\sigma,w_\sigma}$ with at most $|\sigma|$ steps:}
 	\begin{definition}[TG projection over traces]
-		Given a minimum probability threshold $p_\theta$, a maximum path length $n$, and a TG $P=(s,t,L,R,w)$, we generate a set $\mathbf{T}_{p_\theta}^n(P)$ of projected TGs $P$ for each trace in $\mathcal{W}_{p_\theta}^n(P)$ as follows: for each weighted trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_{p_\theta}^n(P)$ generated from a path $\pi_\sigma=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a TG $P_\sigma=(s',t',L_\sigma,R_\sigma,\omega_\sigma)$, where \begin{alphalist}
+		Given a minimum probability threshold $p_\theta$, a maximum path length $n$, and a TG $P=(s,t,L,R,\omega)$, we generate a set $\mathbf{T}_{p_\theta}^n(P)$ of projected TGs $P$ for each trace in $\mathcal{W}_{p_\theta}^n(P)$ as follows: for each weighted trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_{p_\theta}^n(P)$ generated from a path $\pi_\sigma=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a TG $P_\sigma=(s',t',L_\sigma,R_\sigma,\omega')$, where \begin{alphalist}
 			\item $s'=s$ if $\textit{label}(s)\neq \tau$ and $t'=n_2$ otherwise,
 			\item $t'=t$ if $\textit{label}(t)\neq \tau$ and $t'=n_m$ otherwise,
 			\item $L_\sigma$ (and $R_\sigma$) is the submatrix of $L$ (and $R$) over the non-$\tau$ labelled notes in $\pi_\sigma$ and the labels from $\sigma$,
-			\item $w'$ is initialised by $w$ and then multiplied by $[R]_{s,n_2}$ (and also $[R]_{n_m,t}$) if $\textit{label}(s)=\tau$ (and  $\textit{label}(t)=\tau$).
+			\item $\omega'$ is initialised by $\omega$ and then multiplied by $[R]_{s,n_2}$ (and also $[R]_{n_m,t}$) if $\textit{label}(s)=\tau$ (and  $\textit{label}(t)=\tau$).
 		\end{alphalist}
 	\end{definition}
 
@@ -66,7 +73,7 @@ Given that the embedding of a (weighted) trace $\braket{\sigma,w_\sigma}\in\math
 \end{tabular}}
 \end{table}
 \begin{example}\label{ex:neue}
-Given the TG $P$ in Figure \ref{fig:closed}, we assign the following probability values to the edges: $p_1=0.8$, $p_2=0.2$, $p_3=p_6=0.5$, $p_4=0.7$, and $p_5=0.3$. If we limit our analysis to all the traces of maximum length $4$, we generate the following probabilistic traces set:
+Given the TG $P$ in Figure \ref{fig:closed}, we assign the following probability values to the edges: $\pa=0.8$, $\pb=0.2$, $\pc=\pf=0.5$, $\pd=0.7$, and $\pe=0.3$. If we limit our analysis to all the traces of maximum length $4$, we generate the following probabilistic traces set:
 $$\begin{aligned}
 \mathcal{W}^4_0(P)=\{&\braket{a,0.4},\braket{aa,0.2},\braket{aaa,0.1},\braket{ca,0.07},\\
 &\braket{cb,0.06},\braket{aaaa,0.05},\braket{caa,0.035},\braket{caaa,0.0175}\}\\
@@ -104,6 +111,8 @@ $$\phi_{\mathcal{P}}(P)_i=\begin{cases}
 \end{cases}$$
 where $\epsilon$ and $\nu$ respectively represent the non-negatively defined embedding associated to the TG's transition matrix and nodes.
 \end{definition}
+
+At this stage, the computation of $\underset{\braket{\sigma,w_\sigma}\in \mathcal{W}_p^n(P), P_\sigma\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\sigma, P_{\sigma^*})$ returns the best approximated trace alignment $\sigma$ for a query trace represented as $P_{\sigma^*}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\sigma^*}$ as $\underset{P}{\max\arg}\underset{ P_\sigma\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\sigma, P_{\sigma^*})$.}¯
 
 Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in our experiment section} we choose two possible interchangeable definitions ($x=1$ and $x=2$) for both sub-embeddings (Table \ref{tab:embedstrat}): $l$ is the path length indicated in Table \ref{tab:proj}, and $N$ for $\nu^1$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\Sigma_\tau}\nu^1(P)_{\color{green}\alpha}=1$. In Example \ref{ex:cmpexample}, we will see that the given definition of $\epsilon^1$ provides a better approximation than the edge embedding $\epsilon^2$.
 
@@ -268,7 +277,7 @@ k_{\phi_{\mathcal{P}}}(P,P')=&\omega\omega't_f^{|R>0|+|R'>0|}\left(1-\frac{\norm
 \end{table}
 
 
-At this stage, the computation of $\underset{\braket{\sigma,w_\sigma}\in \mathcal{W}_p^n(P), P_\sigma\in\mathbf{P}_p^n(P)}{\max\arg} k_{\phi_\mathcal{P}}(P_\sigma, P_{\sigma^*})$ returns the best approximated trace alignment $\sigma$ for a query trace represented as $P_{\sigma^*}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\sigma^*}$ as $\underset{P}{\max\arg}\underset{ P_\sigma\in\mathbf{P}_p^n(P)}{\max} k_{\phi_\mathcal{P}}(P_\sigma, P_{\sigma^*})$.}¯
+
 
 \begin{example}\label{ex:11}
 	Given that $k_{\phi_{\mathcal{P}}}(\sigma,\sigma^*)=\braket{\phi_{\mathcal{P}}(P_\sigma),\;\phi_{\mathcal{P}}(P_{\sigma^*})}$ for each weighted trace $\braket{\sigma,w_\sigma}\in\mathcal{W}_0^4(P)$, then the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}, where the expected ranking $k_\star$ is also showed. This similarity score approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
@@ -401,7 +410,7 @@ At this stage, the computation of $\underset{\braket{\sigma,w_\sigma}\in \mathca
 \end{example}
 
 
-\subsubsection{Properties}
+\subsubsection{Properties}\label{subsub:prop}
 As a first property, we can prove that when the two traces are equivalent,  there exists an embedding configuration for which the kernel computation reduces to the two traces' weight product, i.e. $ww'$. The kernel will represent the probability that both traces are valid contemporaneously and, when both weights are $1$, the kernel returns $1$. We will call this condition  ``weak equality'' because we cannot possibly prove that $k_{\phi_{\mathcal{P}}}(P,P')=ww'\Leftrightarrow \mathcal{W}_p^n(P)=\mathcal{W}_p^n(P')$, as there could be similar embeddings coming from Workflow Nets sharing a different weighted traces set ($\mathcal{W}_p^n(P)\neq\mathcal{W}_p^n(P')$, Figure \ref{fig:counterexample}). As previously observed in \S\ref{ex:wheredotiszero}, we will have the maximum dissimilarity when the traces have neither $2$-grams nor transitions' labels in common, for which the dot product of an embedding will always return $0$ (\textit{strong dissimilarity}). Given that both weak equality and strong similarity hold, we can say that the embedding performs weakly-ideally.
 
 \begin{figure}[!t]
