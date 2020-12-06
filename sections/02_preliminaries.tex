@@ -71,14 +71,14 @@ The \emph{reachability graph} $\rg{\net}$ of \uswn \net is a triple $(M,E,P)$ wh
 Notice that, in the definition, we have to account for the possible case where, in a given state, distinct net transitions share the same label produce the same consequent state. In this case, they are indistinguishable when observing the execution traces of the net, and in fact they collapse into a single edge of the reachability graph. This is why, in this case, we accumulate all their firing probabilities into a single value.
 
 
-In the remainder of the paper, given a \uswn \net, we always assume that it satisfies two structural assumptions that are natural in the BPM setting:
+In the remainder of the paper, given a \uswn $\net$, we always assume that it satisfies two structural assumptions that are natural in the BPM setting:
 \begin{compactitem}
-\item \net is \emph{bounded}, that is, every marking in $\rg{\net}$ assigns at most a pre-defined number of tokens to each place;
+\item $\net$ is \emph{bounded}, that is, every marking in $\rg{\net}$ assigns at most a pre-defined number of tokens to each place;
 \item $\rg{\net}$ does not contain loops where all edges are labeled with $\tau$.   
 \end{compactitem}
 The first assumption indicates that a case of the process does not generate unboundedly many parallel threads, and guarantees in turn that the reachability graph contains finitely many states. The second assumption naturally corresponds to how $\tau$-transitions are used when modeling business processes, where they are essential in representing gateways (such as exclusive and parallel splits/joins), cascaded gateways without tasks in between, and skippable tasks.  In all these cases, multiple $\tau$-transitions may be used, but never creating completely invisible loops. Under this assumption, \net enjoys a very interesting property: given a trace $\trace$, there are only boundedly many valid sequences that can produce it, and so they can be exhaustively enumerated when calculating the probability of $\trace$. 
 
-Figure~\eqref{fig:rg} shows the reachability graph constructed from the \uswng in Figure~\eqref{fig:spn}.
+Figure~\eqref{fig:rg} shows an example of reachability graph.
 
 
 
@@ -146,7 +146,7 @@ $L$ and $R$ satisfy the following well-formedness conditions:
 \end{definition}
 In the definition, the condition for $L$ indicates that each node is mapped by $L$ to a single label, while the same label may be used for multiple nodes. The condition for $R$ ensures that the numbers contained therein can be interpreted as a probability distribution when choosing which next node to pick upon executing a transition.
 
-A transition graph $\tg$ can be inuitively visualized as shown in Figures~\eqref{fig:lmc} and \eqref{fig:closed}. There, each node $\ind{i} \in \tg.V$ is  represented as a circle with its identifying number. The initial node is decorated by a small incoming edge, while the final node is double circled. The label of the node is shown close to the circle, in agreement with $\tg.L$. Finally, an edge from $\ind{i} \in \tg.V$ to $\ind{j} \in \tg.V$ is shown if the transition probability $[\tg.R]_{\ind{i}\ind{j}}$ is positive. Each edge is decorated with the positive probability assigned by $\tg.R$. 
+A transition graph $\tg$ can be visualized as shown in Figures~\eqref{fig:lmc} and \eqref{fig:closed}. There, each node $\ind{i} \in \tg.V$ is  represented as a circle with its identifying number. The initial node is decorated by a small incoming edge, while the final node is double circled. The label of the node is shown close to the circle, in agreement with $\tg.L$. Finally, an edge from $\ind{i} \in \tg.V$ to $\ind{j} \in \tg.V$ is shown if the transition probability $[\tg.R]_{\ind{i}\ind{j}}$ is positive. Each edge is decorated with the positive probability assigned by $\tg.R$. 
 
 %\begin{definition}[Path, trace]
 %A \emph{path} in a transition graph $\tg$ is a finite sequence of nodes $\ind{i}_1 \cdots \ind{i}_n$ (with $n > 1$) such that, for every $j \in \set{1,\ldots,n-1}$, we have that $[\tg.R]_{\ind{i}_j\ind{i}_{j+1}} > 0$. Such a path is \emph{valid} if it starts from the initial node and ends in the accepting node of $\tg$, that is, $\ind{i}_1 = \tg.s$ and $\ind{i}_n = \tg.e$.
@@ -165,11 +165,13 @@ By mirroring to definitions of \uswn{s} taking into account that now labels are 
 \end{inparaenum}
 Runs and traces are then defined as in \uswn{s}, and we employ the same notation to indicate the runs underlying a trace, and the valid sequences underlying a run.
 
+We can play with matrixes $L$ and $R$ of transition graph $G$ to compute various interesting probabilities \cite{GartnerFW03}. For example, given two nodes $\ind{i},\ind{j}$, $[R^n]_{\ind{i}\ind{j}}$ gives the probability of having a path in $\tg$ that connects $\ind{i}$ to $\ind{j}$ and has length $n$. Given two labels $\alfa,\beta \in \Sigma$, with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$ we obtain the probability that, starting in any node labeled by $\alpha$, we reach a node labeled $\beta$ by performing $n$ steps in $\tg$. As a shortcut notation, we call the result $[\tg.\Lambda^n]_{\alpha\beta}$. Since there may be different nodes labeled by $\alpha$, we need to normalize the resulting probabilities. This is obtained with the division by $L\transp{L}$, which does so by assuming a uniform distribution for starting from a particular node with label $\alpha$. Notice that these calculations need to be refined so as to consider proper runs and traces. This will be done in Section~\ref{sezionegiusta}. \todo{Rimandare alla sezione giusta}
 
 
-$[R^n]_{\texttt{\color{blue}ij}}$ denotes the probability of having a path $\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\overset{n}{\rightsquigarrow}{\color{green}\beta}$). We denote as ${\color{green}\alpha}{\rightsquigarrow}{\color{green}\beta}$ an aforementioned path of arbitrary length. 
-We can also associate a weight $\omega\in[0,1]\subseteq\mathbb{R}$ to a TG, so to express the probability associated with the TG itself as valid. 
-
+%
+%$\texttt{\color{blue}i}\overset{n}{\rightsquigarrow}\texttt{\color{blue}j}$ of length $n$: therefore, $[\Lambda^n]_{\color{green}\alpha\beta}:=[LR^nL^t]_{\color{green}\alpha\beta}/[LL^t]_{\color{green}\alpha\alpha}$ denotes the probability that, having started at any node labelled $\color{green}\alpha$ and taking $n$ steps, we arrive at any node labelled $\color{green}\beta$ (${\color{green}\alpha}\overset{n}{\rightsquigarrow}{\color{green}\beta}$). We denote as ${\color{green}\alpha}{\rightsquigarrow}{\color{green}\beta}$ an aforementioned path of arbitrary length. 
+%We can also associate a weight $\omega\in[0,1]\subseteq\mathbb{R}$ to a TG, so to express the probability associated with the TG itself as valid. 
+%
 
 
 
