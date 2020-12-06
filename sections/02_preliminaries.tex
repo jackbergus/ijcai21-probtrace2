@@ -123,11 +123,12 @@ Figure~\eqref{fig:rg} shows an example of reachability graph.
 
 
 \subsection{Transition Graphs}\label{subsec:ppn}
+
 The graph and trace embedding techniques that we will use as the basis for computing probabilistic alignments cannot be directly defined over reachability graphs. In fact, these techniques rely on graphs where edges are only labeled by probabilities, whereas labels are attached to nodes. In addition, towards readily enabling     efficient algorithmic techniques, such graphs are compactly defined using transition matrixes. We therefore take inspiration from \cite{GartnerFW03} and introduce so-called \emph{probabilistic transition graphs}, which we will later use to encode \uswn{s} via their reachability graphs.
 
 For a matrix $Q$ with row set $A$ and column set $B$, notation $[Q]_{ab}$ for $a \in A$ and $b \in B$ denotes the corresponding element in the matrix. In addition $\transp{Q}$ denotes the transposed matrix where rows and columns are inverted. We employ the usual sum and product operations over matrixes and arrays, and denote, for a square matrix $Q$, the repeated multiplication of $Q$ with itself $n$ times by $Q^n$.
 
-In our technical treatment, we continue to assume the existence of a set $\Sigma$ of labels (including the special label $\tau$).
+In our technical treatment, we continue to assume the existence of a set $\Sigma$ of labels (including the special label $\tau$).\todo{NOn si capisce il significato di $\omega$]
 
 \begin{definition} A \emph{(probabilistic) transition graph} is a tuple $(V,s,t,L,R,\omega)$ where:
   \begin{inparaenum}[\itshape (i)]
@@ -165,7 +166,7 @@ By mirroring to definitions of \uswn{s} taking into account that now labels are 
 \end{inparaenum}
 Runs and traces are then defined as in \uswn{s}, and we employ the same notation to indicate the runs underlying a trace, and the valid sequences underlying a run.
 
-We can play with matrixes $L$ and $R$ of transition graph $G$ to compute various interesting probabilities \cite{GartnerFW03}. For example, given two nodes $\ind{i},\ind{j}$, $[R^n]_{\ind{i}\ind{j}}$ gives the probability of having a path in $\tg$ that connects $\ind{i}$ to $\ind{j}$ and has length $n$. Given two labels $\alfa,\beta \in \Sigma$, with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$ we obtain the probability that, starting in any node labeled by $\alpha$, we reach a node labeled $\beta$ by performing $n$ steps in $\tg$. As a shortcut notation, we call the result $[\tg.\Lambda^n]_{\alpha\beta}$. Since there may be different nodes labeled by $\alpha$, we need to normalize the resulting probabilities. This is obtained with the division by $L\transp{L}$, which does so by assuming a uniform distribution for starting from a particular node with label $\alpha$. Notice that these calculations need to be refined so as to consider proper runs and traces. This will be done in Section~\ref{sezionegiusta}. \todo{Rimandare alla sezione giusta}
+We can play with matrixes $L$ and $R$ of transition graph $G$ to compute various interesting probabilities \cite{GartnerFW03}. For example, given two nodes $\ind{i},\ind{j}$, $[R^n]_{\ind{i}\ind{j}}$ gives the probability of having a path in $\tg$ that connects $\ind{i}$ to $\ind{j}$ and has length $n$. Given two labels $\alpha,\beta \in \Sigma$, with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$ we obtain the probability that, starting in any node labeled by $\alpha$, we reach a node labeled $\beta$ by performing $n$ steps in $\tg$. As a shortcut notation, we call the result $[\tg.\Lambda^n]_{\alpha\beta}$. Since there may be different nodes labeled by $\alpha$, we need to normalize the resulting probabilities. This is obtained with the division by $L\transp{L}$, which does so by assuming a uniform distribution for starting from a particular node with label $\alpha$. Notice that these calculations need to be refined so as to consider proper runs and traces. This will be done in Section~\ref{sezionegiusta}. \todo{Rimandare alla sezione giusta}
 
 
 %
