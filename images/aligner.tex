@@ -50,9 +50,7 @@
 
 
 \begin{pgfonlayer}{background}
-\node[cell,below right=-3mm of v11,fill=marcofucsia2!10] (v31) {};
-\node[cell,right=-\pgflinewidth of v31,fill=marcofucsia2!10] (v32) {};
-\node[cell,right=-\pgflinewidth of v32,fill=marcofucsia2!10] (v33) {\tiny\ldots};
+
 
 \node[above=0mm of v21.north west,anchor=south west] {trace vectors};
 \node[above=0mm of v41.south west,anchor=north west] {$\trace$-vector};
@@ -60,7 +58,9 @@
 
 \node[astep,fit=(ate1) (ate2) (vs)] (pta){};
 \node[above=-1mm of pta] {Approximate-ranking probabilistic alignment};
-
+\node[cell,below right=-3mm of v11,fill=marcofucsia2!10] (v31) {};
+\node[cell,right=-\pgflinewidth of v31,fill=marcofucsia2!10] (v32) {};
+\node[cell,right=-\pgflinewidth of v32,fill=marcofucsia2!10] (v33) {\tiny\ldots};
   
 \end{pgfonlayer}
 
