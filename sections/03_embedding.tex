@@ -6,43 +6,37 @@
 
 
 \section{Probabilistic Trace Alignment Pipeline}
-We propose the pipeline from Figure \ref{fig:pipe} connecting several existing formalisations via intermediate processing steps. 
-The input of this pipeline is a query trace to be aligned, an USWN, and a minimum probability threshold $\pmin$. Its output 
-is a set of model traces satisfying $\pmin$ with an alignment ranking.
+We now employ the models and techniques described in Section~\ref{sec:models} to provide the main contribution of this paper, namely a technique for computing probabilistic trace alignments. More specifically, our approach takes as input 
+\begin{inparaenum}[\it (i)]
+\item a reference model represented as a \uswn $\net$,
+\item a minimum, positive probability threshold $\pmin \in (0,1]$
+\item a trace $\trace$ of interest,  
+\end{inparaenum}
+and returns a ranking over all the $\net$-traces having a probability greater or equal than $\pmin$, based on a combined consideration of their probability values (probabilistic component) and their distance to $\trace$ (alignment component).
+
+This is obtained through the pipeline shown in Figure~\ref{fig:pipe}, consisting of the following steps:
+\begin{inparaenum}
+\item the reachability graph $\rg{\net}$ of $\net$ is constructed;
+\item $\rg{\net}$ is converted, by \emph{shifting labels} from transitions to states, into a corresponding transition graph $\tg_{\rg{\net}$ that preserves model traces and their probabilities;
+\item the transition graph is subject to a \emph{$\hidden$-closure} that compiles away $\tau$-transitions, producing a new transition graph $\closure{\tg_{\rg{\net}}$ that preserves model traces and their probabilities while working only over visible tasks in $\tasks$;
+\item this transition graph is unraveled collecting all the model traces that have a probability of at least $\pmin$;
+\item we apply a probabilistic alignment technique that ranks all such model traces according to their probability and their similarity to $\trace$.
+\end{inparaenum}
 %
-The pipeline has the following phases: after representing the USWN as a graph of all the sequentially scheduled transitions 
-(\S\ref{sec:seqZ}), we shift the labels from the edges towards the nodes while preserving the set of probabilistic traces 
-(\S\ref{sec:LSift}) and minimize the graph representation by removing the $\tau$-labelled nodes while preserving the 
-trace probability (\S\ref{sec:clos}). We extract the set of all traces having probability above $\pmin$ threshold (\S\ref{sec:unrav}) and  apply two different alignment strategies; one exact  (\S\ref{subsec:eta}), and one approximated. 
+%The pipeline has the following phases: after representing the USWN as a graph of all the sequentially scheduled transitions 
+%(\S\ref{sec:seqZ}), we shift the labels from the edges towards the nodes while preserving the set of probabilistic traces 
+%(\S\ref{sec:LSift}) and minimize the graph representation by removing the $\tau$-labelled nodes while preserving the 
+%trace probability (\S\ref{sec:clos}). 
+The last step, showed as a black box in the pipeline, is realized using two alternative techniques, one more computational demanding but guaranteeing to produce an optimal ranking, the other more efficient but providing an approximate ranking.\todo{Ho tagliato la descrizione che c'era dopo. Al limite la incorporerei nella rispettiva sottosezione.}
+%We later discuss how to rank traces in the exact and approximated scenarios by reducing the alignment process to a k-nearest 
+%neighbour problem. While the exact trace alignment requires to perform the alignment process each time a novel trace $\sigma^*$ is 
+%introduced (\S\ref{subsec:exbkptap}), the approximated alignment can split the alignment into a preliminary loading phase and a 
+%query phase. In the former, each stochastic trace from the USWN is represented as a vector (\S\ref{subsec:ate}), and in the latter the to-be-aligned trace $\sigma^*$ is first represented as a vector and then compared to all the other vectorial representations.  
+
+We now go through each step of the pipeline (but the reachability graph construction, which has been already commented).
 
 
-We later discuss how to rank traces in the exact and approximated scenarios by reducing the alignment process to a k-nearest 
-neighbour problem. While the exact trace alignment requires to perform the alignment process each time a novel trace $\sigma^*$ is 
-introduced (\S\ref{subsec:exbkptap}), the approximated alignment can split the alignment into a preliminary loading phase and a 
-query phase. In the former, each stochastic trace from the USWN is represented as a vector (\S\ref{subsec:ate}), and in the latter the to-be-aligned trace $\sigma^*$ is first represented as a vector and then compared to all the other vectorial representations.  
-
-\subsection{Sequentialization}\label{sec:seqZ}
-The sequentialization step transforms a USWN with an initial marking $M$ into a Reachability Graph $(\mathcal{M},\mathcal{E})$ 
-generated by a sequentialization process, where potentially concurrent firing transitions are represented via a sequential scheduling. 
-
-\begin{definition}[Reachability Graph]
-	Given an initial marking $M$ for a USWN $\mathcal{U}$,  the \textit{Reachability Graph} for $\mathcal{U}$ is a graph 
-	$(\mathcal{M},\mathcal{E})$ where the nodes  $\mathcal{M}$ are composed of all the reachable markings from $M$, 
-	and the edges $\mathcal{E}$ are induced by the aforementioned relation $M\overset{t}{\to}M'$ among the 
-	nodes. To each edge $M\overset{t}{\to}M'$, we associate a transition probability $\mathbb{P}\left(M\overset{t}{\to}M'\right)=\frac{W(t)}{\sum_{t'\in E(M)}W(t')}$ \cite{spdwe}. 
-\end{definition}
-
-\begin{example}
-From the USWN in Figure \ref{fig:spn}, the sequentialization process generates the reachability graph depicted in 
-Figure \ref{fig:rg}. Each node represents a marking $M$ as a vector, and the edges are labelled with the firing transitions. 
-The edges associated to this graph describe potentially concurrent firing transitions sequentially. While visiting the graph from 
-$M$, the chaining of the edge labels generates a trace produced from the Untimed Workflow Net, and the product of the edge 
-weights provides the probability associated to the trace.
-\end{example}
-
-
-
-\subsection{Label Shifter}\label{sec:LSift}
+\subsection{Label Shifting}\label{sec:LSift}
 Reachability graphs obtained via sequentialization cannot be directly embedded using existing methods:  Reachability graphs 
 associated to stochastic workflow nets are edge labelled, but TGs are node labelled. To represent the former as the latter, we 
 shift the labels from the edges to the nodes  while preserving the set of traces and their associated probability. 
