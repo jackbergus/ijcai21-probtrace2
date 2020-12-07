@@ -1,17 +1,17 @@
 \documentclass[tikz]{standalone}
-\input{tgstyle}
+\input{tikz-macros.tex}
 \begin{document}
 	\begin{tikzpicture}[align=center,node distance=1cm]
 	\node (init1) {};
-	\node[state,right=3mm of init1,label=above:\color{green}$c$] (s1) {1};
-	\node[state,right=of s1,label=above:\color{green}$a$]       (s2) {2};
-	\node[state,right=of s2,label=above:\color{green}$c$]       (s3) {3};
-	\node[state,accepting,right=of s3,label=above:\color{green}$b$]       (s4) {3};
+	\node[config,right=3mm of init1,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$c$] (s1) {1};
+	\node[config,right=of s1,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$a$]       (s2) {2};
+	\node[config,right=of s2,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$c$]       (s3) {3};
+	\node[config,accepting,right=of s3,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$b$]       (s4) {3};
 	
 	\draw[link] (init1) -- (s1);
-	\draw[link] (s1) -- node[midway,above]{\color{violet}$1$} (s2);
-	\draw[link] (s2) -- node[midway,above]{\color{violet}$1$} (s3);
-	\draw[link] (s3) -- node[midway,above]{\color{violet}$1$} (s4);
+	\draw[link] (s1) -- node[font=\footnotesize,yshift=1.5mm] {\pcolor$1$} (s2);
+	\draw[link] (s2) -- node[font=\footnotesize,yshift=1.5mm]{\pcolor$1$} (s3);
+	\draw[link] (s3) -- node[font=\footnotesize,yshift=1.5mm]{\pcolor$1$} (s4);
 	\end{tikzpicture}
 \end{document}
 

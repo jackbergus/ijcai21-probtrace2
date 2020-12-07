@@ -1,14 +1,16 @@
 
 \section{Modeling Probabilistic Dynamic Systems}
+In this section, we introduce the different models and techniques that will constitute the basis for representing and computing probabilistic trace alignments.
+
 \subsection{Stochastic Workflow Nets}\label{subsec:spn}
 As customary in probabilistic conformance checking \cite{lavori-su-prob-conformance}, we adopt stochastic Petri nets \cite{MarsanCB84,Desel1998,RoggeSoltiAW13} as the underlying formal basis to represent processes. More specifically, we consider an interesting class of Stochastic Petri Nets with only immediate transitions (i.e., no timed ones), namely untimed stochastic workflow nets (\uswn for short). 
-We assume to have a set $\Sigma$ of labels indicating either a process task or an invisible task. In the latter case, we employ as usual the special label $\tau$. A \emph{trace} is a finite sequence of labels from $\Sigma\setminus{\tau}$.
+We assume to have a set $\alphabet = \tasks \cup \set{\tau}$ of labels, where labels in $\tasks$ indicate process tasks, whereas $\tau$ indicates an invisible execution step ($\tau$-transition). A \emph{trace} is a finite sequence of labels from $\tasks$.
 
 \begin{definition} An \emph{untimed Stochastic Workflow Net (\uswn)}
 is a tuple $\net = (P,T,F,\ell,W)$ where:
 \begin{compactitem}
 \item $(P,T,F)$ is a standard \emph{workflow net} with places $P$, transitions $T$, and flow relation $F$ such that there is exactly one \emph{input place} with no incoming arc, and exactly one \emph{output place} with no outgoing arcs;
-\item $\ell: T \rightarrow \Sigma$ is a \emph{labeling function} mapping each transition $t \in T$ into a label $\ell(t) \in \Sigma$ - this either indicates the task executed upon firing $t$, or the fact that $t$ is an invisible transition (in the latter case, $\ell(t) = \tau$);
+\item $\ell: T \rightarrow \alphabet$ is a \emph{labeling function} mapping each transition $t \in T$ into a label $\ell(t) \in \alphabet$ - this either indicates the task executed upon firing $t$, or the fact that $t$ is an invisible transition (in the latter case, $\ell(t) = \tau$);
 \item $W\colon T\to \mathbb{R}^+$ is a \emph{weight function} assigning a positive firing weight to each transition of the net.
 \end{compactitem}
 \end{definition}
@@ -18,7 +20,7 @@ As usual, the current state of execution is captured using a marking of the net,
 %As pointed out above, \emph{we always assume, as customary in BPM, that the input \uswn is \underline{bounded}}, that is, in every state the number of tokens associated to each place cannot exceed a maximum, fixed threshold.
 The notions of transition enablement and firing are also the standard ones, since they do not depend on the weight function, which provides the basis for capturing the stochastic behavior of the net. We use the following notation: given a marking $\marking$ over \uswn $\net$, we denote by $\enaset{\marking}{\net}$ the set of enabled transitions in $\marking$; given transition $t \in \enaset{\marking}{\net}$, we write $\fire{\marking}{t}{\marking'}{\net}$ to capture the fact that, within $\net$, firing $t$ in $\marking$ results in the new marking $\marking'$. A \emph{firing sequence of $\net$ starting from marking $\marking_0$} is a sequence $t_1\cdots t_n$ of transitions from $\net.T$ so that for every $i \in \set{1,\ldots,n}$, we have that $\fire{\marking_{i-1}}{t_i}{\marking_{i}}{\net}$. We say that the firing sequence results in $\marking_{n}$.
 
-As customary in workflow nets, we consider two special markings: the \emph{input} (resp.~\emph{output}) marking $m_{in}^\net$ (resp.~$m_{out}^\net$) that assigns a single token to the input (resp.~output) place $\net.in$ (resp.~$\net.out$) of $\net$, and no token elsewhere. A \emph{valid sequence} $\seq = t_1\cdots t_n$ of $\net$ is a firing sequence of $\net$ starting from $m_{in}^\net$ and resulting in $m_{out}^\net$. A sequence of labels $\run = \alpha_1 \cdots \alpha_n$ from $\Sigma$ is a \emph{run} of $\net$ if there exists a valid underlying sequence $\seq = t_1\cdots t_n$ of $\net$  such that, for every $i \in \set{1,\ldots,n}$, we have $\net.\ell(t_i) = \alpha_i$. Run $\run$ may have different underlying valid sequences in $\net$, which we collectively refer to as $\seqs{\run}{\net}$. A trace $\trace$ is a \emph{model trace} of $\net$ (or $\net$-trace for short) if there exists an underlying run $\run$ of $\net$ that corresponds to $\trace$ once all occurrences of $\tau$ are removed. There may be multiple runs underlying a $\net$-trace $\trace$, and we collectively refer to them as $\runs{\trace}{\net}$.
+As customary in workflow nets, we consider two special markings: the \emph{input} (resp.~\emph{output}) marking $m_{in}^\net$ (resp.~$m_{out}^\net$) that assigns a single token to the input (resp.~output) place $\net.in$ (resp.~$\net.out$) of $\net$, and no token elsewhere. A \emph{valid sequence} $\seq = t_1\cdots t_n$ of $\net$ is a firing sequence of $\net$ starting from $m_{in}^\net$ and resulting in $m_{out}^\net$. A sequence of labels $\run = \alpha_1 \cdots \alpha_n$ from $\alphabet$ is a \emph{run} of $\net$ if there exists a valid underlying sequence $\seq = t_1\cdots t_n$ of $\net$  such that, for every $i \in \set{1,\ldots,n}$, we have $\net.\ell(t_i) = \alpha_i$. Run $\run$ may have different underlying valid sequences in $\net$, which we collectively refer to as $\seqs{\run}{\net}$. A trace $\trace$ is a \emph{model trace} of $\net$ (or $\net$-trace for short) if there exists an underlying run $\run$ of $\net$ that corresponds to $\trace$ once all occurrences of $\tau$ are removed. There may be multiple runs underlying a $\net$-trace $\trace$, and we collectively refer to them as $\runs{\trace}{\net}$.
 \begin{example}
 \label{ex:net}
   Figure~\eqref{fig:spn} shows an example of \uswn with input place $p_1$ and output place $p_7$. One run of the net is $\tau c \tau a a \tau$, which corresponds to trace $caa$. Overall, the net supports infinitely many finite traces of the form (represented using regular expressions):
@@ -31,13 +33,13 @@ As customary in workflow nets, we consider two special markings: the \emph{input
 
 When executing a \uswn, the crucial addition to the standard execution semantics of workflow nets is that, being the net stochastic, in each marking the set of enabled transitions gets associated to a discrete probability distribution. This is defined as follows: given a marking $\marking$ of $N$ and an enabled transition $t \in \enaset{\marking}{\net}$, the \emph{firing probability} of $t$ in $\marking$ is $\probt{t}{\marking}{\net} = \frac{\net.W(t)}{\sum_{t'\in \enaset{\marking}{\net}}\net.W(t')}$. As required, the probabilities associated to all enabled transitions in a marking always add up to 1.
 
-Using firing probabilities as basic building block, we define the probability $\prob{\seq}{\net}$ of a valid sequence $\seq = t_1\cdots t_n$ of $\net$ as the product of the probabilities associated to each transition: $\probt{\seq}{\net} = \prod_{i \in \set{1,\ldots,n}}\prob{t_i}{\marking_{i-1}}{\net}$. %For a run $\run$ of $\net$, its probability $\prob{\seq}{\net}$ is then obtained by summing up the probabilities of all valid sequences corresponding to $\run$: $\prob{\run}{\net} = \sum_{\seq \in \seqs{\run}{\net}} \prob{\seq}{\net}$. Likewise, for a trace $\trace$ of $\net$, its probability is obtained by summing up     
+Using firing probabilities as basic building block, we define the probability $\prob{\seq}{\net}$ of a valid sequence $\seq = t_1\cdots t_n$ of $\net$ as the product of the probabilities associated to each transition: $\prob{\seq}{\net} = \prod_{i \in \set{1,\ldots,n}}\prob{t_i}{\marking_{i-1}}{\net}$. %For a run $\run$ of $\net$, its probability $\prob{\seq}{\net}$ is then obtained by summing up the probabilities of all valid sequences corresponding to $\run$: $\prob{\run}{\net} = \sum_{\seq \in \seqs{\run}{\net}} \prob{\seq}{\net}$. Likewise, for a trace $\trace$ of $\net$, its probability is obtained by summing up     
 For a trace $\trace$ of $\net$, its probability $\prob{\trace}{\net}$ is then obtained by collecting all its underlying runs, in turn collecting all their underlying valid sequences, summing up their respective probabilities: $\prob{\trace}{\net} = \sum_{\run \in \runs{\trace}{\net}} \sum_{\seq \in \seqs{\run}{\net}} \prob{\seq}{\net}$. This corresponds to the intuition that, to observe $\trace$, one can equivalently pick any of its underlying valid sequences.
 
 \begin{example}
   \label{ex:trace}
-Consider the \uswn \net of Example~\ref{ex:net}. Considering trace $caa$, it is easy to see that it has only one underlying run, namely $\tau c \tau a a \tau$, in turn produced by a single underlying valid sequence. The firing probability of picking the first $\tau$-transition starting from the input marking is $1$, as there are no alternatives. In the new marking where only one token is assigned to $p_2$ the firing probability of choosing the $\tau$-transition above is $\rho_{23} = \frac{v_{\tau_2}}{v_{\tau_2}+v_c}$, whereas that of choosing the $c$-transition below is $\rho_{24} = \frac{v_c}{v_{\tau_2}+v_c}$. Upon choosing the transition below, the new marking assigns only to $p_4$ one token, leaving just one choice to continue by moving that token to $p_6$. In that marking, the the probability of choosing the $a$-transition above is $\rho_{65} = \frac{v_{a_3}}{v_{a_3}+v_b}$, resulting in the token being moved to $p_5$. In this new marking, token to $p_5$, the probability of iterating over the $a$-transition above is $\rho_{55} = \frac{v_{\tau_3}}{v_{\tau_3}+v_{a_2}}$, while that of completing in the output marking via the enabled $\tau$-transition is $\rho_{57} = \frac{v_{\tau_3}}{v_{\tau_3}+v_{a_2}}$. Hence, all in all $
-  \prob{caa}{\net} = 1 \cdot \rho_{24} \cdot 1 \cdot \rho_{65} \cdot \rho_{55} \cdot \rho_{57}$.
+Consider the \uswn \net of Example~\ref{ex:net}. Considering trace $\const{caa}$, it is easy to see that it has only one underlying run, namely $\const{\tau c \tau a a \tau}$, in turn produced by a single underlying valid sequence. The firing probability of picking the first $\tau$-transition starting from the input marking is $1$, as there are no alternatives. In the new marking where only one token is assigned to $p_2$ the firing probability of choosing the $\tau$-transition above is $\rho_{23} = \frac{v_{\tau_2}}{v_{\tau_2}+v_c}$, whereas that of choosing the $c$-transition below is $\rho_{24} = \frac{v_c}{v_{\tau_2}+v_c}$. Upon choosing the transition below, the new marking assigns only to $p_4$ one token, leaving just one choice to continue by moving that token to $p_6$. In that marking, the the probability of choosing the $a$-transition above is $\rho_{65} = \frac{v_{a_3}}{v_{a_3}+v_b}$, resulting in the token being moved to $p_5$. In this new marking, token to $p_5$, the probability of iterating over the $a$-transition above is $\rho_{55} = \frac{v_{\tau_3}}{v_{\tau_3}+v_{a_2}}$, while that of completing in the output marking via the enabled $\tau$-transition is $\rho_{57} = \frac{v_{\tau_3}}{v_{\tau_3}+v_{a_2}}$. Hence, all in all $
+  \prob{\const{caa}}{\net} = 1 \cdot \rho_{24} \cdot 1 \cdot \rho_{65} \cdot \rho_{55} \cdot \rho_{57}$.
 \end{example}
 
 By interpreting concurrency by interleaving, we can represent all transition firings of a \uswn, together with their probabilities, in a reachability graph.
@@ -46,7 +48,7 @@ By interpreting concurrency by interleaving, we can represent all transition fir
 The \emph{reachability graph} $\rg{\net}$ of \uswn \net is a triple $(M,E,P)$ where:
 \begin{compactitem}[$\bullet$]
 \item $M$ is the set of all reachable markings from $\marking_0^\net$ (including $\marking_0^\net$ itself).
-\item $E \subseteq M \times \Sigma \times M$ is a $\Sigma$-\emph{labeled transition relation} induced by $\net$, that is, for $\marking,\marking' \in M$, we have edge $(\marking,a,\marking') \in E$ if and only if there exists transition $t$ in $\net$ with label $\ell(t) = a$ and such that $\fire{\marking}{t}{\marking'}{\net}$.
+\item $E \subseteq M \times \alphabet \times M$ is a $\alphabet$-\emph{labeled transition relation} induced by $\net$, that is, for $\marking,\marking' \in M$, we have edge $(\marking,a,\marking') \in E$ if and only if there exists transition $t$ in $\net$ with label $\ell(t) = a$ and such that $\fire{\marking}{t}{\marking'}{\net}$.
 \item $P:E \rightarrow [0,1]$ is the \emph{transition probability} function assigning to each transition $(\marking,a,\marking') \in E$ its corresponding probability, obtained from the firing probability of the \uswn transition(s) that lead from $\marking$ to $\marking'$ and are labeled by $a$: $P(\marking,a,\marking') = \sum_{t_i \in \enaset{\marking}{\net} \text{ s.t.~} \net.\ell(t) = a \text{ and } \fire{\marking}{t}{\marking'}{\net}} \prob{t}{\marking}{\net}$.
 \end{compactitem}
 \end{definition}
@@ -58,7 +60,12 @@ In the remainder of the paper, given a \uswn $\net$, we always assume that it sa
 \item $\net$ is \emph{bounded}, that is, every marking in $\rg{\net}$ assigns at most a pre-defined number of tokens to each place;
 \item $\rg{\net}$ does not contain loops where all edges are labeled with $\tau$.   
 \end{compactitem}
-The first assumption indicates that a case of the process does not generate unboundedly many parallel threads, and guarantees in turn that the reachability graph contains finitely many states. The second assumption naturally corresponds to how $\tau$-transitions are used when modeling business processes, where they are essential in representing gateways (such as exclusive and parallel splits/joins), cascaded gateways without tasks in between, and skippable tasks.  In all these cases, multiple $\tau$-transitions may be used, but never creating completely invisible loops. Under this assumption, \net enjoys a very interesting property: given a trace $\trace$, there are only boundedly many valid sequences that can produce it, and so they can be exhaustively enumerated when calculating the probability of $\trace$. 
+The first assumption indicates that a case of the process does not generate unboundedly many parallel threads, and guarantees in turn that the reachability graph contains finitely many states. The second assumption naturally corresponds to how $\tau$-transitions are used when modeling business processes, where they are essential in representing gateways (such as exclusive and parallel splits/joins), cascaded gateways without tasks in between, and skippable tasks.  In all these cases, multiple $\tau$-transitions may be used, but never creating completely invisible loops. Under this assumption, $\net$ enjoys a very interesting property: given a trace $\trace$, there are only boundedly many valid sequences that can produce it. Hence, the probability of a $\trace$ can be computed by:
+\begin{inparaenum}[\it (i)]
+\item exhaustively enumerating all its valid sequences;
+\item calculating the probability of each such sequence;
+\item summing up all the so-obtained probabilities.  
+\end{inparaenum}
 
 Figure~\eqref{fig:rg} shows an example of reachability graph.
 
@@ -108,22 +115,20 @@ Figure~\eqref{fig:rg} shows an example of reachability graph.
 
 The graph and trace embedding techniques that we will use as the basis for computing probabilistic alignments cannot be directly defined over reachability graphs. In fact, these techniques rely on graphs where edges are only labeled by probabilities, whereas labels are attached to nodes. In addition, towards readily enabling     efficient algorithmic techniques, such graphs are compactly defined using transition matrixes. We therefore take inspiration from \cite{GartnerFW03} and introduce so-called \emph{probabilistic transition graphs}, which we will later use to encode \uswn{s} via their reachability graphs.
 
-For a matrix $Q$ with row set $A$ and column set $B$, notation $[Q]_{ab}$ for $a \in A$ and $b \in B$ denotes the corresponding element in the matrix. In addition $\transp{Q}$ denotes the transposed matrix where rows and columns are inverted. We employ the usual sum and product operations over matrixes and arrays, and denote, for a square matrix $Q$, the repeated multiplication of $Q$ with itself $n$ times by $Q^n$.\todo{Rimuovere questo paragrafo se serve spazio,}
-
-In our technical treatment, we continue to assume the existence of a set $\Sigma$ of labels (including the special label $\tau$).\todo{NOn si capisce il significato di $\omega$}
-
+For a matrix $Q$ with row set $A$ and column set $B$, notation $[Q]_{ab}$ for $a \in A$ and $b \in B$ denotes the corresponding element in the matrix. In addition $\transp{Q}$ denotes the transposed matrix where rows and columns are inverted. We employ the usual sum and product operations over matrixes and arrays, and denote, for a square matrix $Q$, the repeated multiplication of $Q$ with itself $n$ times by $Q^n$.\todo{Rimuovere questo paragrafo se serve spazio,}\todo{NOn si capisce il significato di $\omega$}
+%In our technical treatment, we continue to assume the existence of a set $\alphabet$ of labels (including the special label $\tau$).
 \begin{definition} A \emph{(probabilistic) transition graph} is a tuple $(V,s,t,L,R,\omega)$ where:
   \begin{inparaenum}[\itshape (i)]
     \item $V \subset \mathbb{N}$ is a set of \emph{nodes};    
     \item $s\in V$ is the \emph{initial node}; 
     \item $e\in V$ is the \emph{accepting node};
-    \item $L: \Sigma \times V \rightarrow \{0,1\}$ is a \emph{label matrix} associating each node in $V$ to a single label in $\Sigma$, where for label $\alpha \in \Sigma$ and node $\ind{i} \in V$, $[L]_{\alpha\ind{i}}$ gives $1$ if $\ind{i}$ is labeled by $\alpha$, $0$ otherwise;
+    \item $L: \alphabet \times V \rightarrow \{0,1\}$ is a \emph{label matrix} associating each node in $V$ to a single label in $\alphabet$, where for label $\alpha \in \alphabet$ and node $\ind{i} \in V$, $[L]_{\alpha\ind{i}}$ gives $1$ if $\ind{i}$ is labeled by $\alpha$, $0$ otherwise;
     \item $R: V \times V \rightarrow [0,1]$ is a \emph{(probabilistic)} transition matrix indicating, for each pair of nodes, what is the probability that executing a transition from the first node leads to the second node;
     \item $\omega \in [0,1]$ is a \emph{graph weight} indicating an overall value associated to the entire graph.   
   \end{inparaenum}
 $L$ and $R$ satisfy the following well-formedness conditions:
 \begin{inparaenum}[\itshape (i)]
-\item for every $i \in V$ there is one and only one label $\alpha \in \Sigma$ so   that $[L]_{\alpha\ind{i}}=1$;
+\item for every $i \in V$ there is one and only one label $\alpha \in \alphabet$ so   that $[L]_{\alpha\ind{i}}=1$;
 \item  for  every $\ind{i} \in V$, we have that $\sum_{\ind{j}\in V}[R]_{\ind{ij}}=1$. 
 \end{inparaenum}
 \end{definition}
@@ -145,11 +150,12 @@ By mirroring to definitions of \uswn{s} taking into account that now labels are 
 \begin{inparaenum}[\it (i)]
 \item $\ind{i}_0 = \tg.s$;
 \item $\ind{i}_n = \tg.e$;
-\item if the sequence contains at least two nodes, each two consecutive nodes are connected by a positive transition probability, i.e., for every $j \in \set{1,n}$ we have $[R]_{\ind{i}_{j-1}\ind{i}_{j}} > 0$.
+\item if the sequence contains at least two nodes, each two consecutive nodes are connected by a positive transition probability, i.e., for every $j \in \set{1,\ldots,n}$ we have $[R]_{\ind{i}_{j-1}\ind{i}_{j}} > 0$.
 \end{inparaenum}
-Runs and model traces are then defined as in \uswn{s}, and we employ the same notation to indicate the runs underlying a model trace, and the valid sequences underlying a run.
+Runs and model traces of transition graphs are then defined as in \uswn{s}, and we employ the same notation to indicate the runs underlying a model trace, and the valid sequences underlying a run. The computation of probabilities for runs and traces is hence defined equivalently. 
 
-We can play with matrixes $L$ and $R$ of transition graph $G$ to compute various interesting probabilities \cite{GartnerFW03}. For example, given two nodes $\ind{i},\ind{j}$, $[R^n]_{\ind{i}\ind{j}}$ gives the probability of having a path in $\tg$ that connects $\ind{i}$ to $\ind{j}$ and has length $n$. Given two labels $\alpha,\beta \in \Sigma$, with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$ we obtain the probability that, starting in any node labeled by $\alpha$, we reach a node labeled $\beta$ by performing $n$ steps in $\tg$. As a shortcut notation, we call the result $[\tg.\Lambda^n]_{\alpha\beta}$. Since there may be different nodes labeled by $\alpha$, we need to normalize the resulting probabilities. This is obtained with the division by $L\transp{L}$, which does so by assuming a uniform distribution for starting from a particular node with label $\alpha$. Notice that these calculations need to be refined so as to consider proper runs and traces. This will be done in Section~\ref{sezionegiusta}. \todo{Rimandare alla sezione giusta}
+We close this section by introducing how some  matrix operations defined in the literature \cite{GartnerFW03} are applied to matrixes $L$ and $R$ of $\tg$, towards tackling interesting probability computations. These will be instrumental later on in the paper. Given two nodes $\ind{i},\ind{j} \in \tg.V$, $[R^n]_{\ind{i}\ind{j}}$ returns the probability of having a path in $\tg$ that connects $\ind{i}$ to $\ind{j}$ and has length $n$. Given two labels $\alpha,\beta \in \alphabet$, with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$ we obtain the probability that, starting in any node labeled by $\alpha$, we reach a node labeled by $\beta$ through  $n$ consecutive steps in $\tg$. As a shortcut notation, we call the result $[\tg.\Lambda^n]_{\alpha\beta}$. Since there may be different nodes labeled by $\alpha$, we need to normalize the resulting probabilities. This is obtained with the division by $L\transp{L}$, which does so by assuming a uniform distribution when picking from which specific $\alpha$-labeled node one wants to start. Notice that these calculations need to be refined so as to consider proper runs and  traces. This will be done in Section~\ref{sezionegiusta}. \todo{Rimandare alla sezione giusta}
+
 
 
 %
@@ -187,70 +193,104 @@ We can play with matrixes $L$ and $R$ of transition graph $G$ to compute various
 % Given a TG $P=(s,t,L,R,\omega)$, a trace $\tau$ is a tuple in $(\Sigma\backslash\{\varepsilon\})^*$ denoting a path always originating from $s$ and terminating in $t$. 
 
 
-
-
 \subsection{Kernels and Trace Kernels}\label{subsec:katk}
-Given a set of data examples $\mathcal{X}$, (e.g., string or traces, TGs) a (positive definite) \textbf{kernel} function $k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product $\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$. 
-A kernel is said to \textbf{perform ideally} \cite{Gartner03} when $k(x,x')=1\Leftrightarrow x=x'$ (\textit{strong equality}) and $k(x,x')=0\Leftrightarrow x\not\simeq x'$ (\textit{strong dissimilarity}). A kernel is also said to be \textbf{appropriate} when similar elements $x,x'\in\mathcal{X}$ are also close in the feature space: appropriateness can be only assessed  empirically \cite{Gartner03}.
-Any positive definite kernel induces a distance metric as \cite{Raedt}:
+As a foundational basis to compute trace alignments, we adapt similarity measures from the database literature. We here introduce the necessary machinery to explain how. Given a set of data examples $\mathcal{X}$, (e.g., string or traces, transition graphs) a (positive definite) \emph{kernel} function $k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product $\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$. 
+A kernel is said to \emph{perform ideally} \cite{Gartner03} when $k(x,x')=1$ whenever $x$ and $x'$ are the same object (\textit{strong equality}) and $k(x,x')=0$ whenever $x$ and $x'$ are distinct objects (\textit{strong dissimilarity}). A kernel is also said to be \emph{appropriate} when similar elements $x,x'\in\mathcal{X}$ are also close in the feature space. Notice that appropriateness can be only assessed  empirically \cite{Gartner03}.
+A positive definite kernel induces a distance metric as \cite{Raedt}:
 \begin{equation}\label{eq:dofk}
 d_k(\mathbf{x},\mathbf{x}'):=\sqrt{k(\mathbf{x},\mathbf{x})-2k(\mathbf{x},\mathbf{x}')+k(\mathbf{x}',\mathbf{x}')}
 \end{equation}
-When the kernel of choice is the inner product, the resulting distance is the well known Euclidean distance $\norm{\mathbf{x}-\mathbf{x}'}{2}$. A normalized vector (versor) $\hat{\mathbf{x}}$ is defined as $\mathbf{x}/\norm{\mathbf{x}}{2}$: we can easily prove for normalized vectors that $\norm{\hat{\mathbf{x}}-\hat{\mathbf{x}}'}{2}^2=2(1-\Braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$.
+When the kernel of choice is the inner product, the resulting distance is the well-known Euclidean distance $\norm{\mathbf{x}-\mathbf{x}'}{2}$. A normalized vector $\hat{\mathbf{x}}$ is defined as $\mathbf{x}/\norm{\mathbf{x}}{2}$. For a normalized vector we can easily prove that: $\norm{\hat{\mathbf{x}}-\hat{\mathbf{x}}'}{2}^2=2(1-\Braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$.
 
-When $\mathcal{X}$ does not necessarily represent a $d$-dimensional Euclidean space, we can use an \textbf{embedding} $\phi\colon\mathcal{X}\to \mathbb{R}^d$ to define a kernel $k_\phi\colon \mathcal{X}\times \mathcal{X}\to\mathbb{R}$ as $k_\phi(x,x'):=\Braket{\phi(x),\phi(x')}$. As a result, $k_\phi(x,x')=k_\phi(x',x)$ for each $x,x'\in\mathcal{X}$.
+When $\mathcal{X}$ does not represent directly a $d$-dimensional Euclidean space, we can use an \emph{embedding} $\embed\colon\mathcal{X}\to \mathbb{R}^d$ to define a kernel $k_\embed\colon \mathcal{X}\times \mathcal{X}\to\mathbb{R}$ as $k_\embed(x,x'):=\Braket{\embed(x),\embed(x')}$. As a result, $k_\embed(x,x')=k_\embed(x',x)$ for each $x,x'\in\mathcal{X}$.
 
-Current literature also provides kernel representations for traces (referred as strings in Database literature \cite{LodhiSSCW02,Raedt,GartnerFW03}). We now provide an intuition describing the desired features of such representation \cite{LodhiSSCW02}: if we associate each dimension in $\mathbb{R}^d$ to a different subtrace ${\color{green}\alpha\beta}\in(\Sigma\backslash\{\varepsilon\})^2$ of size $2$ ($2$-grams\footnote{\label{fn:caveat}For our experiments, we choose to consider only $2$-grams, but any $p$-grams of arbitrary length $p\geq 2$ might be considered \cite{Gartner03}. Still, an increased size of $p$ allows to increase precision to the detriment of computational complexity, as all the arbitrary sequences of length $p$ occurring at distance $i<|\tau|$ must be considered.}), the associated coordinate should represent how frequently and ``compatctly'' such subtrace is embedded in the original trace. Therefore, we need to introduce a \textbf{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ weighting the presence of each subtrace ``${\color{green}\alpha\beta}/L$'' as $\lambda^Lm$, where $m$ is the frequency of $\color{green}\alpha\beta$ appearing in the given trace at a distance $L$. Given a trace $\tau\in\Sigma^*$, we can represent it as a TG \cite{Myers1989} $(1,{|\tau|},L_\tau,R_\tau,1)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. Under these assumptions, we can simplify the definition of the embedding from \cite{LodhiSSCW02,Raedt} as $\phi_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
+The literature also provides a kernel representation for strings \cite{LodhiSSCW02,Raedt,GartnerFW03}, which we can directly employ for our traces. We now provide an intuition describing the desired features of such representation \cite{LodhiSSCW02}. If we associate each dimension in $\mathbb{R}^d$ to a different subtrace $\alpha\beta$ of size $2$ (i.e., $2$-grams\footnote{\label{fn:caveat}For our experiments, we choose to consider only $2$-grams, but any $p$-grams of arbitrary length $p\geq 2$ might be adopted \cite{Gartner03}. An increased size of $p$ improves precision but also incurs in a worse computational complexity, as it requires to consider all the arbitrary subtraces of length $p$ whose constitutive elements occur at any distance from each other within the trace.}), the associated coordinate should represent how frequently and ``compactly'' this subtrace is embedded in the trace $\trace$ of interest. Therefore, we introduce a \emph{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ that, for all $m$ subtraces where $\alpha$ and $\beta$ appear in $\trace$ at the same relative distance $L < |\trace|$, weights the resulting embedding as $\lambda^Lm$. 
+
+We need to lift this approach so as to consider all occurrences of subtraces $\alpha\beta$ at every distance between $1$ and $|\trace|-1$. To do so, we proceed in two steps. First, we encode $\trace$ into a ``linear'' transition graph $\tg_\trace$ in the obvious way: \todo{Tagliare dopo i due punti se necessario.} each element of the graph corresponds to an element of the trace labeled correspondingly, and the nodes representing two consecutive elements in the trace are connected with a transition probability of 1 (whereas in all the other cases, the probability is 0). Figure~\ref{fig:taustar} shows an example of this encoding.  As a second step, we rely on the matrix operations introduced at the end of Section~\ref{subsec:ppn} to calculate a simplified version of the embedding defined in \cite{LodhiSSCW02,Raedt} as $\trembed_{\alpha\beta}(\trace)=\sum_{1\leq i\leq |\trace|}\lambda^i[(\tg_{\trace}.\Lambda)^i]_{\alpha\beta}$. \todo{No spazio per spiegare cosa succede...} This value can be seen as a nonzero penalty \cite{Gartner03}. 
+
+The kernel between two traces corresponds to the sum of the products of such penalties \todo{Piu' che penalty mi sembra un reward, considerando anche come poi viene usato questo valore nel calcolo di similarity} calculated 2-gram by 2-gram for the two traces. \todo{L'ho provato a scrivere intuitivamente, ma non e' chiaro da dove arrivi questo modo di calcolarlo... deriva dalle formule sopra ma la digressione in mezzo e' lunga. Come possiamo fare per chiarire? L'esempio spiega bene tutto!}
+This trace kernel returns strong dissimilarity when the two traces have no shared 2-grams at any arbitrary occurring length, but does not enjoy strong equality (as the similarity of a trace with itself is at least $\lambda^2$ - returned when the trace is a 2-gram).
+
+%
+%we can represent it as a TG \cite{Myers1989} $(1,{|\tau|},L_\tau,R_\tau,1)$ having $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=1\Leftrightarrow \tau_{\texttt{\color{blue}i}}={\color{green}\alpha}$ and $[L_\tau]_{{\color{green}\alpha}\texttt{\color{blue}i}}=0$ otherwise, and $\forall i<|\tau|.\; [R_\tau]_{\texttt{\color{blue}i(i+1)}}=1 $ and $[R_\tau]_{\texttt{\color{blue}ij}}=0$ otherwise. 
+%Exploiting this encoding, we can adopt a simplified version of the embedding defined in \cite{LodhiSSCW02,Raedt} as $\embed_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$. 
+%Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$. 
 
 \begin{figure}[!t]
 	\centering
 	\includegraphics{images/taustar.pdf}
-	\caption{Graphical representation of $\tau^*=\textup{caba}$ as a Thompson automaton.}\label{fig:taustar}
+	\caption{Graphical representation of the transition graph encoding trace $cacb$}\label{fig:taustar}
 \end{figure}
-\begin{example}\label{ex:tracembed}
-	{Let us suppose that we want to align a trace $\tau^*$ to one of the traces from a transition graph: in order to carry out an approximate alignment, we need to transform it to a transition graph first.} A trace $\tau^*=\textup{caba}$ can be graphically represented in Figure \ref{fig:taustar}. The associated TG $T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ has matrices $L$ and $R$  defined as follows:
-	$$L:=\kbordermatrix{
-		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
-		\color{green}a            & 0&\textbf{1}&0&\textbf{1}\\
-		\color{green}b            & 0&0&\textbf{1}&0\\
-		\color{green}c            & \textbf{1}&0&0&0\\
-	}\qquad R:=\kbordermatrix{
-		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
-		\texttt{\color{blue}1}  & 0&\color{red}1&0&0\\
-		\texttt{\color{blue}2}  & 0&0&\color{red}1&0\\
-		\texttt{\color{blue}3}  & 0&0&0&\color{red}1\\
-		\texttt{\color{blue}4}  & 0& 0& 0& 0\\
-	}$$
-We can similarly represent all the traces from the USPN.
-\end{example}
+%
+%\begin{example}\label{ex:tracembed}
+%	{Let us suppose that we want to align a trace $\tau^*$ to one of the traces from a transition graph: in order to carry out an approximate alignment, we need to transform it to a transition graph first.} A trace $\tau^*=\textup{caba}$ can be graphically represented in Figure \ref{fig:taustar}. The associated TG $T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ has matrices $L$ and $R$  defined as follows:
+%	$$L:=\kbordermatrix{
+%		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
+%		\color{green}a            & 0&\textbf{1}&0&\textbf{1}\\
+%		\color{green}b            & 0&0&\textbf{1}&0\\
+%		\color{green}c            & \textbf{1}&0&0&0\\
+%	}\qquad R:=\kbordermatrix{
+%		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
+%		\texttt{\color{blue}1}  & 0&\color{red}1&0&0\\
+%		\texttt{\color{blue}2}  & 0&0&\color{red}1&0\\
+%		\texttt{\color{blue}3}  & 0&0&0&\color{red}1\\
+%		\texttt{\color{blue}4}  & 0& 0& 0& 0\\
+%	}$$
+%We can similarly represent all the traces from the USPN.
+%\end{example}
 
 %\begin{example}
-%The subtrace \textit{\textbf{\uline{hi}}} is represented in \textit{\textbf{\uline{hi}}deous},   \textit{\uline{\textbf{h}}e\uline{{i}}d\textbf{i}}, and \textit{\uline{{\textbf{h}i}}nd\textbf{i}}, but with different frequencies and subtrace distances. We have $\phi_{\mathcal{T}}(\textit{hideous})_{{\color{green}hi}}=\lambda$,  $\phi_{\mathcal{T}}(\textit{heidi})_{{\color{green}hi}}=\lambda^2+\lambda^4$, and $\phi_{\mathcal{T}}(\textit{hindi})_{{\color{green}hi}}=\lambda+\lambda^4$.
+%The subtrace \textit{\textbf{\uline{hi}}} is represented in \textit{\textbf{\uline{hi}}deous},   \textit{\uline{\textbf{h}}e\uline{{i}}d\textbf{i}}, and \textit{\uline{{\textbf{h}i}}nd\textbf{i}}, but with different frequencies and subtrace distances. We have $\embed_{\mathcal{T}}(\textit{hideous})_{{\color{green}hi}}=\lambda$,  $\embed_{\mathcal{T}}(\textit{heidi})_{{\color{green}hi}}=\lambda^2+\lambda^4$, and $\embed_{\mathcal{T}}(\textit{hindi})_{{\color{green}hi}}=\lambda+\lambda^4$.
 %\end{example}
 
 
 
 \begin{table}[!t]
-\caption{Embedding for both $\tau^*=cacb$ and some traces caaa, caa and cb generated from the USPN $\mathcal{U}$ in Figure \ref{fig:spn}}\label{tb:embedding}
+\caption{Embedding of traces $cacb$, $caaa$, $caa$ and $cb$.}\label{tb:embedding}
 \begin{center}
-	\begin{tabular}{l|l|l|l|l|l|l|l|l|l|}
+	\begin{tabularx}{\textwidth}{
+>{\hsize=.1\hsize}X 
+>{\hsize=.2\hsize}X 
+>{\hsize=.1\hsize}X 
+>{\hsize=.1\hsize}X 
+>{\hsize=.1\hsize}X 
+>{\hsize=.1\hsize}X 
+>{\hsize=.1\hsize}X 
+>{\hsize=.25\hsize}X 
+>{\hsize=.2\hsize}X 
+>{\hsize=.1\hsize}X 
+}
 		\toprule
-		& aa    & ab   & ac    & ba   & bb   & bc & ca & cb & cc   \\
+		& $\const{aa}$    & $\const{ab}$   & $\const{ac}$    & $\const{ba}$   & $\const{bb}$   & $\const{bc}$ & $\const{ca}$ & $\const{cb}$ & $\const{cc}$   \\
 		\midrule
-		cacb & $0$ & $\lambda^2$ & $\lambda$ & $0$  & $0$  & $0$ & $\lambda$ & $\lambda+\lambda^3$ & $\lambda^2$\\
-		caaa & $2\lambda+\lambda^2$& $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2+\lambda^3$ & $0$ & $0$ \\
-		caa  & $\lambda$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2$ & $0$&  $0$\\
-		cb   & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda$& $0$ \\
+		$\const{cacb}$ & $0$ & $\lambda^2$ & $\lambda$ & $0$  & $0$  & $0$ & $\lambda$ & $\lambda+\lambda^3$ & $\lambda^2$\\
+		$\const{caaa}$ & $2\lambda+\lambda^2$& $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2+\lambda^3$ & $0$ & $0$ \\
+		$\const{caa}$  & $\lambda$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2$ & $0$&  $0$\\
+		$\const{cb}$   & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda$& $0$ \\
 		\bottomrule
-	\end{tabular}
+	\end{tabularx}
 \end{center}
 \end{table}
 \begin{example}
-Given $\Sigma_\varepsilon=\Set{a,b,c}$, we have that $\Set{aa,ab,ac,ba,bb,bc,ca,cb,cc}\\=\Sigma^2_\varepsilon$ defines the set of all the possible $2$-grams represented by the grammar $\Sigma_\varepsilon$ induced by the non-$\varepsilon$ transitions within the USPN $\mathcal{U}$ in Figure \ref{fig:spn}. For each $2$-gram ${\color{green}\alpha\beta}\in\Sigma_\varepsilon^2$ in a given trace $\tau$, we will have a non-zero component $\phi_{\mathcal{T}}(\tau)_{\color{green}\alpha\beta}$ describing a penalty \cite{Gartner03}, while the kernel between two traces will describe the sum of such penalties. Given a trace $cb$ associated to $\mathcal{U}$,  the only non-zero component of $\phi_{\mathcal{T}}(cb)$ will be $cb$ itself where $\phi_{\mathcal{T}}(cb)_{\color{green}cb}=\lambda$ (Table \ref{tb:embedding}). On the other hand, the trace $caa$ from $\mathcal{U}$ will have a $2$-gram $ca$ with occurring lengths $1$ (\textbf{ca}a) and $2$ (\textbf{c}a\textbf{a}), and $aa$ with occurring length $1$; therefore, $\phi_{\mathcal{T}}(caa)_{\color{green}ca}=\lambda+\lambda^2$ and  $\phi_{\mathcal{T}}(caa)_{\color{green}aa}=\lambda$.  Similar considerations can be carried out for the other traces cacb and caaa, which embeddings are represented in Figure \ref{tb:embedding}. 
+Consider tasks $\tasks=\Set{a,b,c}$. The possible 2-grams over $\tasks$ are $\tasks^2=\Set{\const{aa},\const{ab},\const{ac},\const{ba},\const{bb},\const{bc},\const{ca},\const{cb},\const{cc}}$. Table~\ref{tb:embedding} shows the embeddings of some traces. Being a 2-gram, trace $\const{cb}$ has only a nonzero component, namely that corresponding to itself, with $\trembed_{\const{cb}}(\const{cb})=\lambda$. Trace $\const{caa}$ has the 2-gram $\const{ca}$ occurring with length $1$ ($\const{\underline{ca}a}$) and $2$ ($\const{\underline{c}a\underline{a}}$), and the 2-gram $\const{aa}$ with occurring length $1$ ($\const{c\underline{aa}}$). Hence: $\trembed_{\const{ca}}(\const{caa})=\lambda+\lambda^2$ and  $\trembed_{\const{aa}}(\const{caa})=\lambda$.  Similar considerations can be carried out for the other traces in the table.
 
-If we want to evaluate the similarity $k_{\phi_{\mathcal{T}}}$ between $\tau^*=cacb$ and the remaining traces, we will obtain the following results: $k_{\phi_{\mathcal{T}}}(cacb,caaa)=\lambda(\lambda+\lambda^2+\lambda^3)$,  $k_{\phi_{\mathcal{T}}}(cacb,caa)=\lambda(\lambda+\lambda^2)$, and $k_{\phi_{\mathcal{T}}}(cacb,cb)=\lambda(\lambda+\lambda^3)$, thus obtaining an induced traces ranking $k_{\phi_{\mathcal{T}}}(cacb,caaa)>k_{\phi_{\mathcal{T}}}(cacb,caa)>k_{\phi_{\mathcal{T}}}(cacb,cb)$. For this trace kernel, we have strong dissimilarity when the two traces have no shared $2$-grams at any arbitrary occurring length ($k_{\phi_{\mathcal{T}}}(caa,cb)=0$) but no strong equality ($k_{\phi_{\mathcal{T}}}(cb,cb)=\lambda^2$ with $\lambda^2\neq 1$ for $0\leq \lambda<1$).
+We now want to compute the similarity between the first trace $\const{cacb}$ and the other three traces. To do so, we sum, column by column (that is, 2-gram by 2-gram) the product of the embeddings for the two traces (thus keeping penalties whenever the 2-gram embeds in both traces). We then get 
+{\footnotesize
+\[
+k_{\trembed}(\const{cacb},\const{caaa})=\lambda(\lambda+\lambda^2+\lambda^3)
+~~
+k_{\trembed}(\const{cacb},\const{caa})=\lambda(\lambda+\lambda^2)
+~~
+k_{\trembed}(\const{cacb},\const{cb})=\lambda(\lambda+\lambda^3)
+\]}
+which induces ranking $
+k_{\trembed}(\const{cacb},\const{caaa})>
+k_{\trembed}(\const{cacb},\const{caa})>
+k_{\trembed}(\const{cacb},\const{cb})
+$.
 \end{example}
 
+\endinput
 \subsection{Graph Embedding}\label{ssec:ge}
 Graph kernels allow mapping graph data structures to feature spaces (usually an Eulcidean space in $\mathbb{R}^n$ for $n\in \mathbb{N}_{>0}$) \cite{Samatova} so to express graph similarity functions that can then be adopted for both classification \cite{TsudaS10} and clustering \cite{Raedt} algorithms. One of the first approaches used in literature involved the definition of topological description vectors \cite{Sidere} for each graph in a graph database, for then defining the graph similarity function as an inner product of their associated vectors. One inconvenience of such a technique is that it is required to perform NP-complete subgraph isomorphisms among a collection of graphs. It has been already proved that the definition of a graph kernel function fully recognising the structure the graph always boils down solving such  NP-Complete problem \cite{GartnerFW03}, as exact embeddings generable in polynomial can be inferred just for loop-free Direct Acyclic Graphs \cite{BergamiBM20}.  
 
