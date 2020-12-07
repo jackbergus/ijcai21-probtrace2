@@ -1,0 +1,125 @@
+\documentclass[tikz]{standalone}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usepackage{xfrac}
+\tikzstyle{node}=[draw=#1,fill=#1!20]
+\usepackage[T1]{fontenc}
+\usepackage{palatino}
+\usepackage{amsfonts}
+\newcommand{\vertex}[6]{\node[shape=circle,fill=black, scale=0.5,label=#1:{#2},label=#5:{\tiny\texttt{\color{blue}#6}},#4] (#3)  {};}
+\newcommand{\myedge}[4]{ \draw[->] (#1) edge node[#2] {#3} (#4);}
+\newcommand{\myedger}[4]{ \draw[->] (#1) edge [bend right] node[#2] {#3} (#4);}
+\newcommand{\myedgel}[4]{ \draw[->] (#1) edge [bend left] node[#2] {#3} (#4);}
+\usetikzlibrary{automata}
+\usetikzlibrary{fit}
+\usepackage{braket}
+\usetikzlibrary{arrows}
+\input{arrowsnew}
+\usetikzlibrary{arrows.meta,calc,decorations.markings,math,arrows.meta}
+\usetikzlibrary{positioning}
+\makeatletter
+\tikzset{
+	initial text=\(\ast\),
+	>={Stealth[scale=3.0]},
+}
+\makeatother
+\usetikzlibrary{shapes.geometric}
+\tikzset{database/.style={cylinder,aspect=0.5,draw,rotate=90,path picture={
+			\draw (path picture bounding box.160) to[out=180,in=180] (path picture bounding
+			box.20);
+			\draw (path picture bounding box.200) to[out=180,in=180] (path picture bounding
+			box.340);
+}}}
+\usetikzlibrary{shapes.multipart}
+\begin{document}
+\begin{tikzpicture}[align=center,node distance=3.5cm]
+
+
+\node[fill=blue!25,text width=5cm,rectangle,rounded corners,inner sep=10,outer sep=0] at (10,0) (tg) {\Large Unraveller};
+\node[circle,fill=red] at (tg.west) (tgin) {};
+\node[circle,fill=blue] at (tg.south) (mp) {};
+
+\node[circle,fill=red] at ($(tg.north east)!0.3!(tg.east)$) (sto) {};
+
+
+\node[fill=blue!25,text width=5cm,rectangle,rounded corners,inner sep=10,outer sep=0] at (1,0) (clos) {\Large $\varepsilon$-closure};
+\node[circle,fill=red] at (clos.east) (eclosout) {};
+\node[circle,fill=red] at (clos.west) (eclosin) {};
+\draw[->] (eclosout) edge node [above] {$\varepsilon$-closed TG}
+                          node [below] {$TG_\varepsilon$}    (tgin) ; 
+
+
+\node[fill=blue!25,text width=5cm,rectangle,rounded corners,inner sep=10,outer sep=0] at (-17,0) (Sq) {\Large Sequentialization};
+\node[circle,fill=red] at (Sq.west) (SqIn) {};
+\node[circle,fill=red] at (Sq.east) (SqOut) {};
+
+\node[fill=blue!25,text width=5cm,rectangle,rounded corners,inner sep=10,outer sep=0] at (-8.5,0) (LS) {\Large Label Shifter};
+\node[circle,fill=red] at (LS.west) (LSIn) {};
+\draw[->] (SqOut) edge node [above] {Reachability Gr.}
+                       node [below] {$RG$}               (LSIn);
+
+\node[circle,fill=red] at (LS.east) (LsOut) {};
+\draw[->] (LsOut) edge node [above] {Transition Gr.}
+node [below] {$TG$}               (eclosin);
+
+\node[draw=black,rectangle,fit=(SqIn)(Sq)(LS),inner sep=20] (EG) {};
+\node[draw=black,rectangle,fill=yellow] at ([yshift=-.9em,xshift=4.7em]EG.north west) {Embeddable Graph};
+
+
+\node[draw=black,rectangle,fit=(clos)(tg),inner sep=20] (SG) {};
+\node[draw=black,rectangle,fill=yellow] at ([yshift=-.8em,xshift=6.2em]SG.north west) {Stochastic Trace Generator};
+
+
+\node[draw=black,rectangle,minimum width=8cm, minimum height=4cm] at (22,-.8) (Strat) {};
+\node[database,scale=3,fill=green,draw=blue,label={[xshift=2.0cm, yshift=-0.3cm]\textit{storage}}] at (Strat.east) {};
+\node[draw=black,rectangle,fill=yellow] at ([yshift=-.8em,xshift=4.8em]Strat.north west) {Alignment Strategy};
+%\node[rectangle,minimum width=5mm,minimum height=5mm,fill=green,label=right:\textit{output}] at (Strat.east) (Fini) {};
+\draw[->] (sto) edge node [above] {Stochastic Tr., $\mathbf{T}_p(TG_\varepsilon)$}
+                     node [below] {$\{\braket{\tau,p_\tau}\in TG_{\varepsilon}|p_\tau\geq p_\theta\}$} ($(Strat.south west)!(sto)!(Strat.north west)$);
+\node[circle,fill=red] at ($(Strat.south west)!0.3!(Strat.west)$) (TraceInStrat) {};
+
+\node[draw=black,rectangle,fit=(EG)(Strat),inner sep=10,rounded corners=10,minimum width=51cm] (Paper) {};
+\node[circle,fill=red] at ($(Paper.south west)!(TraceInStrat)!(Paper.north west)$) (TraceIn) {};
+\draw[->] (TraceIn) edge node [below] {Query Trace, $\tau^*$}               (TraceInStrat);
+
+\node at ($(TraceIn)!(mp)!(TraceInStrat)$) (imp) {};
+\node[scale=0.001] at ($(mp)!0.77!(imp)$) (imp2) {};
+\node[circle,fill=blue] at ($(Paper.south west)!(imp2)!(Paper.north west)$) (mpin) {};
+
+\draw[-] (mpin) edge node [xshift=120,yshift=5] {Minimum Probability Threshold, $p_\theta$} (imp2); \draw[->] (imp2) -- (mp);
+
+\node[circle,fill=red] at ($(Paper.south west)!(SqIn)!(Paper.north west)$) (GraphIn) {};
+\draw[->] (GraphIn) edge node [above] {Petri Net}
+node [below] {$SPN$}               (SqIn);
+
+\node[draw=black,rectangle,minimum width=8cm, minimum height=4cm] at (8.5,-7) (StratE) {};
+\node[fill=blue!25,text width=5cm,rectangle,rounded corners,inner sep=10,outer sep=0,minimum height=3cm] at (8,-7) (acc1) {\Large Exact Trace Aligner};
+\node at ($(acc1.north west)!0.3!(acc1.west)$) (inTrE) {};
+\draw ($(StratE.north west)!(inTrE)!(StratE.west) - (2,0)$) edge[->] node [above]{$\mathbf{T}_p(TG_\varepsilon)$} (inTrE);
+\node at ($(acc1.south west)!0.3!(acc1.west)$) (inTE) {};
+\draw ($(StratE.south west)!(inTE)!(StratE.west) - (2,0)$) edge[->] node [above]{$\tau^*$} (inTE);
+\node[database,scale=3,fill=green,draw=blue,] at ($(StratE.south east)!(acc1.east)!(StratE.north east)$) (d1) {};
+\draw[->] (acc1) edge node [above]{\textit{ranking}} (d1);
+\draw[-{Triangle[scale=3.0,fill=white]},very thick] (StratE) -- (Strat);
+
+
+\node[draw=black,rectangle,minimum width=17cm, minimum height=4cm] at (25,-7) (StratA) {};
+\node[fill=blue!25,text width=5cm,rectangle,rounded corners,inner sep=10,outer sep=0] at (20,-6) (acc2) {\Large Approximate \\ Trace Embedder};
+\draw ($(StratA.north west)!(acc2.west)!(StratA.west) - (2,0)$) edge[->] node [above]{$\mathbf{T}_p(TG_\varepsilon)$} (acc2);
+\node[database,scale=3,fill=green,draw=blue,] at (25,-6) (d2i) {};
+\node[rectangle split, rectangle split parts=5,draw, anchor=center,fill=blue,scale=.5] at (25.5,-6) (d2ii) {};
+\draw[->] (acc2) edge node [above]{\textit{storing}} (d2i);
+\node[fill=blue!25,text width=5cm,rectangle,rounded corners,inner sep=10,outer sep=0] at (20,-8) (acc3) {\Large Approximate \\  Trace Embedder};
+\draw ($(StratA.north west)!(acc3.west)!(StratA.west) - (2,0)$) edge[->] node [above]{$\tau^*$} (acc3);
+\node[rectangle split, rectangle split parts=5,draw, anchor=center,fill=blue] at (25,-8) (d2j) {};
+\draw[->] (acc3) edge node [above]{\textit{storing}} (d2j);
+\node[fill=blue!25,text width=5cm,rectangle,rounded corners,inner sep=5,outer sep=0] at (29,-7) (vs) {\Large Vector Similarity};
+\draw[->] (d2ii) -- (vs.north);
+\draw[->] (d2j) -- (vs.south);
+\node[database,scale=3,fill=green,draw=blue] at (StratA.east) (f) {};
+\draw[->] (vs) edge node [above]{\textit{ranking}} (f);
+\draw[-{Triangle[scale=3.0,fill=white]},very thick] (StratA) -- ($(Strat.south west)!(StratA.north)!(Strat.south east)$);
+
+\end{tikzpicture}
+
+\end{document}

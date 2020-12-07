@@ -1,4 +1,4 @@
-\newcommand{\pmin}{p_{min}}
+\newcommand{\pmin}{\rho}
 
 \newcommand{\const}[1]{\mathsf{#1}}
 
@@ -9,6 +9,7 @@
 \newcommand{\uswn}{SWN\xspace}
 \newcommand{\net}{\ensuremath{N}}
 \newcommand{\tg}{\ensuremath{G}}
+\newcommand{\closed}[1]{\overline{#1}}
 \newcommand{\marking}{m}
 \newcommand{\enaset}[2]{E_{#2}(#1)}
 \newcommand{\fire}[4]{#1\xrightarrow{#2}_{#4}#3}
@@ -20,12 +21,15 @@
 \newcommand{\run}{\xi}
 \newcommand{\trace}{\sigma}
 \newcommand{\traces}[1]{\mathit{traces}(#1)}
+\newcommand{\ptraces}[2]{\mathit{ptraces}_{#2}(#1)}
+
 \newcommand{\nreach}[3][]{#2 \overset{#1}{\rightsquigarrow} #3}
 \newcommand{\runs}[2]{runs_{#2}(#1)}
 \newcommand{\seqs}[2]{seqs_{#2}(#1)}
 \newcommand{\transp}[1]{#1^\top}
 \newcommand{\embed}{\phi}
 \newcommand{\trembed}{\embed^{\text{tr}}}
+
 
 \newcommand{\pa}{\rho_{23}}
 \newcommand{\pb}{\rho_{24}}
