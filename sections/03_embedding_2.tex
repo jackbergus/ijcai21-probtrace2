@@ -26,7 +26,7 @@
 \newcommand{\WCal}[2]{\ptraces{\closed{\tg_{\rg{\net}}}}{#1}}
 \fi
 \newcommand{\probskip}[1]{\prob{#1}{\probarg}}
-\newcommand{\logtrace}{\trace_\ell}
+
 \subsection{Alignment Strategy}\label{subsec:as}
 Despite current trace alignment algorithms return a single alignment for a single model trace, approaches generating different alignment possibilities would provide the user with a richer feedback. This is even more important for approaches based o stochastic nets, like \uswn-s, since, in this case, distinct model traces have different probabilities and the retrieval of the best model trace maximizing the combined provision of minimum trace alignment cost and maximum model trace probability might not suffice. Therefore, we would
 like to return the best $k$ alignments among all the distinct \unravelled\ model traces in $\ptraces{\net}{\pmin}=\ptraces{\closed{\tg_{\rg{\net}}}}{\pmin}$. In the database community, this problem is usually tackled via $k$-Nearest Neighbors.

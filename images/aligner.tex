@@ -31,8 +31,8 @@
 
 
 
-\node[cstep,right=7mm of log,minimum height=1em,yshift=-4mm] (ate1){Approx.-ranking\\trace embedding};
-\node[cstep,right=5.2mm of intrace,minimum height=1em] (ate2){Approx.-ranking\\trace embedding};
+\node[cstep,right=7mm of log,minimum height=1em,yshift=-4mm] (ate1){$\gorgembed(\cdot)$};
+\node[cstep,right=5.2mm of intrace,minimum height=1em] (ate2){$\gorgembed(\sigma)$};
 
 \node[cell,right=of ate1,fill=marcofucsia2!30] (v11) {};
 \node[cell,right=-\pgflinewidth of v11,fill=marcofucsia2!30] (v12) {};
@@ -46,14 +46,13 @@
 \node[cell,right=-\pgflinewidth of v41,fill=marcoorange!30] (v42) {};
 \node[cell,right=-\pgflinewidth of v42,fill=marcoorange!30] (v43) {\tiny\ldots};
 
-\node[cstep,right=21mm of ate1,yshift=-4.5mm,minimum height=1em,minimum width=1em] (vs) {Vector\\similarity};
+\node[cstep,right=21mm of ate1,yshift=-4.5mm,minimum height=1em,minimum width=1em] (vs) {$\braket{\mathcal{X}_i,x}$};
 
 
 \begin{pgfonlayer}{background}
 
 
-\node[above=0mm of v21.north west,anchor=south west] {trace vectors};
-\node[above=0mm of v41.south west,anchor=north west] {$\trace$-vector};
+
 
 
 \node[astep,fit=(ate1) (ate2) (vs)] (pta){};
@@ -69,7 +68,8 @@
 \draw[link,ultra thick] ($(rank.west)+(3mm,0)$) --($(rank.east)+(3mm,0)$);
 \node[below=2mm of rank,xshift=-2mm] {ranking};
 
-
+\node[above=-1mm of v23.east,anchor=south west] {$\mathcal{X}$};
+\node[above=-3mm of v43.south east,anchor=south east] {$x$};
 
 \draw[link] (log) -- (ate1);
 \draw[link] (intrace) -- (ate2);
