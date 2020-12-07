@@ -1,14 +1,10 @@
 % !TeX root=../main.tex
 
-\ifdefined\DEBUG
+
 \newcommand{\unravelled}{unravelled}
 \newcommand{\unravelling}{unravelling}
 \newcommand{\unravel}{unravel}
-\else
-\newcommand{\unravelled}{unfolded}
-\newcommand{\unravelling}{unfolding}
-\newcommand{\unravel}{unfold}
-\fi
+
 
 
 %
@@ -66,9 +62,9 @@ Given that a trace embedding $\trace\in\WCal{\pmin}{n}$ adequately representing 
 		Given a minimum probability threshold $\pmin$ and a $\tau$-closed transition graph $\closed{G}$, for each trace $\trace\in\ptraces{\closed{G}}{\pmin}$ we generate a transition graph
 		$\closed{G}_\sigma=(V_\trace,s_\trace,t_\trace,L_\trace,R_\trace,\omega_\trace)$, where \begin{inparaenum}[\it (i)]
 		\item $V_\trace$ contains all the distinct transitions 	
-		\end{inparenum}
+		\end{inparaenum}\dots
 		
-		we generate a set $\TBf{\pmin}{n}(\closed{G})$ of projected TGs $P$ for each trace in $\WCal{\pmin}{n}(P)$ as follows: for each weighted trace $\braket{\trace,\probskip{\trace}}\in\WCal{\pmin}{n}(P)$ generated from a path $\pi_\trace=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a TG $P_\trace=(s',t',L_\trace,R_\trace,\omega')$, where \begin{inparaenum}[\it (i)]
+		\dots we generate a set $\TBf{\pmin}{n}(\closed{G})$ of projected TGs $P$ for each trace in $\WCal{\pmin}{n}(P)$ as follows: for each weighted trace $\braket{\trace,\probskip{\trace}}\in\WCal{\pmin}{n}(P)$ generated from a path $\pi_\trace=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a TG $P_\trace=(s',t',L_\trace,R_\trace,\omega')$, where \begin{inparaenum}[\it (i)]
 			\item $s'=s$ if $\textit{label}(s)\neq \tau$ and $t'=n_2$ otherwise,
 			\item $t'=t$ if $\textit{label}(t)\neq \tau$ and $t'=n_m$ otherwise,
 			\item $L_\trace$ (and $R_\trace$) is the submatrix of $L$ (and $R$) over the non-$\tau$ labeled notes in $\pi_\trace$ and the labels from $\trace$,
@@ -100,14 +96,12 @@ Given that a trace embedding $\trace\in\WCal{\pmin}{n}$ adequately representing 
 \end{tabular}}
 \end{table}
 \begin{example}\label{ex:neue}
-Given the $\tau$-closed transition graph $\closed{\tg_{\rg{\net}}}$ in Figure \ref{fig:closed}, we assign the following probability values to the edges: $\pa=0.8$, $\pb=0.2$, $\pc=\pf=0.5$, $\pd=0.7$, and $\pe=0.3$. If we limit our analysis to all the traces of maximum length $4$, we generate the following probabilistic traces set:
+Given the $\tau$-closed transition graph $\closed{\tg_{\rg{\net}}}$ in Figure \ref{fig:closed}, we assign the following probability values to the edges: $\pa=0.8$, $\pb=0.2$, $\pc=\pf=0.5$, $\pd=0.7$, and $\pe=0.3$. The $\ptraces{\expN}{0}$ with maximum length $4$ are the following:
 $$\begin{aligned}
-\WCal{\varepsilon}{4}=\{&\braket{a,0.4},\braket{aa,0.2},\braket{aaa,0.1},\braket{ca,0.07},\\
+\ptraces{\expN}{0}_{|\trace|\leq 4}=\{&\braket{a,0.4},\braket{aa,0.2},\braket{aaa,0.1},\braket{ca,0.07},\\
 &\braket{cb,0.06},\braket{aaaa,0.05},\braket{caa,0.035},\braket{caaa,0.0175}\}\\
 \end{aligned}$$
-\medskip
-
-Table \ref{tab:proj} represents the TGs $P_\trace\in\TBf{\varepsilon}{4}$ with weight $\omega$ generated for each weighted path $\braket{\trace,\probskip{\trace}}\in \WCal{\varepsilon}{4}$ of length $l=|\trace|$ from the TG $\closed{\tg_{\rg{\net}}}$ in Figure \ref{fig:closed}. The associated weight $\omega$ derives from the source's outgoing edges (and target's ingoing edges) when such node is labeled as $\tau$: given that both \textbf{(i)} the embedding strategy from current literature (\S\ref{subsec:katk}) allows trace embedding just for visible (i.e., non-$\tau$) transitions, and that \textbf{(ii)} such trace extraction process discards the $\tau$ information but we want to preserve the transition probabilities from and to $\tau$ transitions, we exploit an additional parameter $\omega$ to preserve such information.
+Table \ref{tab:proj} represents the projected transition graphs associated to such traces. The associated weight $\omega$ derives from the source's outgoing edges (and target's ingoing edges) when such node is labeled as $\tau$: given that both \textit{(i)} the embedding strategy from current literature (\S\ref{subsec:katk}) allows trace embedding just for visible (i.e., non-$\tau$) transitions, and that \textit{(ii)} such trace extraction process discards the $\tau$ information but we want to preserve the transition probabilities from and to $\tau$ transitions, we exploit an additional parameter $\omega$ to preserve such information.
 %\xout{selection of a trace $\trace$ implies performing a set of specific probabilistic choices, we can remove all the edges starting (and arriving) at nodes that are $\tau$-labelled and move their score as the weight of the TG.}
 \end{example}
 	
@@ -128,13 +122,13 @@ Table \ref{tab:proj} represents the TGs $P_\trace\in\TBf{\varepsilon}{4}$ with w
 %	\bottomrule
 %\end{tabular}
 %\end{table}
-\begin{definition}[TG Embedding]\label{def:ppne}
+\begin{definition}[G-Embedding]\label{def:ppne}
 %Given a finite set of non-empty labels $\trace_\tau =\trace\backslash\{\tau\}$, $\trace_\tau^2$ denotes all the possible pair of labels associated to paths ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ and $\trace_\tau$ denotes the set of all the possible non-$\tau$ node labels. Therefore, it is always possible to enumerate $\trace_\tau^2\cup\trace_\tau$ via an enumeration by a bijection $\iota\colon \trace_\tau^2\cup\trace_\tau\to  N$, where $N\subset \mathbb{N}_{\neq 0}$ and $\max N=|N|$.
 	
 Given a $\tau$-closed transition graph $\closed{\tg}$ and a tuning parameter $t_f\in[0,1]\subseteq\mathbb{R}$, the associated embedding is defined as follows:
 $$\gorgembed_{i}(\closed{\tg})=\begin{cases}
-	\omega t_f^{|R>0|}\,\sfrac{\epsilon_\const{ab}(\closed{\tg})}{\|\epsilon\|_2} & {i}=\const{ab}\\
-	\;\;\,t_f^{|R>0|}\,\sfrac{\nu_\const{a}(\closed{\tg})}{\|\nu\|_2} & {i}=\const{a}\\
+	\omega \frac{\epsilon_\const{ab}(\closed{\tg})}{\|\epsilon\|_2}\;t_f^{|R>0|}\, & {i}=\const{ab}\\
+	\frac{\nu_\const{a}(\closed{\tg})}{\|\nu\|_2}\;\;\;\,t_f^{|R>0|}\, & {i}=\const{a}\\
 \end{cases}$$
 where $\epsilon$ (and $\nu$) represents the non-negatively defined embedding associated to $\closed{\tg}.R$ (both $\closed{\tg}.R$ and $\closed{\tg}.L$).
 \end{definition}
@@ -144,7 +138,7 @@ At this stage, the computation of $\underset{\trace\in \WCal{p}{n}, P_\trace\in\
 \begin{table}[!t]
 	\caption{Different sub-embedding definitions ($\epsilon^1$, $\epsilon^2$, $\nu^1$, and $\nu^2$) for $\gorgembed$.}\label{tab:embedstrat}
 	\centering
-	\begin{tabular}{c|c|c}
+	\resizebox{.6\textwidth}{!}{\begin{tabular}{c|c|c}
 		\toprule
 		& $x=1$ & $x=2$ \\
 		\midrule
@@ -153,7 +147,7 @@ At this stage, the computation of $\underset{\trace\in \WCal{p}{n}, P_\trace\in\
 		\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$\\
 		$\nu^x(P)_{\color{green}\alpha}:=$ & $\frac{1}{N}\sum_{\braket{\trace,w}\in\WCal{p}{l}(P)}\frac{|\Set{\trace_i\in\trace|\trace_i\neq\tau\wedge \trace_i={\color{green}\alpha}}|}{|\trace|}$ & $0$ \\
 		\bottomrule
-	\end{tabular}
+	\end{tabular}}
 \end{table}
 Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in our experiment section} we choose two possible interchangeable definitions ($x=1$ and $x=2$) for both sub-embeddings (Table \ref{tab:embedstrat}): $l$ is the path length indicated in Table \ref{tab:proj}, and $N$ for $\nu^1$ is a normalization factor such that $\sum_{{\color{green}\alpha}\in\trace_\tau}\nu^1(P)_{\color{green}\alpha}=1$. \ADD{While $\nu^2$ implies to completely ignore the label's frequency contribution, $\epsilon^2$ is the direct implementation of $\trembed$ from \S\ref{subsec:katk}, and $\epsilon^1$ and $\epsilon^2$ only differ from the normalization perspective.} %In Example \ref{ex:cmpexample}, we will see that the given definition of $\epsilon^1$ provides a better approximation than the edge embedding $\epsilon^2$.
 
@@ -163,7 +157,7 @@ Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in o
 \begin{table}[!t]
 	\centering
 	\caption{Embedding for both the traces $\trace$ of maximum length $4$ from $P$ and  $\logtrace$.}\label{tab:emb2}\label{tab:embsitar}
-	\begin{tabular}{l|l|l|l|l|l|l|}
+	\resizebox{.6\textwidth}{!}{\begin{tabular}{l|l|l|l|l|l|l|}
 		\toprule
 		& $\const{a}$    & $\const{b}$                                                   & $\const{c}$    & $\const{aa}$   & $\const{ca}$   & $\const{cb}$   \\
 		\midrule
@@ -180,10 +174,10 @@ Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in o
 		\bottomrule
 				$\gorgembed(P_{\logtrace})$ & $8.16\cdot10^{-17}$ & $4.08\cdot 10^{-17}$ & $4.08\cdot10^{-17}$ & $4.37\cdot 10^{-17}$ & $1.03\cdot10^{-16}$ & $4.37\cdot10^{-17}$\\
 		\bottomrule
-	\end{tabular}
+	\end{tabular}}
 \end{table}
-\begin{example}\label{ex:withpaths} After generating all the TGs for the \unravelled\ traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the $2$-grams included in the model traces.\footnoteref{fn:caveat}
-Given $\trace_\tau=\Set{a,b,c}$, the embedding space is of size $6$: three features (computed using $\nu$) correspond to the labels of the non-$\tau$ vertices in $\trace_\tau$, i.e., $\{a,b,c\}$, and other three features (computed using $\epsilon$) correspond to the $2$-grams subsequences that are also traces in $W^4_0(P)$, i.e., $\{aa,ca,cb\}$. Therefore, $\{a,b,c,aa,ca,cb\}\subset \trace_\tau^2\cup\trace_\tau$ is the whole set of features describing both the label and the transition matrix, so $\gorgembed$ is a vector with 6 dimensions.
+\begin{example}\label{ex:withpaths} %After generating all the TGs for the \unravelled\ traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the $2$-grams included in the model traces.\footnoteref{fn:caveat}
+%Given $\trace_\tau=\Set{a,b,c}$, the embedding space is of size $6$: three features (computed using $\nu$) correspond to the labels of the non-$\tau$ vertices in $\trace_\tau$, i.e., $\{a,b,c\}$, and other three features (computed using $\epsilon$) correspond to the $2$-grams subsequences that are also traces in $W^4_0(P)$, i.e., $\{aa,ca,cb\}$. Therefore, $\{a,b,c,aa,ca,cb\}\subset \trace_\tau^2\cup\trace_\tau$ is the whole set of features describing both the label and the transition matrix, so $\gorgembed$ is a vector with 6 dimensions.
 $t_f\in [0,1]\subset\mathbb{R}^+_{0}$ and $\lambda\in [0,1]\subset\mathbb{R}^+_{0}$ are tuning parameters that can be inferred from the available data \cite{DriessensRG06}. While the latter describes the previously mentioned decay factor, $t_f$ represents the relevance of our embedding representation when the number of the edges within TG increases. In both our experiments and examples, we chose $t_f=0.0001$ and $\lambda=0.07$.
 %\xout{The embedding associated to $P$ is described in Table \ref{tab:emb1} as $\gorgembed(P)$: it shows that doing ${\color{green}a}\rightsquigarrow{\color{green}a}$ is more probable than doing  ${\color{green}c}\rightsquigarrow{\color{green}a}$. Also, given that both the probability of performing ${\color{green}c}\overset{1}{\rightsquigarrow}{\color{green}b}$ is relatively low and trace $\color{green}cb$ is relatively infrequent, ${\color{green}c}{\rightsquigarrow}{\color{green}b}$ is less probable than any other subtrace. If we now consider the single nodes, $\color{green}c$ shares a subset of traces with $\color{green}a$ where $\color{green}a$ is more frequent than $\color{green}c$, and therefore the score of the former is higher than the one of the latter. Also, the score associated to the single node $\color{green}b$ is lower than the one for the single node $\color{green}c$ because $\color{green}b$ is less frequent and appears in less probable traces than $\color{green}c$: in particular, $\color{green}c$ appears in \textit{ca}, which is more probable than \textit{cb}.}
 Table \ref{tab:emb2} represents the embeddings $\gorgembed(P_\trace)$ generated from the sub-TGs generated in Example \ref{ex:neue}, where the $l=|\trace|$ for each trace $\trace$ associated to the sub-TG. This representation is completely independent from the representation associated with a trace to be aligned. Therefore it does not have to be recomputed at each alignment with a different $\logtrace$.
@@ -350,65 +344,65 @@ Please note that, when the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are a
 %		\bottomrule
 %	\end{tabular}
 %\end{table}
-\begin{table}[!t]
-	\caption{Comparison between the ranking induced by the expected ranking $k_\star$ and the proposed kernel $k_{\gorgembed}$ with embedding strategies $\epsilon^2$ and $\nu^1$: arrows $\boldsymbol{\downarrow}$ remark the column of choice under which we sort the rows (i.e., ranking).}\label{tab:compLit}
-	\centering
-	\resizebox{.9\textwidth}{!}{\begin{tabular}{l|ll|cc}
-			\toprule
-			
-			{$\trace$} &
-			%\multirow{2}{*}{$d(\trace,\logtrace)$} &
-			%\multicolumn{2}{c|}{$\mu_{\logtrace}$} &
-			$( \probskip{\trace}$ &  $,\,\boldsymbol{\downarrow} s_d(\trace,\logtrace)) $ &
-			{$=k_\star(\trace,\logtrace)$} &
-			{$k_{\gorgembed}(P_\trace,P_{\logtrace})$} \\
-			
-			
-			\midrule
-			$\const{caa}$  & $0.035$ & $\;\; 0.8333$ & $0.0292$ & $1.03498\cdot10^{-40}$\\
-			$\const{caaa}$  &  $0.0175$ & $\;\; 0.8333$ & $0.0145$ & $8.94997\cdot10^{-41}$ \\
-			$\const{a}$  & $0.4$ & $\;\; 0.6250$  & $0.2500$ & $8.16497\cdot10^{-21}$\\
-			$\const{aaaa}$ & $0.05$ & $\;\; 0.6250$ & $0.0357$ & $8.20640\cdot10^{-41}$\\
-			$\const{aa}$  & $0.2$ & $\;\; 0.7142$ & $0.1428$ & $9.96007\cdot10^{-41}$ \\
-			$\const{aaa}$  & $0.1$ & $\;\; 0.7142$ & $0.0714$ & $8.41263\cdot10^{-41}$\\
-			$\const{ca}$  &  $0.07$ & $\;\; 0.7142$ & $0.0500$ & $1.45079\cdot10^{-24}$\\
-			$\const{cb}$  &  $0.06$ & $\;\; 0.7142$ & $0.0428$ & $8.52070\cdot10^{-25}$\\
-			\bottomrule
-		\end{tabular}\quad \begin{tabular}{l|c}
-			\toprule
-			
-			{$\trace$} &
-			{$\boldsymbol{\downarrow}k_\star(\trace,\logtrace)$} \\
-			
-			
-			\midrule
-			$\const{a}$  &  $0.2500$ \\
-			$\const{aa}$  &  $0.1428$  \\
-			$\const{aaa}$  & $0.0714$ \\
-			$\const{ca}$  &   $0.0500$\\
-			$\const{cb}$  & $0.0428$ \\
-			$\const{aaaa}$  &  $0.0357$ \\
-			$\const{caa}$  &  $0.0292$ \\
-			$\const{caaa}$  &   $0.0145$ \\
-			\bottomrule
-		\end{tabular}\quad	\begin{tabular}{l|c}
-			\toprule
-			
-			{$\trace$} &
-			{$\boldsymbol{\downarrow}k_{\gorgembed}(P_\trace,P_{\logtrace})$} \\
-			
-			
-			\midrule
-			{a}  & $8.16497\cdot10^{-21}$ \\
-			{ca}  &   $1.45079\cdot10^{-24}$\\
-			{cb}  &   $8.52070\cdot10^{-25}$\\
-			{caa}  & $1.03498\cdot10^{-40}$\\
-			{aa}  &  $9.96007\cdot10^{-41}$ \\
-			{caaa}  &  $8.94997\cdot10^{-41}$ \\
-			{aaa}  &  $8.41263\cdot10^{-41}$\\
-			{aaaa}  & $8.20640\cdot10^{-41}$\\
-			\bottomrule
-	\end{tabular}}
+%\begin{table}[!t]
+%	\caption{Comparison between the ranking induced by the expected ranking $k_\star$ and the proposed kernel $k_{\gorgembed}$ with embedding strategies $\epsilon^2$ and $\nu^1$: arrows $\boldsymbol{\downarrow}$ remark the column of choice under which we sort the rows (i.e., ranking).}\label{tab:compLit}
+%	\centering
+%	\resizebox{.9\textwidth}{!}{\begin{tabular}{l|ll|cc}
+%			\toprule
+%			
+%			{$\trace$} &
+%			%\multirow{2}{*}{$d(\trace,\logtrace)$} &
+%			%\multicolumn{2}{c|}{$\mu_{\logtrace}$} &
+%			$( \probskip{\trace}$ &  $,\,\boldsymbol{\downarrow} s_d(\trace,\logtrace)) $ &
+%			{$=k_\star(\trace,\logtrace)$} &
+%			{$k_{\gorgembed}(P_\trace,P_{\logtrace})$} \\
+%			
+%			
+%			\midrule
+%			$\const{caa}$  & $0.035$ & $\;\; 0.8333$ & $0.0292$ & $1.03498\cdot10^{-40}$\\
+%			$\const{caaa}$  &  $0.0175$ & $\;\; 0.8333$ & $0.0145$ & $8.94997\cdot10^{-41}$ \\
+%			$\const{a}$  & $0.4$ & $\;\; 0.6250$  & $0.2500$ & $8.16497\cdot10^{-21}$\\
+%			$\const{aaaa}$ & $0.05$ & $\;\; 0.6250$ & $0.0357$ & $8.20640\cdot10^{-41}$\\
+%			$\const{aa}$  & $0.2$ & $\;\; 0.7142$ & $0.1428$ & $9.96007\cdot10^{-41}$ \\
+%			$\const{aaa}$  & $0.1$ & $\;\; 0.7142$ & $0.0714$ & $8.41263\cdot10^{-41}$\\
+%			$\const{ca}$  &  $0.07$ & $\;\; 0.7142$ & $0.0500$ & $1.45079\cdot10^{-24}$\\
+%			$\const{cb}$  &  $0.06$ & $\;\; 0.7142$ & $0.0428$ & $8.52070\cdot10^{-25}$\\
+%			\bottomrule
+%		\end{tabular}\quad \begin{tabular}{l|c}
+%			\toprule
+%			
+%			{$\trace$} &
+%			{$\boldsymbol{\downarrow}k_\star(\trace,\logtrace)$} \\
+%			
+%			
+%			\midrule
+%			$\const{a}$  &  $0.2500$ \\
+%			$\const{aa}$  &  $0.1428$  \\
+%			$\const{aaa}$  & $0.0714$ \\
+%			$\const{ca}$  &   $0.0500$\\
+%			$\const{cb}$  & $0.0428$ \\
+%			$\const{aaaa}$  &  $0.0357$ \\
+%			$\const{caa}$  &  $0.0292$ \\
+%			$\const{caaa}$  &   $0.0145$ \\
+%			\bottomrule
+%		\end{tabular}\quad	\begin{tabular}{l|c}
+%			\toprule
+%			
+%			{$\trace$} &
+%			{$\boldsymbol{\downarrow}k_{\gorgembed}(P_\trace,P_{\logtrace})$} \\
+%			
+%			
+%			\midrule
+%			{a}  & $8.16497\cdot10^{-21}$ \\
+%			{ca}  &   $1.45079\cdot10^{-24}$\\
+%			{cb}  &   $8.52070\cdot10^{-25}$\\
+%			{caa}  & $1.03498\cdot10^{-40}$\\
+%			{aa}  &  $9.96007\cdot10^{-41}$ \\
+%			{caaa}  &  $8.94997\cdot10^{-41}$ \\
+%			{aaa}  &  $8.41263\cdot10^{-41}$\\
+%			{aaaa}  & $8.20640\cdot10^{-41}$\\
+%			\bottomrule
+%	\end{tabular}}
 %	
 %	\centering
 %	\begin{tabular}{lc|l}
@@ -431,11 +425,11 @@ Please note that, when the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are a
 %		
 %		\bottomrule
 %	\end{tabular}
-\end{table}
+%\end{table}
 
-\begin{example}\label{ex:cmpexample}
-	Let us compare the ranking results by replacing in $\gorgembed$ the edge embedding $\epsilon^1$ with $\epsilon^2$. If we re-run the computations performed in  Example \ref{ex:11}, we obtain   Table \ref{tab:compLit}:  $\epsilon^1$ provides longer approximated subsequences if compared to $\epsilon^2$. Both embedding proposals tend to favor sequences containing one single node or one single subtrace due to the normalization of both  the edge and the nodes' distribution, but $\epsilon^2$ seems to be less influenced than $\epsilon^1$ in the change of the edge distribution. Therefore, $\epsilon^1$ proposal is to be preferred to $\epsilon^2$.
-\end{example}
+%\begin{example}\label{ex:cmpexample}
+%	Let us compare the ranking results by replacing in $\gorgembed$ the edge embedding $\epsilon^1$ with $\epsilon^2$. If we re-run the computations performed in  Example \ref{ex:11}, we obtain   Table \ref{tab:compLit}:  $\epsilon^1$ provides longer approximated subsequences if compared to $\epsilon^2$. Both embedding proposals tend to favor sequences containing one single node or one single subtrace due to the normalization of both  the edge and the nodes' distribution, but $\epsilon^2$ seems to be less influenced than $\epsilon^1$ in the change of the edge distribution. Therefore, $\epsilon^1$ proposal is to be preferred to $\epsilon^2$.
+%\end{example}
 
 
 \subsubsection{Properties}\label{subsub:prop}
