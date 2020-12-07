@@ -133,7 +133,7 @@ $$\gorgembed_{i}(\closed{\tg})=\begin{cases}
 where $\epsilon$ (and $\nu$) represents the non-negatively defined embedding associated to $\closed{\tg}.R$ (both $\closed{\tg}.R$ and $\closed{\tg}.L$).
 \end{definition}
 
-At this stage, the computation of $\underset{\trace\in \WCal{p}{n}, P_\trace\in\TBf{p}{n}(P)}{\max\arg} k_{\gorgembed}(P_\trace, P_{\logtrace})$ returns the best approximated trace alignment $\trace$ for a query trace represented as $P_{\logtrace}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\logtrace}$ as $\underset{P}{\max\arg}\underset{ P_\trace\in\mathbf{P}_p^n(P)}{\max} k_{\gorgembed}(P_\trace, P_{\logtrace})$.}¯
+At this stage, the computation of $\underset{\trace\in \WCal{\pmin}{n}, P_\trace\in\TBf{p}{n}(P)}{\max\arg} k_{\gorgembed}(P_\trace, P_{\logtrace})$ returns the best approximated trace alignment $\trace$ for a query trace represented as $P_{\logtrace}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\logtrace}$ as $\underset{P}{\max\arg}\underset{ P_\trace\in\mathbf{P}_p^n(P)}{\max} k_{\gorgembed}(P_\trace, P_{\logtrace})$.}¯
 
 \begin{table}[!t]
 	\caption{Different sub-embedding definitions ($\epsilon^1$, $\epsilon^2$, $\nu^1$, and $\nu^2$) for $\gorgembed$.}\label{tab:embedstrat}
@@ -145,7 +145,7 @@ At this stage, the computation of $\underset{\trace\in \WCal{p}{n}, P_\trace\in\
 		$\epsilon^x(P)_{\color{green}\alpha\beta}:=$ & $\label{eq:epsilon}
 		\sum_{i=1}^l{\lambda^i}\frac{[LR^iL^t]_{\color{green}\alpha\beta}}{\sum_{\color{green}\alpha'\beta'}R^i_{\color{green}\alpha'\beta'}}$ & $
 		\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$\\
-		$\nu^x(P)_{\color{green}\alpha}:=$ & $\frac{1}{N}\sum_{\braket{\trace,w}\in\WCal{p}{l}(P)}\frac{|\Set{\trace_i\in\trace|\trace_i\neq\tau\wedge \trace_i={\color{green}\alpha}}|}{|\trace|}$ & $0$ \\
+		$\nu^x(P)_{\color{green}\alpha}:=$ & $\frac{1}{N}\sum_{\braket{\trace,w}\in\WCal{\pmin}{l}(P)}\frac{|\Set{\trace_i\in\trace|\trace_i\neq\tau\wedge \trace_i={\color{green}\alpha}}|}{|\trace|}$ & $0$ \\
 		\bottomrule
 	\end{tabular}}
 \end{table}
@@ -184,13 +184,14 @@ Table \ref{tab:emb2} represents the embeddings $\gorgembed(P_\trace)$ generated 
 {After representing trace $\logtrace=\textup{caba}$ to be aligned as a graph (see Example \ref{ex:tracembed}), we can represent its}
 %\xout{Similar considerations can be also drawn from the}
 embedding $\gorgembed(P_{\logtrace})$ with strategies $\epsilon^1$ and $\nu^1$ %\xout{associated to the trace $\logtrace=\textup{caba}$ (also in Table --):} \ADD
-{as} in Table \ref{tab:embsitar}: ${\color{green}a}$ is clearly the most frequent label ${\color{green}b}$ and ${\color{green}c}$ are equiprobable, as well as the path ${\color{green}c}\rightsquigarrow {\color{green}a}$ appears twice in the trace set and then, it is more frequent than the other subtraces.
+{as} in Table \ref{tab:embsitar}: ${\color{green}a}$ is clearly the most frequent label $\const{b}$ and $\const{c}$ are equiprobable, as well as the $2$-gram $\const{ca}$ appears twice in the trace set and then, it is more frequent than the other $2$-grams.
 \end{example}
 
 %\xout{After defining the embedding, we can show that this embedding establishes some desired features that are independent of the definition of $\epsilon$ and $\nu$, and that $\epsilon$ and $\nu$ only depend on the characterization of both the labelling $L$ and the transition matrix $R$. We provide a rewriting proposition that is going to be used in the incoming subsection to provide the aforementioned characterizing properties.} \ADD
 
-Given that kernel functions $k_\phi$ are defined as the dot product between the embedding $\phi$ of distinct objects $x$ (\S\ref{subsec:katk}), then we can express the kernel $k_{\gorgembed}$ as such dot product and, after normalizing $\epsilon$ and $\nu$, we can rewrite such kernel
-{as a function of distance  $\|\hat{\epsilon}-\hat{\epsilon}'\|_2^2$ and $\|\hat{\nu}-\hat{\nu}'\|_2^2$ for both traces $\trace$ and $\trace'$ to be aligned:}
+%Given that kernel functions $k_\phi$ are defined as the dot product between the embedding $\phi$ of distinct objects $x$ (\S\ref{subsec:katk}), then we can express the kernel $k_{\gorgembed}$ as such dot product and, after normalizing $\epsilon$ and $\nu$, we can rewrite such kernel
+The kernel $k_\gorgembed$ associated to $\gorgembed$ is
+{ a function of the distance  $\|\hat{\epsilon}-\hat{\epsilon}'\|_2^2$ and $\|\hat{\nu}-\hat{\nu}'\|_2^2$ for traces $\trace$ and $\trace'$ to be aligned:}
 
 \begin{proposition}\label{lem:rewritinglemma}
 Given two TGs $P=(s,t,L,R,w)$ and $P'=(s',t',L',R',w')$, the TG Kernel is defined as follows:
@@ -209,7 +210,7 @@ k_{\gorgembed}(P,P')=\omega\omega't_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\ep
 %\end{aligned}$$
 \end{proof}
 
-Please note that, when the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numerical cancelation due to the aforementioned truncation error (i.e., $\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}^2\to 0$), the $\nu$ strategy intervenes as a backup ranking strategy. The first term of the sum does not affect the ranking, as it reduces to a constant factor.
+When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numerical cancelation due to truncation error (i.e., $\norm{\hat{\epsilon}-\hat{\epsilon}'}{2}^2\to 0$), the $\nu$ strategy intervenes as a backup ranking strategy. The first term of the sum does not affect the ranking, as it reduces to a constant factor.
 
 %\xout{Given that we can now follow Definition \ref{def:ppne} for representing a trace $\trace$ as a proper embedding after transforming it as a TG $P_{\logtrace}$ (\S\ref{subsec:katk}), we can find the TG $P$ providing the best approximate match with  a trace $\trace$ as follows:}
 %\[\Rcancel{\underset{{P}}{\max\arg}\;k_{\gorgembed}(P,T)}\]
@@ -302,7 +303,7 @@ Please note that, when the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are a
 
 
 \begin{example}\label{ex:11}
-	Given that $k_{\gorgembed}(\trace,\logtrace)=\braket{\gorgembed(P_\trace),\;\gorgembed(P_{\logtrace})}$ for each weighted trace $\braket{\trace,\probskip{\trace}}\in\WCal{\varepsilon}{4}(P)$, then the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}, where the expected ranking $k_\star$ is also showed. This similarity score approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
+	Given $k_{\gorgembed}(\trace,\logtrace)=\braket{\gorgembed(G_\trace),\;\gorgembed(G_{\logtrace})}$ with sub-embedding $\nu^1$ and $\epsilon^1$ for each  trace $\trace\in\WCal{\varepsilon}{4}$,  the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}, where the expected ranking $k_\star$ is also showed. $k_{\gorgembed}$ approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
 \end{example}
 
 
@@ -433,14 +434,14 @@ Please note that, when the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are a
 
 
 \subsubsection{Properties}\label{subsub:prop}
-As a first property, we can prove that when the two traces are equivalent,  there exists an embedding configuration for which the kernel computation reduces to the two traces' weight product, i.e. $ww'$. The kernel will represent the probability that both traces are valid contemporaneously and, when both weights are $1$, the kernel returns $1$. We will call this condition  ``weak equality'' because we cannot possibly prove that $k_{\gorgembed}(P,P')=ww'\Leftrightarrow \WCal{p}{n}(P)=\WCal{p}{n}(P')$, as there could be similar embeddings coming from Workflow Nets sharing a different weighted traces set ($\WCal{p}{n}(P)\neq\WCal{p}{n}(P')$, Figure \ref{fig:counterexample}). As previously observed in \S\ref{ex:wheredotiszero}, we will have the maximum dissimilarity when the traces have neither $2$-grams nor transitions' labels in common, for which the dot product of an embedding will always return $0$ (\textit{strong dissimilarity}). Given that both weak equality and strong similarity hold, we can say that the embedding performs weakly-ideally.
+We can prove that when the two traces are equivalent on both $2$-grams and their distribution,  there exists an embedding configuration for which the kernel computation reduces $\omega\omega'$. When both weights $\omega$-s are $1$, the kernel returns $1$. We will call this condition  ``weak equality'' because we cannot possibly prove that $k_{\gorgembed}(\closed{\tg},\closed{\tg}')=ww'\Leftrightarrow \ptraces{\closed{\tg}}{0}=\ptraces{\closed{\tg}'}{0}$, as there could be similar embeddings coming from Workflow Nets sharing a different weighted traces set ($\ptraces{\closed{\tg}}{\pmin}\neq\ptraces{\closed{\tg}'}{\pmin}$). Similarly to \S\ref{ex:wheredotiszero}, traces having neither $2$-grams nor transitions' labels in common will have a zero-valued kernel (\textit{strong dissimilarity}). Given that both weak equality and strong similarity hold, the embedding performs weakly-ideally.
 
-\begin{figure}[!t]
-	\vspace*{-0.5cm}
-	\centering
-	\includegraphics[scale=0.7]{images/counterexample.pdf}
-	\caption{Two TGs, $Q$ (left) and $R$ (right), having a different set of traces but the same embedding representation.}\label{fig:counterexample}
-\end{figure}
+%\begin{figure}[!t]
+%	\vspace*{-0.5cm}
+%	\centering
+%	\includegraphics[scale=0.7]{images/counterexample.pdf}
+%	\caption{Two TGs, $Q$ (left) and $R$ (right), having a different set of traces but the same embedding representation.}\label{fig:counterexample}
+%\end{figure}
 %\begin{example}
 %	If we use $\epsilon$ (or $\epsilon^2$) and $\nu$ (or $\nu^2$) for $\gorgembed$, we might have a false positive for ``weak equality'' if $Q=(s,s,L,R,w)$ and $R=(s',s',L,R,w)$ are both cycle graphs with $s\neq s'$, $\textit{label}(s)\neq\textit{label}(s')$, $\textit{label}(s)\neq\tau$, and $\textit{label}(s')\neq\tau$. An intuitive example of such situation is presented in Figure \ref{fig:counterexample}: both graphs will have the same frequency for both subtraces and nodes, and therefore have the same  $\epsilon$ and $\nu$ by construction. By having different initial and accepting node with  different labels, we have $\mathcal{W}_0^{\aleph_0}(Q)=\Set{\textup{a(bca)}^n|n\in\mathbb{N}}$ and $\mathcal{W}_0^{\aleph_0}(R)=\Set{\textup{c(abc)}^n|n\in\mathbb{N}}$, thus implying $\mathcal{W}_0^{\aleph_0}(Q)\neq\mathcal{W}_0^{\aleph_0}(R)$ but $k_{\gorgembed}(Q,R)=1$ for $t_f=1$.
 %\end{example}
