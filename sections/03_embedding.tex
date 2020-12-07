@@ -7,13 +7,13 @@
 
 \section{Probabilistic Trace Alignment Pipeline}
 We propose the pipeline from Figure \ref{fig:pipe} connecting several existing formalisations via intermediate processing steps. 
-The input of this pipeline is a query trace to be aligned, an USWN, and a minimum probability threshold $p_\theta$. Its output 
-is a set of model traces satisfying $p_\theta$ with an alignment ranking.
+The input of this pipeline is a query trace to be aligned, an USWN, and a minimum probability threshold $\pmin$. Its output 
+is a set of model traces satisfying $\pmin$ with an alignment ranking.
 %
 The pipeline has the following phases: after representing the USWN as a graph of all the sequentially scheduled transitions 
 (\S\ref{sec:seqZ}), we shift the labels from the edges towards the nodes while preserving the set of probabilistic traces 
 (\S\ref{sec:LSift}) and minimize the graph representation by removing the $\tau$-labelled nodes while preserving the 
-trace probability (\S\ref{sec:clos}). We extract the set of all traces having probability above $p_\theta$ threshold (\S\ref{sec:unrav}) and  apply two different alignment strategies; one exact  (\S\ref{subsec:eta}), and one approximated. 
+trace probability (\S\ref{sec:clos}). We extract the set of all traces having probability above $\pmin$ threshold (\S\ref{sec:unrav}) and  apply two different alignment strategies; one exact  (\S\ref{subsec:eta}), and one approximated. 
 
 
 We later discuss how to rank traces in the exact and approximated scenarios by reducing the alignment process to a k-nearest 
