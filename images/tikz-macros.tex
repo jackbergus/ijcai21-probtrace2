@@ -90,3 +90,50 @@
         font=\tiny\color{white}
 	},
 }
+
+
+
+\tikzstyle{joint}=[
+ 	circle,
+	minimum size=1mm,
+    draw,
+    very thick,
+]
+
+\tikzstyle{cjoint}=[
+    joint,
+    fill=marcoorange!80,
+]
+
+\tikzstyle{pjoint}=[
+    joint,
+    fill=marcoorange!30,
+]
+
+\tikzstyle{cstep}=[
+    rectangle,
+    rounded corners=5pt,
+    minimum height=3.5em,
+    minimum width=5em,
+    very thick,
+    draw,
+    fill=marcoblue1!40,
+    font=\footnotesize
+]
+
+\tikzstyle{astep}=[
+    rectangle,
+    minimum height=4.2em,
+    minimum width=5em,
+    thick,
+    draw,
+    fill=marcoblue2!20,
+    inner sep=5,
+]
+
+\tikzset{database/.style={cylinder,aspect=0.5,draw,rotate=90,path picture={
+			\draw (path picture bounding box.160) to[out=180,in=180] (path picture bounding
+			box.20);
+			\draw (path picture bounding box.200) to[out=180,in=180] (path picture bounding
+			box.340);
+}}}
