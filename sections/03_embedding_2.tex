@@ -26,6 +26,7 @@
 \newcommand{\WCal}[2]{\ptraces{\closed{\tg_{\rg{\net}}}}{#1}}
 \fi
 \newcommand{\probskip}[1]{\prob{#1}{\probarg}}
+\newcommand{\goldenrank}{\mathcal{R}}
 
 \subsection{Alignment Strategy}\label{subsec:as}
 An alignment of a trace with an \uswn could be represented by the best model trace maximizing the combined provision of minimum trace alignment cost and maximum model trace probability. However, in some cases, the user could prefer to identify an alignment with a lower cost even if based on a less probable model trace, while, in other cases, the user could favor a model trace with a higher probability at the expense of a higher alignment cost.  Therefore, to provide users with an instrument that allows them to find their own trade-off between alignment cost and model trace probability, we need to return the best $k$ alignments among all the distinct \unravelled\ model traces in $\ptraces{\net}{\pmin}=\ptraces{\closed{\tg_{\rg{\net}}}}{\pmin}$. In the database community, this problem is usually tackled via $k$-Nearest Neighbors.
@@ -51,7 +52,7 @@ If we want to align the trace $\logtrace$ over the \unravelled\ traces $\mathcal
 If we want to represent the same intuition of such a weighted distance as a kernel function to induce a ranking, we need to first transform it as a similarity function returning $1$ when both $\nonlogtrace=\logtrace$ and  $\probskip{\logtrace}=1$ hold. We express $d$ as}
 %\xout{We can express our probabilistic trace alignment as finding the trace that maximizes both the trace's probability and its similarity with the query trace $\logtrace$. Still, the trace alignments problems are usually expressed via trace alignments cost functions, and not via trace similarities \cite{LeoniM17}. Given a generic trace cost function $d(\trace,\trace')$, it is always possible to convert it into}
 a normalized similarity score $s_d(\nonlogtrace,\logtrace):=\frac{1}{\frac{d(\nonlogtrace,\logtrace)}{c}+1}$ where $c\in\mathbb{N}_{\neq 0}$ is a constant, so that the maximum similarity of $1$ is reached when the distance is $0$ and the similarity decreases while the distance increases \cite{BergamiBM20}. %\xout{As a consequence, the exact trace aligner will find the weighted trace $\braket{\trace,\mathbb{P}(\trace)}$ in $\mathcal{W}_{\pmin}(P)$ maximising $s_d(\trace,\logtrace)$, and use $s_d$ as a ranking function.} \ADD
-{By  $\probskip{\logtrace}=1$, we can express the golden kernel function (i.e., the one producing the optimal ranking) as $k_\star(\nonlogtrace,\logtrace)=\probskip{\nonlogtrace} \probskip{\logtrace} s_d(\nonlogtrace,\logtrace)$. The computation $\underset{\nonlogtrace\in \WCal{\pmin}{n}}{\max\arg} k_\star(\nonlogtrace, {\logtrace})$ returns the best optimal-ranking trace alignment $\nonlogtrace$ for a log trace $\logtrace$, where $k_\ast$ must be computed a-new for all the possible $\logtrace$.
+{By  $\probskip{\logtrace}=1$, we can express the golden ranking function (i.e., the one producing the optimal ranking) as $\goldenrank(\nonlogtrace,\logtrace)=\probskip{\nonlogtrace} \probskip{\logtrace} s_d(\nonlogtrace,\logtrace)$. The computation $\underset{\nonlogtrace\in \WCal{\pmin}{n}}{\max\arg} \goldenrank(\nonlogtrace, {\logtrace})$ returns the best optimal-ranking trace alignment $\nonlogtrace$ for a log trace $\logtrace$, where $\goldenrank$ must be computed a-new for all the possible $\logtrace$.
 	
 	
 	
@@ -233,7 +234,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 
 
 \begin{table}[!t]
-	\caption{Comparison between the ranking induced by the expected ranking $k_\star$ and the proposed kernel $k_{\gorgembed}$ with embedding strategies $\epsilon^1$ and $\nu^1$: arrows $\boldsymbol{\downarrow}$ remark the column of choice under which we sort the rows (i.e., ranking).}\label{tab:rank3}
+	\caption{Comparison between the ranking induced by the expected ranking $\goldenrank$ and the proposed kernel $k_{\gorgembed}$ with embedding strategies $\epsilon^1$ and $\nu^1$: arrows $\boldsymbol{\downarrow}$ remark the column of choice under which we sort the rows (i.e., ranking).}\label{tab:rank3}
 	\centering
 	%	\begin{tabular}{l|c|ll}
 	%		\toprule
@@ -258,7 +259,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 		%\multirow{2}{*}{$d(\trace,\logtrace)$} &
 		%\multicolumn{2}{c|}{$\mu_{\logtrace}$} &
 		$( \probskip{\nonlogtrace}$ &  $,\,\boldsymbol{\downarrow} s_d(\nonlogtrace,\logtrace)) $ &
-		{$=k_\star(\nonlogtrace,\logtrace)$} &
+		{$=\goldenrank(\nonlogtrace,\logtrace)$} &
 		{$k_{\gorgembed}(P_\nonlogtrace,P_{\logtrace})$} \\
 		
 		
@@ -276,7 +277,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 	\toprule
 	
 	{$\trace$} &
-	{$\boldsymbol{\downarrow}k_\star(\nonlogtrace,\logtrace)$} \\
+	{$\boldsymbol{\downarrow}\goldenrank(\nonlogtrace,\logtrace)$} \\
 	
 	
 	\midrule
@@ -313,7 +314,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 
 
 \begin{example}\label{ex:11}
-	Given $k_{\gorgembed}(\nonlogtrace,\logtrace)=\braket{\gorgembed(G_\nonlogtrace),\;\gorgembed(G_{\logtrace})}$ with sub-embedding $\nu^1$ and $\epsilon^1$ for each  trace $\nonlogtrace\in\WCal{\varepsilon}{4}$,  the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}, where the expected ranking $k_\star$ is also showed. $k_{\gorgembed}$ approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
+	Given $k_{\gorgembed}(\nonlogtrace,\logtrace)=\braket{\gorgembed(G_\nonlogtrace),\;\gorgembed(G_{\logtrace})}$ with sub-embedding $\nu^1$ and $\epsilon^1$ for each  trace $\nonlogtrace\in\WCal{\varepsilon}{4}$,  the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}, where the expected ranking $\goldenrank$ is also showed. $k_{\gorgembed}$ approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
 \end{example}
 
 
@@ -356,7 +357,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 %	\end{tabular}
 %\end{table}
 %\begin{table}[!t]
-%	\caption{Comparison between the ranking induced by the expected ranking $k_\star$ and the proposed kernel $k_{\gorgembed}$ with embedding strategies $\epsilon^2$ and $\nu^1$: arrows $\boldsymbol{\downarrow}$ remark the column of choice under which we sort the rows (i.e., ranking).}\label{tab:compLit}
+%	\caption{Comparison between the ranking induced by the expected ranking $\goldenrank$ and the proposed kernel $k_{\gorgembed}$ with embedding strategies $\epsilon^2$ and $\nu^1$: arrows $\boldsymbol{\downarrow}$ remark the column of choice under which we sort the rows (i.e., ranking).}\label{tab:compLit}
 %	\centering
 %	\resizebox{.9\textwidth}{!}{\begin{tabular}{l|ll|cc}
 %			\toprule
@@ -365,7 +366,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 %			%\multirow{2}{*}{$d(\trace,\logtrace)$} &
 %			%\multicolumn{2}{c|}{$\mu_{\logtrace}$} &
 %			$( \probskip{\trace}$ &  $,\,\boldsymbol{\downarrow} s_d(\trace,\logtrace)) $ &
-%			{$=k_\star(\trace,\logtrace)$} &
+%			{$=\goldenrank(\trace,\logtrace)$} &
 %			{$k_{\gorgembed}(P_\trace,P_{\logtrace})$} \\
 %			
 %			
@@ -383,7 +384,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 %			\toprule
 %			
 %			{$\trace$} &
-%			{$\boldsymbol{\downarrow}k_\star(\trace,\logtrace)$} \\
+%			{$\boldsymbol{\downarrow}\goldenrank(\trace,\logtrace)$} \\
 %			
 %			
 %			\midrule
@@ -421,7 +422,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 %		%\multicolumn{3}{c||}{Example \ref{ex:withpaths}} %&
 %		%\multicolumn{3}{c}{Example \ref{ex:moreskew}}\\
 %		%\hline
-%		$\trace$ &  $k_{\gorgembed}(P_\trace,P_{\logtrace})$ & $k_\star(\trace,\logtrace)$\\ %&
+%		$\trace$ &  $k_{\gorgembed}(P_\trace,P_{\logtrace})$ & $\goldenrank(\trace,\logtrace)$\\ %&
 %		%$\trace$ &  $k_{\gorgembed}(\trace,\logtrace)$ & \textit{exp. ranking}\\
 %		\midrule
 %		
