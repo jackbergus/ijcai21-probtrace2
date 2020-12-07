@@ -1,0 +1,82 @@
+\documentclass[tikz]{standalone}
+\usepackage{amsfonts}
+\usepackage{xspace}
+\usetikzlibrary{automata}
+\usetikzlibrary{fit}
+\usepackage{braket}
+\usetikzlibrary{arrows}
+\input{arrowsnew}
+\usetikzlibrary{arrows.meta,calc,decorations.markings,math,arrows.meta}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usepackage{xfrac}
+\input{tikz-macros}
+\input{../neue_macros}
+
+\tikzstyle{cell}=[minimum width=3mm,minimum height=3mm,draw,thick,rectangle]
+
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+\begin{document}
+\begin{tikzpicture}[align=center,node distance=5mm,font=\footnotesize]
+
+\node[database,fill=marcofucsia1!100,very thick,scale=1.4,anchor=north] (log) {};
+\node[left=1mm of log,yshift=3mm] {probabilistic\\traces};
+
+\node[cjoint,below=7mm of log,xshift=-2mm] (intrace) {};
+\node[left=0mm of intrace] {trace $\trace$};
+
+
+
+\node[cstep,right=7mm of log,minimum height=1em,yshift=-4mm] (ate1){$\gorgembed(\cdot)$};
+\node[cstep,right=5.2mm of intrace,minimum height=1em] (ate2) {$\gorgembed(\sigma)$};
+
+\node[cell,right=of ate1,fill=marcofucsia2!30] (v11) {};
+\node[cell,right=-\pgflinewidth of v11,fill=marcofucsia2!30] (v12) {};
+\node[cell,right=-\pgflinewidth of v12,fill=marcofucsia2!30] (v13) {\tiny\ldots};
+\node[cell,above left=-3mm of v11,fill=marcofucsia2!50] (v21) {};
+\node[cell,right=-\pgflinewidth of v21,fill=marcofucsia2!50] (v22) {};
+\node[cell,right=-\pgflinewidth of v22,fill=marcofucsia2!50] (v23) {\tiny\ldots};
+
+
+\node[cell,right=of ate2,fill=marcoorange!30] (v41) {};
+\node[cell,right=-\pgflinewidth of v41,fill=marcoorange!30] (v42) {};
+\node[cell,right=-\pgflinewidth of v42,fill=marcoorange!30] (v43) {\tiny\ldots};
+
+\node[cstep,right=21mm of ate1,yshift=-4.5mm,minimum height=1em,minimum width=1em] (vs) {$\braket{\mathcal{X}_i,x}$};
+
+
+\node[astep,fit=(ate1) (ate2) (vs)] (pta){ };
+
+\node[cstep,right=7mm of log,minimum height=1em,yshift=-4mm] at ($(pta)-(23mm,-4mm)$) (ate2){$k_\star(\cdot,\trace)=\prob{\cdot}{\net}s_d(\cdot,\trace)$};
+
+\begin{pgfonlayer}{background}
+
+
+
+
+
+
+\node[above=-1mm of pta] {Optimal-ranking probabilistic alignment};
+\node[cell,below right=-3mm of v11,fill=marcofucsia2!10] (v31) {};
+\node[cell,right=-\pgflinewidth of v31,fill=marcofucsia2!10] (v32) {};
+\node[cell,right=-\pgflinewidth of v32,fill=marcofucsia2!10] (v33) {\tiny\ldots};
+  
+\end{pgfonlayer}
+
+
+
+\node[database,fill=marcogreen1!80,right=8mm of vs,very thick,scale=1.4,anchor=north] (rank) {};
+\draw[link,ultra thick] ($(rank.west)+(3mm,0)$) --($(rank.east)+(3mm,0)$);
+\node[below=2mm of rank,xshift=-2mm] {ranking};
+
+
+\draw[link] (log) -- ($(ate2.north west)+(1.4mm,0mm)$);
+\draw[link] (intrace) -- ($(ate2.south west)+(1.5mm,0mm)$);
+\draw[link] (ate2) -- (rank);
+\end{tikzpicture}
+\end{document}
+
