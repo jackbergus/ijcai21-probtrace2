@@ -14,6 +14,8 @@ We now employ the models and techniques described in Section~\ref{sec:models} to
 \end{inparaenum}
 and returns a ranking over all the $\net$-traces having a probability greater or equal than $\pmin$, based on a combined consideration of their probability values (probabilistic component) and their distance to $\trace$ (alignment component).
 
+\subsection{}
+
 This is obtained through the pipeline shown in Figure~\ref{fig:pipe}, consisting of the following steps:
 \begin{inparaenum}
 \item the reachability graph $\rg{\net}$ of $\net$ is constructed;
@@ -36,50 +38,34 @@ The last step, showed as a black box in the pipeline, is realized using two alte
 We now go through each step of the pipeline (but the reachability graph construction, which has been already commented).
 
 
-\subsection{Label Shifting}\label{sec:LSift}
-Reachability graphs obtained via sequentialization cannot be directly embedded using existing methods:  Reachability graphs 
-associated to stochastic workflow nets are edge labelled, but TGs are node labelled. To represent the former as the latter, we 
-shift the labels from the edges to the nodes  while preserving the set of traces and their associated probability. 
-Such transformation is defined next.
-
-\begin{definition}[Label Shifter]\label{def:transf}
-The reachability graph $(\mathcal{M},\mathcal{E})$ generated from an initial marking $M$, is transformed into the TG $(s,t,L,R,1)$, where:
-\begin{itemize}
-	\item If is a single edge $M_1\overset{t}{\to}M_2\in\mathcal{E}$ where $M_1=M$, then $s=M\overset{t}{\to}M_2$; otherwise, define a new node $\textbf{i}$ and set it as the initial node for TG: $s=\textbf{i}$.
-	\item If is a single edge $M_1\overset{t}{\to}M_2\in\mathcal{E}$ without outgoing edges in the reachability graph, then $t=M_1\overset{t}{\to}M_2$; otherwise, define a new node $\textbf{f}$ and set it as the accepting node for TG:  $t=\textbf{f}$.
-	\item $[L]_{\lambda(t),\;M\overset{t}{\to} M'}=1$ for each $M\overset{t}{\to} M'\in\mathcal{E}$; if $\textbf{i}$ is defined then $[L]_{\tau\textbf{i}}=1$; if $\textbf{f}$ is defined, then $[L]_{\tau\textbf{f}}=1$; $[L]_{ij}=0$ otherwise.
-	\item $[R]_{M\overset{t}{\to} M',\;M'\overset{t'}{\to} M''}=\frac{W(t')}{\sum_{\textbf{t}\in E(M')}W(\textbf{t})}$ for each $M\overset{t}{\to} M',M'\overset{t'}{\to} M''\in\mathcal{E}$; if $\textbf{i}$ is defined, $[R]_{\textbf{i},\;M\overset{t}{\to}M'}=\frac{W(t)}{\sum_{\textbf{t}\in E(M)}W(\textbf{t})}$; if $\textbf{f}$ is defined, then $[R]_{M\overset{t}{\to}M',\;\textbf{i}}=1$ for each $M'$ without outgoing edges in the reachability graph; $[R]_{ij}=0$ ow.
-\end{itemize}
-\end{definition}
-
 \endinput
 %
 We can show that the TG obtained in Definition \ref{def:transf} preserves the same set of probabilistic traces associated by the reachability graph. The proof is omitted due to the lack of space.
 
 \begin{example}
-Figure \ref{fig:lmc} shows the TG obtained from the reachability graph in Figure \ref{fig:rg}. Nodes are labelled with the firing 
-transition labels (in green), and edges preserve the probabilistic information from the reachability graph (in red). Intuitively, when a 
-new initial node \textit{\textbf{i}} is inserted, we preserve all the initial probabilistic choices that a transition is fired from an initial 
-marking $M$, while the intermediate edges inherit the probabilisitc choice of the firing transition from the subsequent choices. When 
-a new final node \textit{\textbf{f}} is added, such edges always have probability $1$, and thus do not interfere with the 
+Figure \ref{fig:lmc} shows the TG obtained from the reachability graph in Figure \ref{fig:rg}. Nodes are labelled with the firing
+transition labels (in green), and edges preserve the probabilistic information from the reachability graph (in red). Intuitively, when a
+new initial node \textit{\textbf{i}} is inserted, we preserve all the initial probabilistic choices that a transition is fired from an initial
+marking $M$, while the intermediate edges inherit the probabilisitc choice of the firing transition from the subsequent choices. When
+a new final node \textit{\textbf{f}} is added, such edges always have probability $1$, and thus do not interfere with the
 initial traces' probability.
 \end{example}
 
 \subsection{$\tau$-closure}\label{sec:clos}
-The $\tau$-closure process has two main purposes: first, reduce the size of the previously generated TG by removing all 
-$\tau$-labelled nodes \texttt{\color{blue}w} and preserving the connection between  the nodes \texttt{\color{blue}u} 
+The $\tau$-closure process has two main purposes: first, reduce the size of the previously generated TG by removing all
+$\tau$-labelled nodes \texttt{\color{blue}w} and preserving the connection between  the nodes \texttt{\color{blue}u}
 from its ingoing edges   $\texttt{\color{blue}u}\xrightarrow{\color{violet}\rho}\texttt{\color{blue}w}$ with the nodes \texttt{\color{blue}v} from its ingoing edges   $\texttt{\color{blue}w}\xrightarrow{\color{violet}\rho'}\texttt{\color{blue}v}$ by establishing new edges $\texttt{\color{blue}u}\xrightarrow{\color{violet}\rho\rho'}\texttt{\color{blue}v}$. $\tau$-labelled initial (or accepting) nodes are removed iff they have only one outgoing (ingoing) edge with probability $1$.
 
 \begin{example}\todo{Is it now ok?}
 	The $\tau$-closure removes the non-initial and non-accepting nodes within an automaton, while preserving the probabilistic trace equivalence of the two automata. Let us suppose to apply the $\tau$-closure to the automata in Figure \ref{fig:orig}: node \texttt{\color{blue}10} is removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{violet}\rho_{65}}\texttt{\color{blue}4}$ and $\texttt{\color{blue}3}\xrightarrow{\color{violet}\rho_{6f}}\texttt{\color{blue}5}$ are introduced. The resulting TG $P$ is represented with the same graphical depiction Figure \ref{fig:closed}.
 \end{example}
 %
-Consequently, it is always possible to minimize a TG  via $\tau$-closure, so that the only nodes labelled as $\tau$ 
-are the source and the target nodes and the set of weighted traces is preserved. From now on, we consider only minimised TGs. 
+Consequently, it is always possible to minimize a TG  via $\tau$-closure, so that the only nodes labelled as $\tau$
+are the source and the target nodes and the set of weighted traces is preserved. From now on, we consider only minimised TGs.
 
 \subsection{Unraveller}\label{sec:unrav}
-%Being that both the graph isomorphism problem is NP-Complete and the 
-Since TGs are fully characterized by the set of the probabilistic traces that they generate,  we say that two TGs are 
+%Being that both the graph isomorphism problem is NP-Complete and the
+Since TGs are fully characterized by the set of the probabilistic traces that they generate,  we say that two TGs are
 (probabilistic-trace) equivalent iff they share the same set of weighted traces. In particular, we denote as $\mathcal{W}_p^n(P)$ the set of all the weighted traces in $P$ having at least probability $p$ and maximum length $n$. Under these assumptions, the probabilistic trace equivalence is deterministic.
 
 \begin{example}
