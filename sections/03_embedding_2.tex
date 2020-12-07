@@ -20,7 +20,7 @@
 \fi
 
 
-\subsection{Alignment Strategy}
+\subsection{Alignment Strategy}\label{subsec:as}
 \texttt{\color{red}[MEMO: ``unfolded trace'' can be omitted, as trace should already\\ refer to unfolded traces]}.
 Trace alignment algorithms usually provide as output a single alignment for a single model trace. However, in practice, approaches generating different alignment possibilities would provide the user with a richer feedback. This is even more important for approaches based o stochastic nets, like USWNs, since, in this case, distinct model traces have different probabilities and the retrieval of the best model trace maximizing the combined provision of minimum trace alignment cost and maximum model trace probability might not suffice. Therefore, we would
 like to return the best $k$ alignments among all the distinct \unravelled\ model traces in $\WCal{p_\theta}{n}(P)$. In the database community, this problem is usually tackled via $k$-Nearest Neighbors.
