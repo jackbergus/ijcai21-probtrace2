@@ -8,11 +8,11 @@ We now employ the models and techniques described in Section~\ref{sec:models} to
 \item a minimum, positive probability threshold $\pmin \in (0,1]$
 \item a trace $\trace$ of interest,
 \end{inparaenum}
-and returns a ranking over all the $\net$-traces having a probability greater or equal than $\pmin$, based on a combined consideration of their probability values (probabilistic component) and their distance to $\trace$ (alignment component).
+and returns a ranking over all the $\net$-traces having a probability greater than or equal to $\pmin$, based on a combined consideration of their probability values (probabilistic component) and their distance to $\trace$ (alignment component).
 
 \begin{figure}[!t]
 	\hspace*{-1cm}\includegraphics[width=1.2\textwidth]{images/pipeline}
-	\caption{Proposed pipeline to assess the Probabilistic Trace Alignment}\label{fig:pipe}
+	\caption{Proposed pipeline to assess the probabilistic trace alignment}\label{fig:pipe}
 \end{figure}
 
 
@@ -25,10 +25,10 @@ In step 2,  $\rg{\net}$ is converted into a corresponding transition graph $\tg_
 
 
 In step 3, the transition graph $\tg_{\rg{\net}}$ is processed applying a \emph{$\hidden$-closure} that compiles away
-$\tau$-transitions. This results in a new transition graph $\closed{\tg_{\rg{\net}}}$ that on the one hand only retains $\hidden$ labels only in the initial and accepting states while for the rest exclusively operating over visible labels in $\tasks$, and on the other continues to preserve model traces and their probabilities. Also in this case we omit the details, as the transformation relies on well-known automata-based techniques for removing $\epsilon$-moves. The only non-trivial observation is that, even in our case where probabilities are present, all $\tau$ transitions can still be removed thanks to the working hypothesis done for \uswn{s} in Section~\ref{subsec:spn}, for which no loops can contain only $\tau$ transitions. As a result of this step, the transition graph in \figurename~\ref{fig:orig} results in that of \figurename~\ref{fig:closed}.
+$\tau$-transitions. This results into a new transition graph $\closed{\tg_{\rg{\net}}}$ that on the one hand only retains $\hidden$ labels only in the initial and accepting states while for the rest exclusively operating over visible labels in $\tasks$, and, on the other, continues to preserve model traces and their probabilities. Also in this case we omit the details, as the transformation relies on well-known automata-based techniques for removing $\epsilon$-moves. The only non-trivial observation is that, even in our case where probabilities are present, all $\tau$ transitions can still be removed thanks to the working hypothesis done for \uswn{s} in Section~\ref{subsec:spn}, for which no loops can contain only $\tau$ transitions. As a result of this step, the transition graph in \figurename~\ref{fig:orig} results in that of \figurename~\ref{fig:closed}.
 
 
-In step 4, the $\hidden$-closed transition graph $\closed{\tg_{\rg{\net}}}$ is \unravelled, so as to collect all the model traces that have a probability of at least $\pmin$. To do so, we rely on a key property that $\closed{\tg_{\rg{\net}}}$ inherits from the fact that it results from an \uswn. Since an \uswn has a workflow net as underlying control-flow structure, no loop can be executed without strictly decreasing the resulting probability. This means that all valid sequences with a resulting probability of at least $\pmin$ can be enumerated and returned in a set. The so-obtained sequences are then combined by merging those that produce the same trace, summing up their probabilities, thus obtaining the set of all the traces having a probability greater than $\pmin$, $\ptraces{\closed{\tg_{\rg{\net}}}}{\pmin}$. The closure operation also implies that the notion of model trace collapses with the one of run modulo removing the initial and the final $\tau$ labels attached to the initial and accepting nodes.
+In step 4, the $\hidden$-closed transition graph $\closed{\tg_{\rg{\net}}}$ is \unravelled, so as to collect all the model traces that have a probability of at least $\pmin$. To do so, we rely on a key property that $\closed{\tg_{\rg{\net}}}$ inherits from the fact that it results from an \uswn. Since an \uswn has a Workflow net as underlying control-flow structure, no loop can be executed without strictly decreasing the resulting probability. This means that all valid sequences with a resulting probability of at least $\pmin$ can be enumerated and returned in a set. The so-obtained sequences are then combined by merging those that produce the same trace, summing up their probabilities, thus obtaining the set of all the traces having a probability greater than or equal to $\pmin$, $\ptraces{\closed{\tg_{\rg{\net}}}}{\pmin}$. The closure operation also implies that the notion of model trace collapses with the one of run modulo removing the initial and the final $\tau$ labels attached to the initial and accepting nodes.
 
 
 %$\closed{\tg_{\rg{\net}}}$ preserves model traces and their probabilities while working only over visible tasks in $\tasks$;
@@ -38,7 +38,7 @@ In step 4, the $\hidden$-closed transition graph $\closed{\tg_{\rg{\net}}}$ is \
 %(\S\ref{sec:seqZ}), we shift the labels from the edges towards the nodes while preserving the set of probabilistic traces
 %(\S\ref{sec:LSift}) and minimize the graph representation by removing the $\tau$-labeled nodes while preserving the
 %trace probability (\S\ref{sec:clos}).
-The last step takes the so-obtained model traces and ranks them by considering their probabilities and the similarity with the trace $\trace$ of interest. In \figurename~\ref{fig:pipe} this is shown as a black-box. As we describe in detail next, we have implemented this last step in two alternative ways: one computationally demanding but guaranteeing to produce an optimal ranking, the other more efficient but providing approximate ranking without optimality guarantees.
+The last step takes the so-obtained model traces and ranks them by considering their probabilities and the similarity with the trace $\trace$ of interest. In \figurename~\ref{fig:pipe}, this is shown as a black-box. As we describe in detail next, we have implemented this last step in two alternative ways: one computationally demanding but guaranteeing to produce an optimal ranking, the other more efficient but providing approximate ranking without optimality guarantees.
 %\todo{Ho tagliato la descrizione che c'era dopo. Al limite la incorporerei nella rispettiva sottosezione.}
 %We later discuss how to rank traces in the exact and approximated scenarios by reducing the alignment process to a k-nearest
 %neighbour problem. While the exact trace alignment requires to perform the alignment process each time a novel trace $\sigma^*$ is
