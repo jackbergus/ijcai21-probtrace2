@@ -150,22 +150,22 @@ $$\gorgembed_{i}(\closed{G}_\nonlogtrace)=\begin{cases}
 	\omega \frac{\epsilon_\const{ab}(\closed{G}_\nonlogtrace)}{\|\epsilon\|_2}\;t_f^{|R>0|}\, & {i}=\const{ab}\\
 	\frac{\nu_\const{a}(\closed{G}_\nonlogtrace)}{\|\nu\|_2}\;\;\;\,t_f^{|R>0|}\, & {i}=\const{a}\\
 \end{cases}$$
-where $\epsilon$ (and $\nu$) represents the non-negatively defined embedding associated to $\closed{G}_\nonlogtrace.R$ (both $\closed{G}_\nonlogtrace.R$ and $\closed{G}_\nonlogtrace.L$).
+where $\nu$ (and $\epsilon$) represents the non-negatively defined embedding associated to $\closed{G}_\nonlogtrace.L$ (both $\closed{G}_\nonlogtrace.R$ and $\closed{G}_\nonlogtrace.L$).
 \end{definition}
 %
 Here, ${\max\arg}_{\nonlogtrace\in \WCal{\pmin}{n}, G_\nonlogtrace\in\TBf{p}{n}(P)} k_{\gorgembed}(G_\nonlogtrace, G_{\logtrace})$ returns the best approximated trace alignment for a log trace represented as $G_{\logtrace}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\logtrace}$ as $\underset{P}{\max\arg}\underset{ P_\trace\in\mathbf{P}_p^n(P)}{\max} k_{\gorgembed}(P_\trace, P_{\logtrace})$.}¯
 %
 \begin{table}[!t]
-	\caption{Different sub-embedding definitions ($\epsilon^1$, $\epsilon^2$, $\nu^1$, and $\nu^2$) for $\gorgembed$.}\label{tab:embedstrat}
+	\caption{Different sub-embedding definitions ($\epsilon^1$, $\epsilon^2$, $\nu^1$, and $\nu^2$) for $\gorgembed$}\label{tab:embedstrat}
 	\centering
 	\resizebox{.6\textwidth}{!}{\begin{tabular}{c|c|c}
 		\toprule
 		& $x=1$ & $x=2$ \\
 		\midrule
-		$\epsilon^x(P)_{\color{green}\alpha\beta}:=$ & $\label{eq:epsilon}
-		\sum_{i=1}^l{\lambda^i}\frac{[LR^iL^t]_{\color{green}\alpha\beta}}{\sum_{\color{green}\alpha'\beta'}R^i_{\color{green}\alpha'\beta'}}$ & $
-		\sum_{i=1}^l\lambda^i[\Lambda^i]_{\color{green}\alpha\beta}$\\
-		$\nu^x(P)_{\color{green}\alpha}:=$ & $\frac{1}{N}\sum_{\braket{\nonlogtrace,w}\in\WCal{\pmin}{l}(P)}\frac{|\Set{\nonlogtrace_i\in\nonlogtrace|\nonlogtrace_i\neq\tau\wedge \nonlogtrace_i={\color{green}\alpha}}|}{|\nonlogtrace|}$ & $0$ \\
+		$\epsilon^x_\const{ab}(\overline{G}_\nonlogtrace):=$ & $\label{eq:epsilon}
+		\sum_{i=1}^l{\lambda^i}\frac{[LR^iL^t]_\const{ab}}{\sum_{\const{a'b'}\in\mathcal{A}^2}R^i_\const{a'b'}}$ & $
+		\sum_{i=1}^l\lambda^i[\Lambda^i]_\const{ab}$\\
+		$\nu^x_\const{a}(\overline{G}_\nonlogtrace):=$ & $\frac{1}{c}\sum_{\nonlogtrace'\in \ptraces{\closed{G}_\nonlogtrace}{0}}\frac{|\Set{\nonlogtrace_i'\in\nonlogtrace'|\const{a}\in\mathcal{A}\wedge \nonlogtrace'_i=\const{a}}|}{|\nonlogtrace'|}$ & $0$ \\
 		\bottomrule
 	\end{tabular}}
 \end{table}
