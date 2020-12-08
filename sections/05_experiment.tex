@@ -20,7 +20,7 @@
 \end{adjustbox}
 \end{table}
 \section{Experimental Results}\label{sec:exp}
-\subsection{Dataset}
+%\subsection{Dataset}
 For our experiments, we took the Sepsis Cases event log\footnote{{\small \url{https://data.4tu.nl/articles/Sepsis_Cases_-_Event_Log/12707639}}} and split the dataset into a training set, containing the ``\textit{happy traces}''  having duration lower than or equal to the average trace duration in the log ($\leq 2.3\cdot 10^{7}$ ms), and a test set, containing the traces with the highest execution times. We used the training set to generate either an \uswn, using the approach presented in \cite{RoggeSoltiAW13}, or a BPMN with only exclusive gates using Split Miner 2.0 \cite{AugustoCDRP19} that was then converted into a Petri net \cite{PPNFromLog}. This Petri net was later on converted into an \uswn by using a firing weight estimator: we choose the \texttt{Fork} and the \texttt{PairScale} estimators from \cite{spdwe} and we denote as \texttt{Constant} a naive estimator assuming that all the transition enabled in a given marking are equiprobable. %No estimator was used for the \uswn generated via ProM, as such engine already estimates the firing weights.
 From such \uswn-s, we generated distinct sets of \unravelled\ traces (of different sizes). The experimental settings are summarized in \tablename~\ref{tab:dataset}. The experiments described in the following sections have the aim of evaluating the benefits of performing the approximate-ranking strategy over the optimal-ranking one.
 
