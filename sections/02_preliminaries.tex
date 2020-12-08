@@ -265,7 +265,7 @@ This trace kernel returns strong dissimilarity when the two traces have no share
 		& $\const{aa}$    & $\const{ab}$   & $\const{ac}$    & $\const{ba}$   & $\const{bb}$   & $\const{bc}$ & $\const{ca}$ & $\const{cb}$ & $\const{cc}$   \\
 		\midrule
 		$\const{cacb}$ & $0$ & $\lambda^2$ & $\lambda$ & $0$  & $0$  & $0$ & $\lambda$ & $\lambda+\lambda^3$ & $\lambda^2$\\
-		$\const{caaa}$ & $2\lambda+\lambda^2$& $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2+\lambda^3$ & $0$ & $0$ \\
+		%$\const{caaa}$ & $2\lambda+\lambda^2$& $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2+\lambda^3$ & $0$ & $0$ \\
 		$\const{caa}$  & $\lambda$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda+\lambda^2$ & $0$&  $0$\\
 		$\const{cb}$   & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\lambda$& $0$ \\
 		\bottomrule
@@ -276,17 +276,18 @@ This trace kernel returns strong dissimilarity when the two traces have no share
 \begin{example}\label{ex:wheredotiszero}
 Consider tasks $\tasks=\Set{a,b,c}$. The possible 2-grams over $\tasks$ are $\tasks^2=\Set{\const{aa},\const{ab},\const{ac},\const{ba},\const{bb},\const{bc},\const{ca},\const{cb},\const{cc}}$. Table~\ref{tb:embedding} shows the embeddings of some traces. Being a 2-gram, trace $\const{cb}$ has only one nonzero component, namely that corresponding to itself, with $\trembed_{\const{cb}}(\const{cb})=\lambda$. Trace $\const{caa}$ has the 2-gram $\const{ca}$ occurring with length $1$ ($\const{\underline{ca}a}$) and $2$ ($\const{\underline{c}a\underline{a}}$), and the 2-gram $\const{aa}$ with occurring length $1$ ($\const{c\underline{aa}}$). Hence: $\trembed_{\const{ca}}(\const{caa})=\lambda+\lambda^2$ and  $\trembed_{\const{aa}}(\const{caa})=\lambda$.  Similar considerations can be carried out for the other traces in the table.
 
-We now want to compute the similarity between the first trace $\const{cacb}$ and the other three traces. To do so, we sum, column by column (that is, 2-gram by 2-gram) the product of the embeddings for the two traces (thus keeping penalties whenever the 2-gram embeds in both traces). We then get
-{\footnotesize
-\[
-k_{\trembed}(\const{cacb},\const{caaa})=\lambda(\lambda+\lambda^2+\lambda^3)
-~~
-k_{\trembed}(\const{cacb},\const{caa})=\lambda(\lambda+\lambda^2)
-~~
-k_{\trembed}(\const{cacb},\const{cb})=\lambda(\lambda+\lambda^3)
-\]}
+We now want to compute the similarity between the first trace $\const{cacb}$ and the other three traces. To do so, we sum, column by column (that is, 2-gram by 2-gram) the product of the embeddings for the two traces (thus keeping penalties whenever the 2-gram embeds in both traces). We then get $k_{\trembed}(\const{cacb},\const{caa})=\lambda(\lambda+\lambda^2)
+$ and $k_{\trembed}(\const{cacb},\const{cb})=\lambda(\lambda+\lambda^3)
+$, 
+%{\footnotesize
+%\[
+%k_{\trembed}(\const{cacb},\const{caaa})=\lambda(\lambda+\lambda^2+\lambda^3)
+%~~
+%k_{\trembed}(\const{cacb},\const{caa})=\lambda(\lambda+\lambda^2)
+%~~
+%k_{\trembed}(\const{cacb},\const{cb})=\lambda(\lambda+\lambda^3)
+%\]}
 which induces ranking $
-k_{\trembed}(\const{cacb},\const{caaa})>
 k_{\trembed}(\const{cacb},\const{caa})>
 k_{\trembed}(\const{cacb},\const{cb})
 $.
