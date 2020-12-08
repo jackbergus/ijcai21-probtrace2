@@ -22,10 +22,9 @@ As usual, the current state of execution is captured using a marking of the net,
 The notions of transition enablement and firing are also the standard ones, since they do not depend on the weight function, which provides the basis for capturing the stochastic behavior of the net. We use the following notation: given a marking $\marking$ over \uswn $\net$, we denote by $\enaset{\marking}{\net}$ the set of enabled transitions in $\marking$; given transition $t \in \enaset{\marking}{\net}$, we write $\fire{\marking}{t}{\marking'}{\net}$ to capture the fact that, within $\net$, firing $t$ in $\marking$ results in the new marking $\marking'$. A \emph{firing sequence of $\net$ starting from marking $\marking_0$} is a sequence $t_1\cdots t_n$ of transitions from $\net.T$ so that for every $i \in \set{1,\ldots,n}$, we have that $\fire{\marking_{i-1}}{t_i}{\marking_{i}}{\net}$. We say that the firing sequence results in $\marking_{n}$.
 
 As customary in workflow nets, we consider two special markings: the \emph{input} (resp.~\emph{output}) marking $m_{in}^\net$ (resp.~$m_{out}^\net$) that assigns a single token to the input (resp.~output) place $\net.in$ (resp.~$\net.out$) of $\net$, and no token elsewhere. A \emph{valid sequence} $\seq = t_1\cdots t_n$ of $\net$ is a firing sequence of $\net$ starting from $m_{in}^\net$ and resulting in $m_{out}^\net$. A sequence of labels $\run = \alpha_1 \cdots \alpha_n$ from $\alphabet$ is a \emph{run} of $\net$ if there exists a valid underlying sequence $\seq = t_1\cdots t_n$ of $\net$  such that, for every $i \in \set{1,\ldots,n}$, we have $\net.\ell(t_i) = \alpha_i$. Run $\run$ may have different underlying valid sequences in $\net$, which we collectively refer to as $\seqs{\run}{\net}$. A trace $\trace$ is a \emph{model trace} of $\net$ (or $\net$-trace for short) if there exists an underlying run $\run$ of $\net$ that corresponds to $\trace$ once all occurrences of $\tau$ are removed. There may be multiple runs underlying a $\net$-trace $\trace$, and we collectively refer to them as $\runs{\trace}{\net}$. Finally, we denote the (possibly infinite) set of $\net$-traces as $\traces{\net}$.
-\begin{example}
+\begin{example} \small
 \label{ex:net}
-\small
-  Figure~\eqref{fig:spn} shows an example of \uswn with input place $p_1$ and output place $p_7$. One run of the net is $\const{\tau c \tau a a \tau}$, which corresponds to trace $\const{caa}$. Overall, the net supports infinitely many finite traces of the form (represented using regular expressions):
+Figure~\eqref{fig:spn} shows an example of \uswn with input place $p_1$ and output place $p_7$. One run of the net is $\const{\tau c \tau a a \tau}$, which corresponds to trace $\const{caa}$. Overall, the net supports infinitely many finite traces of the form (represented using regular expressions):
 \begin{inparaenum}[\it (i)]
 \item $\const{aa^*}$,
 \item $\const{cb}$,
@@ -89,22 +88,29 @@ Figure~\eqref{fig:rg} shows an example of a reachability graph.
 %\[\forall p\in P.\; M'(p)=M(p)-\mathbf{1}_{(p,t)\in F}+\mathbf{1}_{(t,p)\in F}\]
 %We denote the transition from marking $M$ to marking $M'$ via an enabling $t$ as a relation $M\overset{t}{\to}M'$. We say that an \uswn with initial marking $M$ is $k$-\textit{bounded} if each of the markings $M'$ reachable from $M$, $M$ included, have $\forall p\in P.\; M(p)\leq k$\\
 
-\begin{figure}[!t]
-	\centering
-	\subfloat[A sample \uswn. Labels are shown in green, invisible transitions in grey, and weights in magenta.]{\label{fig:spn}\includegraphics[width=.45\textwidth]{images/petri.pdf}}\hfill
-    \subfloat[Reachability graph of the \uswn in (a). Probabilities are shown in violet.]{\label{fig:rg}\includegraphics[width=.45\textwidth]{images/rg.pdf}}
-    \\
-\vspace*{-4.5mm}
-	\subfloat[Transition graph encoding the reachability graph in (b).]{\label{fig:lmc}\label{fig:orig}\includegraphics[width=.45\textwidth]{images/running_example.pdf}}
-    \hfill
-    \subfloat[Transition graph resulting from the transition graph in (c) after $\tau$-closure.]{\label{fig:closed}\includegraphics[width=.45\textwidth]{images/closed_example.pdf}}
-	\caption{An \uswn and the application of the three transformation steps to convert it into a minimal, trace-preserving transition graph.}
-	\label{transformspn}
-\end{figure}
+\begin{figure*}[!t]
+	\begin{minipage}{.49\textwidth}
+		\includegraphics[width=.9\textwidth]{images/petri.pdf}
+		\caption{A sample \uswn $N$. Labels are shown in green, invisible transitions in grey, and weights in magenta.}\label{fig:spn}
+	\end{minipage}\hfill \begin{minipage}{.49\textwidth}
+		\includegraphics[width=.9\textwidth]{images/rg.pdf}
+		\caption{Reachability graph $RG(N)$ of the \uswn $N$. Probabilities are shown in violet.}\label{fig:rg}
+	\end{minipage}
+
+	\begin{minipage}{.49\textwidth}
+	\includegraphics[width=.9\textwidth]{images/running_example.pdf}
+	\caption{Transition graph $G_{RG(N)}$ encoding the reachability graph $RG(N)$.}\label{fig:lmc}\label{fig:orig}
+\end{minipage}\hfill \begin{minipage}{.49\textwidth}
+	\includegraphics[width=.9\textwidth]{images/closed_example.pdf}
+	\caption{Transition graph $\closed{G_{RG(N)}}$ resulting from the transition graph in $G_{RG(N)}$ after $\tau$-closure.}\label{fig:closed}
+\end{minipage}
+\end{figure*}
+
+
 %Figures \ref{fig:spn} and \ref{fig:rg} respectively show a sample \uswn and its corresponding reachability graph. This net will be our running example throughout the paper.
 
 
-%\begin{example} \small
+%\begin{example}
 %Figure \ref{fig:spn} provides a sample \uswn defined as such, and \ref{fig:rg} provides its associated Reachability Graph. This representation can be beneficial when such \uswns are inferred and extracted from log files \cite{PPNFromLog} for extracting the set of the probabilistic traces associated to the \uswn.
 %\end{example}
 %
@@ -168,7 +174,7 @@ Runs and model traces of transition graphs are then defined as in \uswn{s}, and 
 
 
 
-%\begin{example} \small
+%\begin{example}
 %We can graphically represent such TG as in \cite{Myers1989}.
 %Figure \ref{fig:orig} is a  TG $P^*=(\mathtt{\color{blue}1},\mathtt{\color{blue}8},L,R,1)$ where $\omega=1$, where the matrices $L$ and $R$ can be both defined as follows:
 %$$L:=\kbordermatrix{
@@ -226,7 +232,7 @@ This trace kernel returns strong dissimilarity when the two traces have no share
 	\caption{Graphical representation of the transition graph encoding trace $\const{cacb}$}\label{fig:taustar}
 \end{figure}
 %
-%\begin{example} \small\label{ex:tracembed}
+%\begin{example}\label{ex:tracembed}
 %	{Let us suppose that we want to align a trace $\tau^*$ to one of the traces from a transition graph: in order to carry out an approximate alignment, we need to transform it to a transition graph first.} A trace $\tau^*=\textup{caba}$ can be graphically represented in Figure \ref{fig:taustar}. The associated TG $T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ has matrices $L$ and $R$  defined as follows:
 %	$$L:=\kbordermatrix{
 %		& \texttt{\color{blue}1}&\texttt{\color{blue}2}&\texttt{\color{blue}3}&\texttt{\color{blue}4}\\
@@ -243,7 +249,7 @@ This trace kernel returns strong dissimilarity when the two traces have no share
 %We can similarly represent all the traces from the USPN.
 %\end{example}
 
-%\begin{example} \small
+%\begin{example}
 %The subtrace \textit{\textbf{\uline{hi}}} is represented in \textit{\textbf{\uline{hi}}deous},   \textit{\uline{\textbf{h}}e\uline{{i}}d\textbf{i}}, and \textit{\uline{{\textbf{h}i}}nd\textbf{i}}, but with different frequencies and subtrace distances. We have $\embed_{\mathcal{T}}(\textit{hideous})_{{\color{green}hi}}=\lambda$,  $\embed_{\mathcal{T}}(\textit{heidi})_{{\color{green}hi}}=\lambda^2+\lambda^4$, and $\embed_{\mathcal{T}}(\textit{hindi})_{{\color{green}hi}}=\lambda+\lambda^4$.
 %\end{example}
 
@@ -279,9 +285,8 @@ This trace kernel returns strong dissimilarity when the two traces have no share
 \vspace{-0.6cm}
 \end{center}
 \end{table}
-\begin{example} \small\label{ex:wheredotiszero}
+\begin{example}\label{ex:wheredotiszero} \small
 Consider tasks $\tasks=\Set{a,b,c}$. The possible 2-grams over $\tasks$ are $\tasks^2=\Set{\const{aa},\const{ab},\const{ac},\const{ba},\const{bb},\const{bc},\const{ca},\const{cb},\const{cc}}$. Table~\ref{tb:embedding} shows the embeddings of some traces. Being a 2-gram, trace $\const{cb}$ has only one nonzero component, namely that corresponding to itself, with $\trembed_{\const{cb}}(\const{cb})=\lambda$. Trace $\const{caa}$ has the 2-gram $\const{ca}$ occurring with length $1$ ($\const{\underline{ca}a}$) and $2$ ($\const{\underline{c}a\underline{a}}$), and the 2-gram $\const{aa}$ with occurring length $1$ ($\const{c\underline{aa}}$). Hence: $\trembed_{\const{ca}}(\const{caa})=\lambda+\lambda^2$ and  $\trembed_{\const{aa}}(\const{caa})=\lambda$.  Similar considerations can be carried out for the other traces in the table.
-
 We now want to compute the similarity between the first trace $\const{cacb}$ and the other three traces. To do so, we sum, column by column (that is, 2-gram by 2-gram) the product of the embeddings for the two traces (thus keeping penalties whenever the 2-gram embeds in both traces). We then get $k_{\trembed}(\const{cacb},\const{caa})=\lambda(\lambda+\lambda^2)
 $ and $k_{\trembed}(\const{cacb},\const{cb})=\lambda(\lambda+\lambda^3)
 $,
@@ -342,7 +347,7 @@ Consequently, most recent literature focused on extracting relevant features of 
 %\end{compactitem}
 %%We write $\tau \models \varphi$ as a shortcut notation for $\tau,0\models \varphi$, and say that formula $\varphi$ is \emph{satisfiable}, if there exists a trace $\tau$ such that $\tau \models \varphi$.
 %
-%\begin{example} \small
+%\begin{example}
 %The $\LTLf$ formula $\Box(\activity{accept} \rightarrow \Diamond\activity{pay})$ models that, whenever an order is accepted, then it is eventually paid. The structure of the formula follows what is called \emph{response template} in \declare.
 %\end{example}
 %
@@ -359,7 +364,7 @@ Consequently, most recent literature focused on extracting relevant features of 
 %
 %
 %
-%\begin{example} \small
+%\begin{example}
 %\label{ex:inconsistency}
 %Consider the following \declare model, constituting a (failed) attempt of capturing a fragment of an order-to-shipment process:
 %
