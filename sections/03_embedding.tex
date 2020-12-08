@@ -16,13 +16,13 @@ and returns a ranking over all the $\net$-traces having a probability greater or
 
 \subsection{Computation pipeline}
 Our technique is realized through the pipeline shown in Figure~\ref{fig:pipe}, consisting of the following steps.
-
+%
 In step 1, the reachability graph $\rg{\net}$ of $\net$ is constructed.
-
+%
 In step 2,  $\rg{\net}$ is converted into a corresponding transition graph $\tg_{\rg{\net}}$ that preserves model traces and their probabilities. We omit the details of this conversion, due to lack of space and the fact that it employs well-known techniques used to \emph{shift labels} from transitions to states while preserving the behavior encoded by a transition system. Figure~\eqref{fig:orig} shows the result of this conversion when applied to the reachability graph in Figure~\eqref{fig:rg}.
 
 
-In step 3, the transition graph $\tg_{\rg{\net}}$ is further processed by applying a \emph{$\hidden$-closure} that compiles away
+In step 3, the transition graph $\tg_{\rg{\net}}$ is processed applying a \emph{$\hidden$-closure} that compiles away
 $\tau$-transitions. This results in a new transition graph $\closed{\tg_{\rg{\net}}}$ that on the one hand only retains $\hidden$ labels only in the initial and accepting states while for the rest exclusively operating over visible labels in $\tasks$, and on the other continues to preserve model traces and their probabilities. Also in this case we omit the details, as the transformation relies on well-known automata-based techniques for removing $\epsilon$-moves. The only non-trivial observation is that, even in our case where probabilities are present, all $\tau$ transitions can still be removed thanks to the working hypothesis done for \uswn{s} in Section~\ref{subsec:spn}, for which no loops can contain only $\tau$ transitions. As a result of this step, the transition graph in Figure~\eqref{fig:orig} results in that of Figure~\eqref{fig:closed}.
 
 

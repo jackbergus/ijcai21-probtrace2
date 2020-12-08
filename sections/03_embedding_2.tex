@@ -1,6 +1,6 @@
 % !TeX root=../main.tex
 
-\vspace{-0.6cm}
+\vspace{-0.5cm}
 \subsection{Alignment Strategy}\label{subsec:as}
 An alignment of a trace with an \uswn could be represented by the best model trace maximizing the combined provision of minimum trace alignment cost and maximum model trace probability. However, in some cases, the user could prefer to identify an alignment with a lower cost even if based on a less probable model trace, while, in other cases, the user could favor a model trace with a higher probability at the expense of a higher alignment cost.  Therefore, to provide users with an instrument that allows them to find their own trade-off between alignment cost and model trace probability, we need to return the best $k$ alignments among all the distinct \unravelled\ model traces in $\ptraces{\net}{\pmin}=\ptraces{\closed{\tg_{\rg{\net}}}}{\pmin}$. In the database community, this problem is usually tackled via $k$-Nearest Neighbors that refers to finding the $k$ nearest data points to a \textit{query} $x$ from a set $\mathcal{X}$ of \textit{data points} via a distance function $d_k$ defined over $\mathcal{X}\cup\{x\}$. 
 
@@ -8,7 +8,9 @@ An alignment of a trace with an \uswn could be represented by the best model tra
 
 %The well-known $k$-nearest neighbors ($k$NN) problem \cite{Altman} refers to finding the $k$ nearest data points to a \textit{query} $x$ from a set $\mathcal{X}$ of \textit{data points} via a distance function $d_k$ defined over $\mathcal{X}\cup\{x\}$. Usually, $x$ and $\mathcal{X}$ are represented as numerical vectors via an embedding $\phi$. {By exploiting ad-hoc data structures such as Vp-Trees \cite{Fu2000}, Kd-Trees \cite{Maneewongvatana99}, and M-Trees \cite{Ciaccia}, we can retrieve the neighborhood of $x$ in $\mathcal{X}$ of size $k$  by pre-ordering (\textit{indexing}) $\mathcal{X}$  via $d_k$. Thus, we do not need to analyze the entire space, but just start the search from the top-$1$ alignment. We prefer embeddings $\phi$ for $\mathcal{X}$ that are independent from the query of choice $x$, as it would not require to constantly change the numeric vector representation for $\mathcal{X}$.
 %	
-If we want to align the trace $\logtrace$ over the \unravelled\ traces $\mathcal{X}=\WCal{\pmin}{n}$ and $d$ is a distance, the $k$-nearest neighbors describe the best $k$ alignments for $\logtrace$.} We now discuss two different possible strategies for obtaining the top-$k$ model trace alignments.
+If we want to align the trace $\logtrace$ over the \unravelled\ traces $\mathcal{X}=\WCal{\pmin}{n}$ and $d$ is a distance, 
+the $k$-nearest neighbors describe the best $k$ alignments for $\logtrace$.} We discuss two strategies for obtaining the 
+top-$k$ model trace alignments.
 
 
 \begin{figure*}[!t]
@@ -21,19 +23,23 @@ If we want to align the trace $\logtrace$ over the \unravelled\ traces $\mathcal
 		\caption{Approx.-Ranking Trace Aligner.}\label{fig:approximate}
 	\end{minipage}
 \end{figure*}
-\vspace{-0.6cm}
-\subsubsection{Optimal-Ranking Trace Aligner}\label{subsec:eta}
-{A possible way to carry out probabilistic trace alignment is to reuse existing trace aligners such as \cite{LeoniM17}, where the notion of distance $d(\nonlogtrace,\logtrace)$ between two traces $\nonlogtrace$ and $\logtrace$ is the Levenshtein distance, i.e., the {minimum} cost for aligning one of the two traces with respect to the other when all the possible moves have cost equal to 1.\footnote{This distance is slightly different from the Levenshtein distance known in the literature since here the replacement is obtained as a concatenation of a deletion and an addition.} We can then exploit decision theory \cite{dectheor} and express the decision score as  $\probskip{\nonlogtrace} d(\nonlogtrace,\logtrace)$.
+%\vspace{-0.6cm}
 
-If we want to represent the same intuition of such a weighted distance as a kernel function to induce a ranking, we need to first transform it as a similarity function returning $1$ when both $\nonlogtrace=\logtrace$ and  $\probskip{\logtrace}=1$ hold. We express $d$ as}
+\noindent
+\textbf{Optimal-Ranking Trace Aligner}\label{subsec:eta}
+{One way to probabilistically align traces is to reuse existing trace aligners like \cite{LeoniM17}, where $d(\nonlogtrace,\logtrace)$ 
+is the Levenshtein distance, i.e., the {minimum} cost for aligning one of the two traces with respect to the other when all the possible moves have cost equal to 1.\footnote{This is slightly different from the Levenshtein distance from the literature since here the replacement is obtained as a concatenation of a deletion and an addition.} Using decision theory \cite{dectheor}, we express the decision score as  $\probskip{\nonlogtrace} d(\nonlogtrace,\logtrace)$.
+
+To represent the same intuition of such a weighted distance as a kernel function to induce a ranking, we must transform it as a 
+similarity function returning $1$ when $\nonlogtrace=\logtrace$ and  $\probskip{\logtrace}=1$ hold. We express $d$ as}
 %\xout{We can express our probabilistic trace alignment as finding the trace that maximizes both the trace's probability and its similarity with the query trace $\logtrace$. Still, the trace alignments problems are usually expressed via trace alignments cost functions, and not via trace similarities \cite{LeoniM17}. Given a generic trace cost function $d(\trace,\trace')$, it is always possible to convert it into}
-a normalized similarity score $s_d(\nonlogtrace,\logtrace):=\frac{1}{\frac{d(\nonlogtrace,\logtrace)}{c}+1}$ where $c\in\mathbb{N}_{\neq 0}$ is a constant, so that the maximum similarity of $1$ is reached when the distance is $0$ and the similarity decreases while the distance increases. %\xout{As a consequence, the exact trace aligner will find the weighted trace $\braket{\trace,\mathbb{P}(\trace)}$ in $\mathcal{W}_{\pmin}(P)$ maximising $s_d(\trace,\logtrace)$, and use $s_d$ as a ranking function.} \ADD
-{By  $\probskip{\logtrace}=1$, we can express the golden ranking function (i.e., the one producing the optimal ranking) as $\goldenrank(\nonlogtrace,\logtrace)=\probskip{\nonlogtrace} \probskip{\logtrace} s_d(\nonlogtrace,\logtrace)$. The computation $\underset{\nonlogtrace\in \WCal{\pmin}{n}}{\max\arg} \goldenrank(\nonlogtrace, {\logtrace})$ returns the best optimal-ranking trace alignment $\nonlogtrace$ for a log trace $\logtrace$, where $\goldenrank$ must be computed a-new for all the possible $\logtrace$.
+a normalized similarity score $s_d(\nonlogtrace,\logtrace):=\frac{1}{\frac{d(\nonlogtrace,\logtrace)}{c}+1}$ where $c\in\mathbb{N}_{\neq 0}$ is a constant. The maximum similarity is reached when the distance is $0$ and the similarity decreases while the distance increases. %\xout{As a consequence, the exact trace aligner will find the weighted trace $\braket{\trace,\mathbb{P}(\trace)}$ in $\mathcal{W}_{\pmin}(P)$ maximising $s_d(\trace,\logtrace)$, and use $s_d$ as a ranking function.} \ADD
+{$\probskip{\logtrace}=1$ expresses the golden ranking function (i.e., the one producing the optimal ranking) as $\goldenrank(\nonlogtrace,\logtrace)=\probskip{\nonlogtrace} \probskip{\logtrace} s_d(\nonlogtrace,\logtrace)$. The computation ${\max\arg}_{\nonlogtrace\in \WCal{\pmin}{n}} \goldenrank(\nonlogtrace, {\logtrace})$ returns the best optimal-ranking trace alignment $\nonlogtrace$ for a log trace $\logtrace$, where $\goldenrank$ must be computed a-new for all the possible $\logtrace$.
 	
 	
 	
-
-\subsubsection{Approximate-Ranking Trace Embedder}\label{subsec:ate}
+\noindent
+\textbf{Approximate-Ranking Trace Embedder}\label{subsec:ate}
 As previously observed, $k$NN ranking optimality comes at the sub-optimal cost of a brute-force recomputation of all the embeddings $\phi$ for each novel trace $\logtrace$ to align%\footnote{By embedding  all the \unravelled\ model traces via $\phi_{\logtrace}(\nonlogtrace)=\Big(\frac{1}{\probskip{\nonlogtrace}\sqrt{\probskip{\nonlogtrace}^2+s_d^2(\nonlogtrace,\logtrace)}},\frac{1}{s_d(\nonlogtrace,\logtrace)\sqrt{\probskip{\nonlogtrace}^2+s_d^2(\nonlogtrace,\logtrace)}}\Big)$ over a specific $\logtrace$, by representing  $\logtrace$ as $(0,0)$, and by using the Euclidean Distance as a distance, we ensure that all the neighbors of $(0,0)$ will represent the top-$k$ best alignments for $\logtrace$.}. %This is not optimal for $k$NN-based techniques, as this entails the  redefinition of the multidimensional search space $\mathcal{X}$ for each new alignment $\logtrace$. The ``recomputation cost'' could be completely avoided by providing an embedding strategy $\gorgembed$ that is independent from the to-be-aligned trace $\logtrace$.
 An embedding strategy
 Given that each embedding $\phi$ entails an associated similarity metric $k_\phi$ (\S\ref{subsec:katk}) and therefore an associated distance $d_{k_\phi}$ (Equation \ref{eq:dofk}), we can compute all the embeddings $\gorgembed$ for all the \unravelled\ traces before performing the top-$k$ search, thus avoiding the brute-force cost. This computational gain comes with a loss in precision, as the generation of precise embeddings for graph data with loops is an NP-Complete (thus intractable) problem \cite{GartnerFW03} and, in its approximated version, is not able to accurately represent the data using low-dimensional vectors \cite{Seshadhri5631}. So, our proposed definition of $\gorgembed$ performs  weakly-ideally (\S\ref{subsec:katk} and \cite{Gartner03}).
