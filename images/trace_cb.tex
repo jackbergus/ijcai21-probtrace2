@@ -3,11 +3,11 @@
 \input{tikz-macros}
 \begin{document}
 	\begin{tikzpicture}[align=center,node distance=1cm]
-	\node (init1) {};
-	\node[config,right=3mm of init1,label=above:\color{green}$c$] (s1) {3};
+	%\node (init1) {};
+	\node[config,label=above:\color{green}$c$] (s1) {3};
 	\node[config,accepting,right=of s1,label=above:\color{green}$b$]       (s2) {5};
 	
-	\draw[link] (init1) -- (s1);
+	%\draw[link] (init1) -- (s1);
 	\draw[link] (s1) -- node[midway,above]{\color{violet}$\rho_{67}$} (s2);
 	\end{tikzpicture}
 \end{document}

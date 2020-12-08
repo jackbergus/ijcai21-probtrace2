@@ -1,10 +1,10 @@
 \documentclass[tikz]{standalone}
 \input{tgstyle}
+\input{tikz-macros}
 \begin{document}
 	\begin{tikzpicture}[align=center,node distance=1cm]
-	\node (init1) {};
-	\node[state,accepting,right=3mm of init1,label=above:\color{green}$a$] (s1) {2};   (s2) {6};
+%	\node (init1) {};
+	\node[config,accepting,label=above:\color{green}$a$] (s1) {2};   (s2) {6};
 	
-	\draw[link] (init1) -- (s1);
 	\end{tikzpicture}
 \end{document}
