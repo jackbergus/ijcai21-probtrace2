@@ -85,7 +85,7 @@ Since a trace embedding for $\nonlogtrace\in\WCal{\pmin}{n}$ adequately represen
 \end{definition}
 %	
 \begin{table}[!t]
-	\caption{Projections of $\expN$ over traces $\nonlogtrace$ of length $4$.}\label{tab:proj}
+	\caption{Projections of $\expN$ over $\net$-traces of length $4$.}\label{tab:proj}
 	\centering
 	\resizebox{.3\textwidth}{!}{\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
 			\toprule
@@ -177,7 +177,7 @@ For sub-embeddings $\epsilon$ and $\nu$, {in our experiment section}, we choose 
 
 \begin{table}[!t]
 	\centering
-	\caption{Embedding for both the traces $\nonlogtrace$ of maximum length $4$ and $\logtrace=\const{cacb}$.}\label{tab:emb2}\label{tab:embsitar}
+	\caption{Embeddings for $\net$-traces of maximum length $4$ and $\logtrace=\const{cacb}$.}\label{tab:emb2}\label{tab:embsitar}
 	\resizebox{\textwidth}{!}{\begin{tabular}{lllllllllllll}
 		\toprule
 		& $\const{a}$    & $\const{b}$                                                   & $\const{c}$    & $\const{aa}$  & $\const{ab}$   & $\const{ac}$   & $\const{ba}$  & $\const{bb}$   & $\const{bc}$   & $\const{ca}$   & $\const{cb}$  & $\const{cc}$  \\
@@ -200,11 +200,11 @@ For sub-embeddings $\epsilon$ and $\nu$, {in our experiment section}, we choose 
 %Given $\nonlogtrace_\tau=\Set{a,b,c}$, the embedding space is of size $6$: three features (computed using $\nu$) correspond to the labels of the non-$\tau$ vertices in $\nonlogtrace_\tau$, i.e., $\{a,b,c\}$, and other three features (computed using $\epsilon$) correspond to the $2$-grams subsequences that are also traces in $W^4_0(P)$, i.e., $\{aa,ca,cb\}$. Therefore, $\{a,b,c,aa,ca,cb\}\subset \nonlogtrace_\tau^2\cup\nonlogtrace_\tau$ is the whole set of features describing both the label and the transition matrix, so $\gorgembed$ is a vector with 6 dimensions.
 $t_f\in [0,1]\subset\mathbb{R}^+_{0}$ and $\lambda\in [0,1]\subset\mathbb{R}^+_{0}$ are tuning parameters that can be
 inferred from the available data \cite{DriessensRG06}. The latter describes the previously mentioned decay factor, and $t_f$
-represents the relevance of our embedding representation as the number of edges within TG increases. In our experiments and
+represents the relevance of our embedding representation as the number of edges within the transition graph increases. In our experiments and
 examples, we chose $t_f=0.0001$ and $\lambda=0.07$.
 %\xout{The embedding associated to $P$ is described in Table \ref{tab:emb1} as $\gorgembed(P)$: it shows that doing ${\color{green}a}\rightsquigarrow{\color{green}a}$ is more probable than doing  ${\color{green}c}\rightsquigarrow{\color{green}a}$. Also, given that both the probability of performing ${\color{green}c}\overset{1}{\rightsquigarrow}{\color{green}b}$ is relatively low and trace $\color{green}cb$ is relatively infrequent, ${\color{green}c}{\rightsquigarrow}{\color{green}b}$ is less probable than any other subtrace. If we now consider the single nodes, $\color{green}c$ shares a subset of traces with $\color{green}a$ where $\color{green}a$ is more frequent than $\color{green}c$, and therefore the score of the former is higher than the one of the latter. Also, the score associated to the single node $\color{green}b$ is lower than the one for the single node $\color{green}c$ because $\color{green}b$ is less frequent and appears in less probable traces than $\color{green}c$: in particular, $\color{green}c$ appears in \textit{ca}, which is more probable than \textit{cb}.}
 Table \ref{tab:emb2} shows the embeddings $\gorgembed(\overline{G}_\nonlogtrace)$ generated from
-Example \ref{ex:neue}, where the $l=|\nonlogtrace|$ for each unravelled trace $\nonlogtrace$. This
+Example \ref{ex:neue}, where the $l=|\nonlogtrace|$ for each $\unravelled$ trace $\nonlogtrace$. This
 representation is independent of the representation associated with a trace to be aligned. Therefore it does not have to be recomputed at each alignment with a different $\logtrace$.
 {After representing trace $\logtrace=\const{caba}$ to be aligned as a graph (see Example \ref{ex:wheredotiszero}), we can represent its}
 %\xout{Similar considerations can be also drawn from the}
@@ -329,7 +329,7 @@ When $\hat{\epsilon}$ and $\hat{\epsilon}'$ are affected by numerical cancelatio
 
 
 \begin{example}%\small \label{ex:11}
-	Given $k_{\gorgembed}(\nonlogtrace,\logtrace)=\braket{\gorgembed(\overline{G}_\nonlogtrace),\;\gorgembed(\overline{G}_{\logtrace})}$ with sub-embedding $\nu^1$ and $\epsilon^1$ for each  trace $\nonlogtrace\in\WCal{0}{4}_{|\sigma'|\leq 4}$,  the dot product between the embeddings by $\gorgembed$ is represented in Table \ref{tab:rank3}, where the expected ranking $\goldenrank$ is also showed. $k_{\gorgembed}$ approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
+	Given $k_{\gorgembed}(\nonlogtrace,\logtrace)=\braket{\gorgembed(\overline{G}_\nonlogtrace),\;\gorgembed(\overline{G}_{\logtrace})}$ with sub-embedding $\nu^1$ and $\epsilon^1$ for each  trace $\nonlogtrace\in\WCal{0}{4}_{|\sigma'|\leq 4}$,  the dot product between the embeddings by $\gorgembed$ is represented in Table \ref{tab:rank3}, where the expected ranking $\goldenrank$ is also showed. $k_{\gorgembed}$ approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the transition graph.
 \end{example}
 
 
