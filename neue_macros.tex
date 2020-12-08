@@ -68,10 +68,10 @@
 \def\EqualityHolds{itholds}
 \ifdefined\EqualityHolds
 \newcommand{\probarg}{\net}
-\newcommand{\WCal}[2]{\ptraces{\net}{#1}}
+\newcommand{\WCal}[2]{\ptraces{#1}{\net}}
 \else
 \newcommand{\probarg}{\expN}
-\newcommand{\WCal}[2]{\ptraces{\closed{\tg_{\rg{\net}}}}{#1}}
+\newcommand{\WCal}[2]{\ptraces{#1}{\closed{\tg_{\rg{\net}}}}}
 \fi
 \newcommand{\probskip}[1]{\prob{#1}{\probarg}}
 \newcommand{\goldenrank}{\mathcal{R}} 
