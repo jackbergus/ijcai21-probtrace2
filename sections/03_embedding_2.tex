@@ -106,7 +106,7 @@ $\closed{G}_\nonlogtrace$, where
 	\bottomrule
 \end{tabular}}
 \end{table}
-\begin{example}\small\label{ex:neue}
+\begin{example}%\small\label{ex:neue}
 Given the $\tau$-closed transition graph $\closed{\tg_{\rg{\net}}}$ in Figure \ref{fig:closed}, we assign the following probability values to the edges: $\pa=0.8$, $\pb=0.2$, $\pc=\pf=0.5$, $\pd=0.7$, and $\pe=0.3$. The $\ptraces{\expN}{0}$ with maximum length $4$ are the following:
 $$\begin{aligned}
 \ptraces{\expN}{0}_{|\nonlogtrace|\leq 4}=\{&\braket{a,0.4},\braket{aa,0.2},\braket{aaa,0.1},\braket{ca,0.07},\\
@@ -172,9 +172,7 @@ Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in o
 	\resizebox{\textwidth}{!}{\begin{tabular}{lllllllllllll}
 		\toprule
 		& $\const{a}$    & $\const{b}$                                                   & $\const{c}$    & $\const{aa}$  & $\const{ab}$   & $\const{ac}$   & $\const{ba}$  & $\const{bb}$   & $\const{bc}$   & $\const{ca}$   & $\const{cb}$  & $\const{cc}$  \\
-		\midrule
-		
-		
+		\midrule		
 		$\gorgembed(G_\const{aaaa})$ & $1.00\cdot 10^{-24}$ & $0.00\cdot 10^{0}$   & $0.00\cdot 10^{0}$   & $6.44\cdot 10^{-26}$ & $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$    &$0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$ \\
 		$\gorgembed(G_\const{aaa})$  & $1.00\cdot 10^{-24}$ & $0.00\cdot 10^{0}$   & $0.00\cdot 10^{0}$   & $1.29\cdot 10^{-25}$ & $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$    &$0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$ \\
 		$\gorgembed(G_\const{aa})$   & $1.00\cdot 10^{-24}$ & $0.00\cdot 10^{0}$   & $0.00\cdot 10^{0}$   & $2.57\cdot 10^{-25}$ & $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$    &$0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$ \\
@@ -187,8 +185,9 @@ Albeit we might pick different characterizations for $\epsilon$ and $\nu$, {in o
 				$\gorgembed(P_{\logtrace})$ & $8.16\cdot10^{-17}$ & $4.08\cdot 10^{-17}$ & $4.08\cdot10^{-17}$ & $4.37\cdot 10^{-17}$ &  $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$& $0.00\cdot 10^{0}$ & $0.00\cdot 10^{0}$ & $0.00\cdot 10^{0}$    & $1.03\cdot10^{-16}$ & $4.37\cdot10^{-17}$& $0.00\cdot 10^{0}$ \\
 		\bottomrule
 	\end{tabular}}
+
 \end{table}
-\begin{example} \small \label{ex:withpaths} %After generating all the TGs for the \unravelled\ traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the $2$-grams included in the model traces.\footnoteref{fn:caveat}
+\begin{example} %\small \label{ex:withpaths} %After generating all the TGs for the \unravelled\ traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the $2$-grams included in the model traces.\footnoteref{fn:caveat}
 %Given $\nonlogtrace_\tau=\Set{a,b,c}$, the embedding space is of size $6$: three features (computed using $\nu$) correspond to the labels of the non-$\tau$ vertices in $\nonlogtrace_\tau$, i.e., $\{a,b,c\}$, and other three features (computed using $\epsilon$) correspond to the $2$-grams subsequences that are also traces in $W^4_0(P)$, i.e., $\{aa,ca,cb\}$. Therefore, $\{a,b,c,aa,ca,cb\}\subset \nonlogtrace_\tau^2\cup\nonlogtrace_\tau$ is the whole set of features describing both the label and the transition matrix, so $\gorgembed$ is a vector with 6 dimensions.
 $t_f\in [0,1]\subset\mathbb{R}^+_{0}$ and $\lambda\in [0,1]\subset\mathbb{R}^+_{0}$ are tuning parameters that can be inferred from the available data \cite{DriessensRG06}. While the latter describes the previously mentioned decay factor, $t_f$ represents the relevance of our embedding representation when the number of the edges within TG increases. In both our experiments and examples, we chose $t_f=0.0001$ and $\lambda=0.07$.
 %\xout{The embedding associated to $P$ is described in Table \ref{tab:emb1} as $\gorgembed(P)$: it shows that doing ${\color{green}a}\rightsquigarrow{\color{green}a}$ is more probable than doing  ${\color{green}c}\rightsquigarrow{\color{green}a}$. Also, given that both the probability of performing ${\color{green}c}\overset{1}{\rightsquigarrow}{\color{green}b}$ is relatively low and trace $\color{green}cb$ is relatively infrequent, ${\color{green}c}{\rightsquigarrow}{\color{green}b}$ is less probable than any other subtrace. If we now consider the single nodes, $\color{green}c$ shares a subset of traces with $\color{green}a$ where $\color{green}a$ is more frequent than $\color{green}c$, and therefore the score of the former is higher than the one of the latter. Also, the score associated to the single node $\color{green}b$ is lower than the one for the single node $\color{green}c$ because $\color{green}b$ is less frequent and appears in less probable traces than $\color{green}c$: in particular, $\color{green}c$ appears in \textit{ca}, which is more probable than \textit{cb}.}
@@ -235,6 +234,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 
 
 \begin{table}[!t]
+\vspace{+0.9mm}
 	\caption{Comparison between the ranking induced by the expected ranking $\goldenrank$ and the proposed kernel $k_{\gorgembed}$ with embedding strategies $\epsilon^1$ and $\nu^1$: arrows $\boldsymbol{\downarrow}$ remark the column of choice under which we sort the rows (i.e., ranking).}\label{tab:rank3}
 	\centering
 	%	\begin{tabular}{l|c|ll}
@@ -314,7 +314,7 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 
 
 
-\begin{example}\small \label{ex:11}
+\begin{example}%\small \label{ex:11}
 	Given $k_{\gorgembed}(\nonlogtrace,\logtrace)=\braket{\gorgembed(G_\nonlogtrace),\;\gorgembed(G_{\logtrace})}$ with sub-embedding $\nu^1$ and $\epsilon^1$ for each  trace $\nonlogtrace\in\WCal{\varepsilon}{4}$,  the dot product between the resulting similarity ranking is represented in Table \ref{tab:rank3}, where the expected ranking $\goldenrank$ is also showed. $k_{\gorgembed}$ approximates the expected ranking  and tends to rank in similar ways the paths generated from the same subgraph of the TG.
 \end{example}
 
@@ -444,8 +444,8 @@ When the $\hat{\epsilon}$ and $\hat{\epsilon}'$ strategy are affected by numeric
 %	Let us compare the ranking results by replacing in $\gorgembed$ the edge embedding $\epsilon^1$ with $\epsilon^2$. If we re-run the computations performed in  Example \ref{ex:11}, we obtain   Table \ref{tab:compLit}:  $\epsilon^1$ provides longer approximated subsequences if compared to $\epsilon^2$. Both embedding proposals tend to favor sequences containing one single node or one single subtrace due to the normalization of both  the edge and the nodes' distribution, but $\epsilon^2$ seems to be less influenced than $\epsilon^1$ in the change of the edge distribution. Therefore, $\epsilon^1$ proposal is to be preferred to $\epsilon^2$.
 %\end{example}
 
-
-\subsubsection{Properties}\label{subsub:prop}
+\noindent
+\textbf{Properties.}\label{subsub:prop}
 We can prove that when the two traces are equivalent on both $2$-grams and their distribution,  there exists an embedding configuration for which the kernel computation reduces $\omega\omega'$. When both weights $\omega$-s are $1$, the kernel returns $1$. We will call this condition  ``weak equality'' because we cannot possibly prove that $k_{\gorgembed}(\closed{\tg},\closed{\tg}')=ww'\Leftrightarrow \ptraces{\closed{\tg}}{0}=\ptraces{\closed{\tg}'}{0}$, as there could be similar embeddings coming from Workflow Nets sharing a different weighted traces set ($\ptraces{\closed{\tg}}{\pmin}\neq\ptraces{\closed{\tg}'}{\pmin}$). Similarly to \S\ref{ex:wheredotiszero}, traces having neither $2$-grams nor transitions' labels in common will have a zero-valued kernel (\textit{strong dissimilarity}). Given that both weak equality and strong similarity hold, the embedding performs weakly-ideally.
 
 %\begin{figure}[!t]

@@ -22,7 +22,7 @@ As usual, the current state of execution is captured using a marking of the net,
 The notions of transition enablement and firing are also the standard ones, since they do not depend on the weight function, which provides the basis for capturing the stochastic behavior of the net. We use the following notation: given a marking $\marking$ over \uswn $\net$, we denote by $\enaset{\marking}{\net}$ the set of enabled transitions in $\marking$; given transition $t \in \enaset{\marking}{\net}$, we write $\fire{\marking}{t}{\marking'}{\net}$ to capture the fact that, within $\net$, firing $t$ in $\marking$ results in the new marking $\marking'$. A \emph{firing sequence of $\net$ starting from marking $\marking_0$} is a sequence $t_1\cdots t_n$ of transitions from $\net.T$ so that for every $i \in \set{1,\ldots,n}$, we have that $\fire{\marking_{i-1}}{t_i}{\marking_{i}}{\net}$. We say that the firing sequence results in $\marking_{n}$.
 
 As customary in workflow nets, we consider two special markings: the \emph{input} (resp.~\emph{output}) marking $m_{in}^\net$ (resp.~$m_{out}^\net$) that assigns a single token to the input (resp.~output) place $\net.in$ (resp.~$\net.out$) of $\net$, and no token elsewhere. A \emph{valid sequence} $\seq = t_1\cdots t_n$ of $\net$ is a firing sequence of $\net$ starting from $m_{in}^\net$ and resulting in $m_{out}^\net$. A sequence of labels $\run = \alpha_1 \cdots \alpha_n$ from $\alphabet$ is a \emph{run} of $\net$ if there exists a valid underlying sequence $\seq = t_1\cdots t_n$ of $\net$  such that, for every $i \in \set{1,\ldots,n}$, we have $\net.\ell(t_i) = \alpha_i$. Run $\run$ may have different underlying valid sequences in $\net$, which we collectively refer to as $\seqs{\run}{\net}$. A trace $\trace$ is a \emph{model trace} of $\net$ (or $\net$-trace for short) if there exists an underlying run $\run$ of $\net$ that corresponds to $\trace$ once all occurrences of $\tau$ are removed. There may be multiple runs underlying a $\net$-trace $\trace$, and we collectively refer to them as $\runs{\trace}{\net}$. Finally, we denote the (possibly infinite) set of $\net$-traces as $\traces{\net}$.
-\begin{example} \small
+\begin{example} %\small
 \label{ex:net}
 Figure~\eqref{fig:spn} shows an example of \uswn with input place $p_1$ and output place $p_7$. One run of the net is $\const{\tau c \tau a a \tau}$, which corresponds to trace $\const{caa}$. Overall, the net supports infinitely many finite traces of the form (represented using regular expressions):
 \begin{inparaenum}[\it (i)]
@@ -36,7 +36,7 @@ When executing an \uswn, the crucial addition to the standard execution semantic
 
 Using firing probabilities as a basic building block, we define the probability $\prob{\seq}{\net}$ of a valid sequence $\seq = t_1\cdots t_n$ of $\net$ as the product of the probabilities associated to each transition: $\prob{\seq}{\net} = \prod_{i \in \set{1,\ldots,n}}\prob{t_i}{\marking_{i-1}}{\net}$. %For a run $\run$ of $\net$, its probability $\prob{\seq}{\net}$ is then obtained by summing up the probabilities of all valid sequences corresponding to $\run$: $\prob{\run}{\net} = \sum_{\seq \in \seqs{\run}{\net}} \prob{\seq}{\net}$. Likewise, for a trace $\trace$ of $\net$, its probability is obtained by summing up
 For a trace $\trace$ of $\net$, its probability $\prob{\trace}{\net}$ is then obtained by collecting all its underlying runs, in turn collecting all their underlying valid sequences, summing up their respective probabilities: $\prob{\trace}{\net} = \sum_{\run \in \runs{\trace}{\net}} \sum_{\seq \in \seqs{\run}{\net}} \prob{\seq}{\net}$. This corresponds to the intuition that, to observe $\trace$, one can equivalently pick any of its underlying valid sequences. Notably, if a trace is not an $\net$-trace (i.e., it does not conform with $\net$), then its probability is 0. For convenience, when needed we represent an $\net$-trace as a pair $\tup{\trace,\prob{\trace}{\net}}$ where the probability assigned to $\trace$ by $\net$ is retained.
-\begin{example} \small
+\begin{example} %\small
   \label{ex:trace}
 Consider the \uswn \net of Example~\ref{ex:net}. Considering trace $\const{caa}$, it is easy to see that it has only one underlying run, namely $\const{\tau c \tau a a \tau}$, in turn produced by a single underlying valid sequence, and that
 %The firing probability of picking the first $\tau$-transition starting from the input marking is $1$, as there are no alternatives. In the new marking, where only one token is assigned to $p_2$, the firing probability of choosing the $\tau$-transition above is $\rho_{23} = \frac{v_{\tau_2}}{v_{\tau_2}+v_c}$, whereas that of choosing the $c$-transition below is $\rho_{24} = \frac{v_c}{v_{\tau_2}+v_c}$. Upon choosing the transition below, the new marking assigns only to $p_4$ one token, leaving just one choice to continue by moving that token to $p_6$. In that marking, the probability of choosing the $a$-transition above is $\rho_{65} = \frac{v_{a_3}}{v_{a_3}+v_b}$, resulting in the token being moved to $p_5$. In this new marking, the probability of iterating over the $a$-transition above is $\rho_{55} = \frac{v_{\tau_3}}{v_{\tau_3}+v_{a_2}}$, while that of completing in the output marking via the enabled $\tau$-transition is $\rho_{57} = \frac{v_{\tau_3}}{v_{\tau_3}+v_{a_2}}$. Hence, all in all
@@ -91,17 +91,14 @@ Figure~\eqref{fig:rg} shows an example of a reachability graph.
 \begin{figure*}[!t]
 	\begin{minipage}{.49\textwidth}
 		\includegraphics[width=.9\textwidth]{images/petri.pdf}
-		\caption{A sample \uswn $N$. Labels are shown in green, invisible transitions in grey, and weights in magenta.}\label{fig:spn}
+		\caption{A sample \uswn. Labels in green, $\tau$ transitions in grey, weights in red.}\label{fig:spn}
 	\end{minipage}\hfill \begin{minipage}{.49\textwidth}
 		\includegraphics[width=.9\textwidth]{images/rg.pdf}
-		\caption{Reachability graph $RG(N)$ of the \uswn $N$. Probabilities are shown in violet.}\label{fig:rg}
+		\caption{Reachability graph $RG(N)$ of the \uswn $N$. Probabilities in violet.}\label{fig:rg}
 	\end{minipage}
-
-	\begin{minipage}{.49\textwidth}
-	\includegraphics[width=.9\textwidth]{images/running_example.pdf}
+	\begin{minipage}{.49\textwidth} \includegraphics[width=.9\textwidth]{images/running_example.pdf}
 	\caption{Transition graph $G_{RG(N)}$ encoding the reachability graph $RG(N)$.}\label{fig:lmc}\label{fig:orig}
-\end{minipage}\hfill \begin{minipage}{.49\textwidth}
-	\includegraphics[width=.9\textwidth]{images/closed_example.pdf}
+\end{minipage}\hfill \begin{minipage}{.49\textwidth} \includegraphics[width=.9\textwidth]{images/closed_example.pdf}
 	\caption{Transition graph $\closed{G_{RG(N)}}$ resulting from the transition graph in $G_{RG(N)}$ after $\tau$-closure.}\label{fig:closed}
 \end{minipage}
 \end{figure*}
@@ -285,7 +282,7 @@ This trace kernel returns strong dissimilarity when the two traces have no share
 \vspace{-0.6cm}
 \end{center}
 \end{table}
-\begin{example}\label{ex:wheredotiszero} \small
+\begin{example}\label{ex:wheredotiszero} %\small
 Consider tasks $\tasks=\Set{a,b,c}$. The possible 2-grams over $\tasks$ are $\tasks^2=\Set{\const{aa},\const{ab},\const{ac},\const{ba},\const{bb},\const{bc},\const{ca},\const{cb},\const{cc}}$. Table~\ref{tb:embedding} shows the embeddings of some traces. Being a 2-gram, trace $\const{cb}$ has only one nonzero component, namely that corresponding to itself, with $\trembed_{\const{cb}}(\const{cb})=\lambda$. Trace $\const{caa}$ has the 2-gram $\const{ca}$ occurring with length $1$ ($\const{\underline{ca}a}$) and $2$ ($\const{\underline{c}a\underline{a}}$), and the 2-gram $\const{aa}$ with occurring length $1$ ($\const{c\underline{aa}}$). Hence: $\trembed_{\const{ca}}(\const{caa})=\lambda+\lambda^2$ and  $\trembed_{\const{aa}}(\const{caa})=\lambda$.  Similar considerations can be carried out for the other traces in the table.
 We now want to compute the similarity between the first trace $\const{cacb}$ and the other three traces. To do so, we sum, column by column (that is, 2-gram by 2-gram) the product of the embeddings for the two traces (thus keeping penalties whenever the 2-gram embeds in both traces). We then get $k_{\trembed}(\const{cacb},\const{caa})=\lambda(\lambda+\lambda^2)
 $ and $k_{\trembed}(\const{cacb},\const{cb})=\lambda(\lambda+\lambda^3)
