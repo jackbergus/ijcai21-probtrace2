@@ -1,8 +1,4 @@
 % !TeX root=../main.tex
-\begin{figure}[!t]
-	\hspace*{-1cm}\includegraphics[width=1.2\textwidth]{images/pipeline}
-	\caption{Proposed pipeline to assess the Probabilistic Trace Alignment}\label{fig:pipe}
-\end{figure}
 
 
 \section{Probabilistic Trace Alignment Pipeline}
@@ -13,6 +9,12 @@ We now employ the models and techniques described in Section~\ref{sec:models} to
 \item a trace $\trace$ of interest,
 \end{inparaenum}
 and returns a ranking over all the $\net$-traces having a probability greater or equal than $\pmin$, based on a combined consideration of their probability values (probabilistic component) and their distance to $\trace$ (alignment component).
+
+\begin{figure}[!t]
+	\hspace*{-1cm}\includegraphics[width=1.2\textwidth]{images/pipeline}
+	\caption{Proposed pipeline to assess the Probabilistic Trace Alignment}\label{fig:pipe}
+\end{figure}
+
 
 \subsection{Computation pipeline}
 Our technique is realized through the pipeline shown in Figure~\ref{fig:pipe}, consisting of the following steps.
