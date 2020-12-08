@@ -98,7 +98,7 @@ $\closed{G}_\nonlogtrace$, where
 			$\const{caa}$ & \includegraphics{images/trace_caa} & $3$ & $\color{violet}\pb\pf$\\
 			\bottomrule
 	\end{tabular}}\qquad \qquad 	
-	\resizebox{.4\textwidth}{!}{\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
+	\resizebox{.3\textwidth}{!}{\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
 	\toprule
 	$\nonlogtrace$&$G_\nonlogtrace$&$l$&$\omega$\\
 	\midrule
@@ -462,17 +462,12 @@ When $\hat{\epsilon}$ and $\hat{\epsilon}'$ are affected by numerical cancelatio
 %\end{example}
 
 \noindent
-<<<<<<< HEAD
-\textbf{Properties.}\label{subsub:prop}
-We can prove that when the two traces are equivalent on both $2$-grams and their distribution,  there exists an embedding configuration for which the kernel computation reduces $\omega\omega'$. When both weights $\omega$-s are $1$, the kernel returns $1$. We will call this condition  ``weak equality'' because we cannot possibly prove that $k_{\gorgembed}(\closed{\tg},\closed{\tg}')=ww'\Leftrightarrow \ptraces{\closed{\tg}}{0}=\ptraces{\closed{\tg}'}{0}$, as there could be similar embeddings coming from Workflow Nets sharing a different weighted traces set ($\ptraces{\closed{\tg}}{\pmin}\neq\ptraces{\closed{\tg}'}{\pmin}$). Similarly to \S\ref{ex:wheredotiszero}, traces having neither $2$-grams nor transitions' labels in common will have a zero-valued kernel (\textit{strong dissimilarity}). Given that both weak equality and strong similarity hold, the embedding performs weakly-ideally.
-=======
 \textbf{Properties}\label{subsub:prop}
 We can prove that when the two traces are equivalent on $2$-grams and their distribution,  there is an embedding configuration
 for which the kernel computation reduces $\omega\omega'$. When both weights are $1$, the kernel returns $1$. We will call this
 condition  ``weak equality'' because we cannot possibly prove that
 $k_{\gorgembed}(\closed{\tg},\closed{\tg}')=ww'\Leftrightarrow \ptraces{\closed{\tg}}{0}=\ptraces{\closed{\tg}'}{0}$;
 there could be similar embeddings coming from Workflow Nets sharing a different weighted traces set ($\ptraces{\closed{\tg}}{\pmin}\neq\ptraces{\closed{\tg}'}{\pmin}$). As in \S\ref{ex:wheredotiszero}, traces having neither $2$-grams nor transition labels in common will have kernel $0$ (\textit{strong dissimilarity}). Since weak equality and strong similarity hold, the embedding performs weakly-ideally.
->>>>>>> 30efc47409df1f65529de45df89798151644a67d
 
 %\begin{figure}[!t]
 %	\vspace*{-0.5cm}
