@@ -88,18 +88,25 @@ Figure~\eqref{fig:rg} shows an example of a reachability graph.
 %\[\forall p\in P.\; M'(p)=M(p)-\mathbf{1}_{(p,t)\in F}+\mathbf{1}_{(t,p)\in F}\]
 %We denote the transition from marking $M$ to marking $M'$ via an enabling $t$ as a relation $M\overset{t}{\to}M'$. We say that an \uswn with initial marking $M$ is $k$-\textit{bounded} if each of the markings $M'$ reachable from $M$, $M$ included, have $\forall p\in P.\; M(p)\leq k$\\
 
-\begin{figure}[!t]
-	\centering
-	\subfloat[A sample \uswn. Labels are shown in green, invisible transitions in grey, and weights in magenta.]{\label{fig:spn}\includegraphics[width=.4\textwidth]{images/petri.pdf}}\hfill
-    \subfloat[Reachability graph of the \uswn in (a). Probabilities are shown in violet.]{\label{fig:rg}\includegraphics[width=.4\textwidth]{images/rg.pdf}}
-    \\
-\vspace*{-4.5mm}
-	\subfloat[Transition graph encoding the reachability graph in (b).]{\label{fig:lmc}\label{fig:orig}\includegraphics[width=.4\textwidth]{images/running_example.pdf}}
-    \hfill
-    \subfloat[Transition graph resulting from the transition graph in (c) after $\tau$-closure.]{\label{fig:closed}\includegraphics[width=.4\textwidth]{images/closed_example.pdf}}
-	\caption{An \uswn and the application of the three transformation steps to convert it into a minimal, trace-preserving transition graph.}
-	\label{transformspn}
-\end{figure}
+\begin{figure*}[!t]
+	\begin{minipage}{.49\textwidth}
+		\includegraphics[width=.9\textwidth]{images/petri.pdf}
+		\caption{A sample \uswn $N$. Labels are shown in green, invisible transitions in grey, and weights in magenta.}\label{fig:spn}
+	\end{minipage}\hfill \begin{minipage}{.49\textwidth}
+		\includegraphics[width=.9\textwidth]{images/rg.pdf}
+		\caption{Reachability graph $RG(N)$ of the \uswn $N$. Probabilities are shown in violet.}\label{fig:rg}
+	\end{minipage}
+
+	\begin{minipage}{.49\textwidth}
+	\includegraphics[width=.9\textwidth]{images/running_example.pdf}
+	\caption{Transition graph $G_{RG(N)}$ encoding the reachability graph $RG(N)$.}\label{fig:lmc}\label{fig:orig}
+\end{minipage}\hfill \begin{minipage}{.49\textwidth}
+	\includegraphics[width=.9\textwidth]{images/closed_example.pdf}
+	\caption{Transition graph $\closed{G_{RG(N)}}$ resulting from the transition graph in $G_{RG(N)}$ after $\tau$-closure.}\label{fig:closed}
+\end{minipage}
+\end{figure*}
+
+
 %Figures \ref{fig:spn} and \ref{fig:rg} respectively show a sample \uswn and its corresponding reachability graph. This net will be our running example throughout the paper.
 
 
