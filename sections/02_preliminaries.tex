@@ -215,7 +215,7 @@ The literature also provides a kernel representation for strings \cite{LodhiSSCW
 We need to lift this approach so as to consider all occurrences of subtraces $\alpha\beta$ at every distance between $1$ and $|\trace|-1$. To do so, we proceed in two steps. First, we encode $\trace$ into a ``linear'' transition graph $\tg_\trace$ (\figurename~\ref{fig:taustar}) in the obvious way. %\todo{Tagliare dopo i due punti se necessario.} each node in $G_\sigma.V$  corresponds to an element of the trace labeled correspondingly, and the nodes representing two consecutive elements in the trace are connected with a transition probability of 1 (whereas in all the other cases, the probability is 0).
 As a second step, we rely on the matrix operations to calculate a simplified version of the embedding defined in \cite{LodhiSSCW02} as $\trembed_{\alpha\beta}(\trace)=\sum_{1\leq i\leq |\trace|}\lambda^i[(\tg_{\trace}.\Lambda)^i]_{\alpha\beta}$. %\todo{No spazio per spiegare cosa succede...}
 %This value can be seen as a reward.
-The kernel between two traces corresponds to the sum of the products of such values calculated 2-gram by 2-gram for the two traces. 
+The kernel between two traces corresponds to the sum of the products of such values calculated 2-gram by 2-gram for the two traces.
 %, namely it is equal to the \emph{kernel convolution}. %\todo{L'ho provato a scrivere intuitivamente, ma non e' chiaro da dove arrivi questo modo di calcolarlo... deriva dalle formule sopra ma la digressione in mezzo e' lunga. Come possiamo fare per chiarire? L'esempio spiega bene tutto!}
 This trace kernel returns strong dissimilarity when the two traces have no shared 2-grams at any arbitrary occurring length, but does not enjoy strong equality (as the similarity of a trace with itself is at least $\lambda^2$ - returned when the trace is a 2-gram).
 
@@ -255,7 +255,7 @@ This trace kernel returns strong dissimilarity when the two traces have no share
 
 \begin{table}[t!]
 \vspace{+0.5cm}
-\caption{Embedding of traces $\const{caba}$, $\const{caaa}$, $\const{caa}$ and $\const{cb}$.}\label{tb:embedding}
+\caption{Embedding of traces $\const{caba}$, $\const{caa}$ and $\const{cb}$.}\label{tb:embedding}
 \vspace{-0.4cm}
 \begin{center}
 \scalebox{0.6}{
