@@ -5,8 +5,8 @@
 	\node (init1) {};
 	\node[config,right=3mm of init1,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$c$] (s1) {1};
 	\node[config,right=of s1,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$a$]       (s2) {2};
-	\node[config,right=of s2,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$c$]       (s3) {3};
-	\node[config,accepting,right=of s3,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$b$]       (s4) {3};
+	\node[config,right=of s2,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$b$]       (s3) {3};
+	\node[config,accepting,right=of s3,label={right,xshift=-1mm,yshift=-1.5mm}:\tcolor$a$]       (s4) {3};
 	
 	\draw[link] (init1) -- (s1);
 	\draw[link] (s1) -- node[font=\footnotesize,yshift=1.5mm] {\pcolor$1$} (s2);
