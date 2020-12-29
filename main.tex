@@ -1,16 +1,30 @@
-\documentclass[runningheads]{llncs}
+%%%% ijcai21-multiauthor.tex
 
-\setlength{\paperheight}{232.8mm}
-\setlength{\paperwidth}{151.5mm}
-\setlength\voffset     {-23mm}
-\setlength\hoffset     {-34mm}
+\typeout{IJCAI--21 Multiple authors example}
 
-%
-\usepackage{hyperref}
+% These are the instructions for authors for IJCAI-21.
+
+\documentclass{article}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
+% The file ijcai21.sty is NOT the same than previous years'
+\usepackage{ijcai21}
+
+% Use the postscript times font!
+\usepackage{times}
+\renewcommand*\ttdefault{txtt}
+\usepackage{soul}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[small]{caption}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\urlstyle{same}
+
 \usepackage{multicol}
 \usepackage[final]{changes}
-\usepackage{url}
-\usepackage{amsmath}
 \usepackage{bm}
 \usepackage{multirow}
 \usepackage{tcolorbox}
@@ -30,50 +44,63 @@
 \input{neue_macros}
 
 \input{macros-style}
+\usepackage{cite}
+
+% the following package is optional:
+%\usepackage{latexsym}
+
+% Following comment is from ijcai97-submit.tex:
+% The preparation of these files was supported by Schlumberger Palo Alto
+% Research, AT\&T Bell Laboratories, and Morgan Kaufmann Publishers.
+% Shirley Jowell, of Morgan Kaufmann Publishers, and Peter F.
+% Patel-Schneider, of AT\&T Bell Laboratories collaborated on their
+% preparation.
+
+% These instructions can be modified and used in other conferences as long
+% as credit to the authors and supporting agencies is retained, this notice
+% is not changed, and further modification or reuse is not restricted.
+% Neither Shirley Jowell nor Peter F. Patel-Schneider can be listed as
+% contacts for providing assistance without their prior permission.
+
+% To use for other conferences, change references to files and the
+% conference appropriate and use other authors, contacts, publishers, and
+% organizations.
+% Also change the deadline and address for returning papers and the length and
+% page charge instructions.
+% Put where the files are available in the appropriate places.
+
+\title{IJCAI--21 Example on typesetting multiple authors}
+
+\author{
+First Author$^1$\footnote{Contact Author}\and
+Second Author$^2$\and
+Third Author$^{2,3}$\And
+Fourth Author$^4$\\
+\affiliations
+$^1$First Affiliation\\
+$^2$Second Affiliation\\
+$^3$Third Affiliation\\
+$^4$Fourth Affiliation\\
+\emails
+\{first, second\}@example.com,
+third@other.example.com,
+fourth@example.com
+}
+
+\makeatletter
+\let\@internalcite\cite
+\def\cite{\def\citeauthoryear##1##2{##1, ##2}\@internalcite}
+\def\shortcite{\def\citeauthoryear##1{##2}\@internalcite}
+\def\@biblabel#1{\def\citeauthoryear##1##2{##1, ##2}[#1]\hfill}
+\makeatother
 
 \begin{document}
 
-%
-\title{Probabilistic Trace Alignment}
-%\subtitle{\emph{Vision Paper}}
-%
-%\titlerunning{Abbreviated paper title}
-% If the paper title is too long for the running head, you can set
-% an abbreviated paper title here
-%
-\author{
-	Giacomo Bergami\inst{1} \and
-	Fabrizio Maria Maggi\inst{1} \and
-	Marco Montali\inst{1} \and \\
-	Rafael Pe\~naloza\inst{2}}
-
-\authorrunning{G.~Bergami, F.M.~Maggi, M.~Montali and R.~Pe\~naloza}
-% First names are abbreviated in the running head.
-% If there are more than two authors, 'et al.' is used.
-%
-\institute{
-	Free University of Bozen-Bolzano, Italy \\\email{gibergami@unibz.it,\{maggi,montali\}@inf.unibz.it}
-	\and
-	University of Milano-Bicocca \\\email{rafael.penaloza@unimib.it}
-}
-
-%\vspace{1.5cm}
-%
-%
-\maketitle              % typeset the header of the contribution
-\linespread{0.92}
-\vspace{-0.5cm}
+\maketitle
 
 \begin{abstract}
-%Conformance checking techniques verify whether the observed behavior recorded in an event log matches a modeled behavior. This type of analysis is crucial, because often real process executions deviate from the reference process models. Currently, one of the most common approaches to conformance checking is based on trace alignments.
-Alignments provide sophisticated diagnostics that pinpoint deviations in a trace with respect to a process model and their severity. However, approaches based on trace alignments use crisp process models as reference and recent probabilistic conformance checking approaches check the degree of conformance of an event log with respect to a stochastic process model instead of finding trace alignments. In this paper, for the first time, we provide a conformance checking approach based on trace alignments using stochastic Workflow nets. Conceptually, this requires to handle the two possibly contrasting forces of the cost of the alignment on the one hand and the likelihood of the model trace with respect to which the alignment is computed on the other.
-%If the cost of the alignment is too high, even if the considered model trace is very likely, applying too many changes in the original trace is not always the best option. The proposed approach has been evaluated using a real-life event log pertaining to the treatment of the sepsis disease in a hospital.
-%\vspace{-0.3cm}
+This short example shows a contrived example on how to format the authors' information for {\it IJCAI--21 Proceedings} using \LaTeX{}.
 \end{abstract}
-
-\keywords{Stochastic Workflow nets, Conformance Checking, Alignments}
-
-%
 
 \input{sections/01_introduction}
 \input{sections/02_preliminaries}
@@ -82,12 +109,11 @@ Alignments provide sophisticated diagnostics that pinpoint deviations in a trace
 \input{sections/05_experiment}
 \input{sections/06_conclusion}
 
-
-\bibliographystyle{splncs04}
+\bibliographystyle{named}
 \bibliography{biblio3}
-%,bibliography2,references,libraryFiltered,main,Bibliography-CDC,DiCiccio,biblio}
-
 
 
 
 \end{document}
+
+

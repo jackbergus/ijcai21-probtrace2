@@ -137,6 +137,8 @@ $L$ and $R$ satisfy the following well-formedness conditions:
 \item for every $i \in V$ there is one and only one label $\alpha \in \alphabet$ so   that $[L]_{\alpha\ind{i}}=1$;
 \item  for  every $\ind{i} \in V$, we have that $\sum_{\ind{j}\in V}[R]_{\ind{ij}}=1$.
 \end{inparaenum}
+
+\ADD{A Weigthed (Probabilistic) Transition Graph is a pair $(G,\omega)$ where $G$ is a (Probabilistic) Transition Graph and $\omega\in[0,1]$ is a weight associated to such graph.}
 \end{definition}
 The condition for $L$ indicates that each node is mapped by $L$ to a single label, while the same label may be used for multiple nodes. The condition for $R$ ensures that the values contained therein can be interpreted as a probability distribution when choosing which next node to pick upon executing a transition. Matrices $L$ and $R$ can be exploited to determine the probability of reaching a node labeled by $\beta\in\Sigma$ from any node labeled $\alpha\in\Sigma$ in $n$ steps with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$, that we can shorthand as $[G.\Lambda^n]_{\alpha\beta}$ (see \cite{GartnerFW03} and Example \ref{ex:wheredotiszero}).
 
@@ -258,7 +260,7 @@ This trace kernel returns strong dissimilarity when the two traces have no share
 \caption{Embedding of traces $\const{caba}$, $\const{caa}$ and $\const{cb}$.}\label{tb:embedding}
 \vspace{-0.4cm}
 \begin{center}
-\scalebox{0.6}{
+\scalebox{0.45}{
 	\begin{tabularx}{\textwidth}{
 >{\hsize=.1\hsize}X
 >{\hsize=.2\hsize}X
