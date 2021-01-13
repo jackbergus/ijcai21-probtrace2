@@ -37,8 +37,8 @@ Using the decision theory \cite{dectheor}, we express the ranking score as the p
 
 \begin{figure*}[!t]
 	\centering
-	\subfloat[The similarity/probability space.]{\label{fig:spp}\includegraphics[width=.45\textwidth]{images/original_space.pdf}}\qquad
-	\subfloat[The transformed space for the $k$ nearest neighbours problem.]{\label{fig:knnspace}\includegraphics[width=.45\textwidth]{images/transformed_space.pdf}}\\
+	\subfloat[The similarity/probability space.]{\label{fig:spp}\includegraphics[width=.35\textwidth]{images/original_space.pdf}}\qquad
+	\subfloat[The transformed space for the $k$ nearest neighbours problem.]{\label{fig:knnspace}\includegraphics[width=.35\textwidth]{images/transformed_space.pdf}}\\
 	\caption{Two different characterizations of the probabilistic trace alignment problem. The best possible match is represented in red in both the similarity/probability space and in the transformed one.}
 \end{figure*}
 To represent the same intuition of such a weighted distance as a ranking function, we must transform it into a
@@ -77,21 +77,24 @@ $\pa=0.8$, $\pb=0.2$, $\pc=\pf=0.5$, $\pd=0.7$, and $\pe=0.3$. The $\ptraces{\ex
 %$$\begin{aligned}
 %\ptraces{\expN}{0}_{|\nonlogtrace|\leq 4}=
 $\{\braket{\const{a},0.4},\braket{\const{aa},0.2}$, $\braket{\const{aaa},0.1}$, $\braket{\const{ca},0.07}$, $\braket{\const{cb},0.06}$,
-$\braket{\const{aaaa},0.05},\braket{\const{caa},0.035},\braket{\const{caaa},0.0175}\}$.
-	
-\ADD{Table \ref{tab:expected} represents the expected alignment raking of such traces with  $\nonlogtrace=\textup{caba}$.  Albeit traces $\const{caa}$ and $\const{caaa}$ are the most similar to $\const{caba}$, their associated trace probability  is rather low, so traces having higher probability but lower similarity score are preferred (e.g., $\const{a}$ and $\const{aa}$).}
+$\braket{\const{aaaa},0.05},\braket{\const{caa},0.035},\braket{\const{caaa},0.0175}\}$. Table \ref{tab:expected} represents the expected alignment raking of such traces with  $\nonlogtrace=\textup{caba}$.  Albeit traces $\const{caa}$ and $\const{caaa}$ are the most similar to $\const{caba}$, their associated trace probability  is rather low, so traces having higher probability but lower similarity score are preferred (e.g., $\const{a}$ and $\const{aa}$).
 \end{example}
 	
-\ADD{Given that users might still prefer the most similar ones to the ones maximizing both probability and similarity, we prefer to offer the user the whole set of the best $k$ solutions rather than cherry-picking the best solution maximizing both probability and similarity. Therefore, we can reduce the problem to the desired $k$-nearest neighbor problem within the Euclidean Space: we define a transformation $t$ such that the distance of the transformed point $t(p,s)$ from  the origin $\vec{0}$ corresponds to $\sfrac{1}{ps}$, thus preserving the score from the golden ranking and making the points maximizing $ps$ nearer to the origin of the axes. We then chose the following transformation:}
-\[t(p,s):=\left(\frac{1}{s\sqrt{p^2+s^2}},\; \frac{1}{p\sqrt{p^2+s^2}}\right)\]
-	\ADD{Given that the  for each candidate trace $\nonlogtrace$ to align to $\logtrace$  we always start looking for the candidates from the origin of the axes, our search will always start scanning from the best candidate first.}
+\ADD{Given that users might still prefer the most similar ones to the ones maximizing both probability and similarity, we %prefer to 
+return the %user the whole set of the 
+best $k$ solutions. %rather than cherry-picking the best solution maximizing both probability and similarity. 
+So, we reduce the problem to the desired $k$-nearest neighbor problem within the Euclidean Space: we define a transformation $t$ such that the distance of the transformed point $t(p,s)$ from  the origin $\vec{0}$ corresponds to $\sfrac{1}{ps}$, thus preserving the score from the golden ranking and making the points maximizing $ps$ nearer to the origin of the axes. We then chose the following transformation:}
+$t(p,s):=\left(\frac{1}{s\sqrt{p^2+s^2}},\; \frac{1}{p\sqrt{p^2+s^2}}\right)$. 
+	\ADD{Given that the  for each candidate trace %$\nonlogtrace$ to align to $\logtrace$  
+	we always start %looking for the candidates 
+	from the origin of the axes, our search always starts scanning from the best candidates.}
 
 	
 \begin{example}
-	\ADD{Figure \ref{fig:spp} shows a family of hyperbolae $\mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma')\cdot s(\sigma,\sigma')=ps$ describing all the points $(\mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma'), s(\sigma,\sigma'))$ having $ps$ as a $\mathcal{R}$ score. Point $\color{red}(1,1)$ represents the best possible trace match, as it means that there exists a trace $\nonlogtrace\in\ptraces{N}{0}$ with $\nonlogtrace=\logtrace$ and $\mathbb{P}_N(\nonlogtrace)\mathbb{P}_N(\logtrace)=1$.
+	\ADD{Figure \ref{fig:spp} shows a family of hyperbolae $ps$ describing all the alignments having $\mathcal{R}(\sigma,\sigma')=ps$. Point $\color{red}(1,1)$ represents the best possible trace match, i.e., a trace $\nonlogtrace\in\ptraces{N}{0}$ with $\nonlogtrace=\logtrace$ and $\mathbb{P}_N(\nonlogtrace)\mathbb{P}_N(\logtrace)=1$.
 		
 		
-	Figure \ref{fig:knnspace} shows that the aforementioned embedding moves the points of the hyperbola $\mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma')\cdot s(\sigma,\sigma')=ps$ over a circumference $x^2+y^2=\sfrac{1}{(ps)^2}$ describing a locus of the points equidistant from the origin of the axes $(0,0)$ with distance $\sfrac{1}{ps}$.}
+	Figure \ref{fig:knnspace} shows that the aforementioned embedding moves the points of the hyperbola $ps$ over a circumference $x^2+y^2=\sfrac{1}{(ps)^2}$ describing a locus of the points equidistant as $\sfrac{1}{ps}$ from the origin of the axes $(0,0)$.}
 \end{example}
 
 The following lemma guarantees that the transformation required for running the $k$NN algorithm preserves the ranking induced by $\mathcal{R}$.
@@ -99,16 +102,15 @@ The following lemma guarantees that the transformation required for running the 
 \begin{lemma}
 	{Given a value $k\in[0,1]\subseteq \mathbb{R}^+_0$, the set of points having the product $ps$ at least $k$ corresponds to the set of $t$-transformed points having a distance of at least $1/k$ from the origin of the axes.}
 \end{lemma}
-\begin{proof}
-	\[\begin{aligned}
-	ps\geq k&{\Leftrightarrow \frac{1}{ps}\leq\frac{1}{k}} \\
-	&{\Leftrightarrow \frac{\sqrt{p^2+s^2}}{ps\sqrt{p^2+s^2}}\leq\frac{1}{k} }\\
-	&{\Leftrightarrow \sqrt{\frac{p^2+s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k}} \\
-	&{\Leftrightarrow \sqrt{\frac{p^2}{p^2s^2(p^2+s^2)}+\frac{s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k}} \\
-	&{\Leftrightarrow \sqrt{\frac{1}{s^2(p^2+s^2)}+\frac{1}{p^2(p^2+s^2)}}\leq\frac{1}{k}} \\
-	&{\Leftrightarrow \left\|{\biggr({\frac{1}{s\sqrt{p^2+s^2}},\frac{1}{p\sqrt{p^2+s^2}}\biggr)}-\vec{0}}\right\|_2\leq\frac{1}{k}} \\
-	&{\Leftrightarrow \left\|t(p,s)-\vec{0}\right\|_2\leq\frac{1}{k}} \\
-	\end{aligned}\]
+\begin{proof} By ignoring the irrelevant traces for $ps= 0$, we have:
+	\[
+	ps\geq k\Leftrightarrow \frac{1}{ps}=
+	{ \frac{\sqrt{p^2+s^2}}{ps\sqrt{p^2+s^2}}= \left\|t(p,s)-\vec{0}\right\|_2\leq\frac{1}{k} }\\
+	%&{\Leftrightarrow \sqrt{\frac{p^2+s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k}} \\
+%	&{\Leftrightarrow \sqrt{\frac{p^2}{p^2s^2(p^2+s^2)}+\frac{s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k}} \\
+%	&{\Leftrightarrow \sqrt{\frac{1}{s^2(p^2+s^2)}+\frac{1}{p^2(p^2+s^2)}}\leq\frac{1}{k}} \\
+%	&{\Leftrightarrow \left\|{\biggr({\frac{1}{s\sqrt{p^2+s^2}},\frac{1}{p\sqrt{p^2+s^2}}\biggr)}-\vec{0}}\right\|_2\leq\frac{1}{k}} \\
+\]
 \end{proof}
 	
 \vspace{+0.2cm}	
@@ -285,13 +287,11 @@ embedding $\gorgembed(\overline{G}_{\logtrace})$ with strategies $\epsilon^1$ an
 	\ADD{The sub-embeddings in Table~\ref{tab:embedstrat} satisfy the requirements from Definition~\ref{def:ppne}.}
 \end{lemma}
 \begin{proof}
-	\ADD{With respect to the $\nu$ embeddings, we can see that $\nu^2$ trivially satisfies the requirement as $\nu^2(G)$ returns the null vector $\vec{0}$. Furthermore, $\nu^1_\const{a}(G)=0$ if and only if there exists no $G$-trace  $\nonlogtrace\in\ptraces{G}{0}$ containing $\const{a}$, that is equivalent to  $\forall u\in V.\;L_{\const{a}u}=0$.}
-	
-	\ADD{We can observe that both $\epsilon^1$ and $\epsilon^2$ are function of both the sub-traces of length $i$ from $1$ to $l$, and  $[LR^iL^t]_\const{ab}$ too:}
-	\begin{itemize}
-		\item[$\Rightarrow$] \ADD{Given $\const{ab}\in\tasks^2$, if $[LR^iL^t]_\const{ab}=0$ for each $i\in\mathbb{N}$, it implies that the summation of all their terms would be also zero, thus implying $\epsilon^1_\const{ab}(G)=0$ and $\epsilon^2_\const{ab}(G)=0$.}
-		\item[$\Leftarrow$] \ADD{Given that $l$ in both $\epsilon^2$ and $\epsilon^1$ always corresponds the maximum trace length generated from $\ptraces{G}{0}$, no $2$-grams at occurring length greater than $l$ can happen, thus implying $\forall j>l.\; [LR^lL^t]_\const{ab}=0$. In addition to that, having $\epsilon^1_\const{ab}(G)=0$ (and $\epsilon^2_\const{ab}(G)=0$) implies that $\forall 0<j\leq l.\; [LR^jL]_\const{ab}=0$. Thus, we can finally conclude that $\forall i\in\mathbb{N}_{\neq 0}. [LR^iL^t]_\const{ab}=0$}
-	\end{itemize}
+	\ADD{With respect to the $\nu$ embeddings, we can see that $\nu^2$ trivially satisfies the requirement as $\nu^2(G)$ returns the null vector $\vec{0}$. Furthermore, $\nu^1_\const{a}(G)=0$ if and only if there exists no $G$-trace  $\nonlogtrace\in\ptraces{G}{0}$ containing $\const{a}$, that is equivalent to  $\forall u\in V.\;L_{\const{a}u}=0$. We can observe that both $\epsilon^1$ and $\epsilon^2$ are function of both the sub-traces of length $i$ from $1$ to $l$, and  $[LR^iL^t]_\const{ab}$ too, thus implying that a summation of possibly zero terms possibly returns zero.}
+%	\begin{itemize}
+%		\item[$\Rightarrow$] \ADD{Given $\const{ab}\in\tasks^2$, if $[LR^iL^t]_\const{ab}=0$ for each $i\in\mathbb{N}$, it implies that the summation of all their terms would be also zero, thus implying $\epsilon^1_\const{ab}(G)=0$ and $\epsilon^2_\const{ab}(G)=0$.}
+%		\item[$\Leftarrow$] \ADD{Given that $l$ in both $\epsilon^2$ and $\epsilon^1$ always corresponds the maximum trace length generated from $\ptraces{G}{0}$, no $2$-grams at occurring length greater than $l$ can happen, thus implying $\forall j>l.\; [LR^lL^t]_\const{ab}=0$. In addition to that, having $\epsilon^1_\const{ab}(G)=0$ (and $\epsilon^2_\const{ab}(G)=0$) implies that $\forall 0<j\leq l.\; [LR^jL]_\const{ab}=0$. Thus, we can finally conclude that $\forall i\in\mathbb{N}_{\neq 0}. [LR^iL^t]_\const{ab}=0$}
+%	\end{itemize}
 \end{proof}
 
 
@@ -547,7 +547,7 @@ When $\hat{\epsilon}(G)$ and $\hat{\epsilon}(G')$ are affected by numerical canc
 %	Let us compare the ranking results by replacing in $\gorgembed$ the edge embedding $\epsilon^1$ with $\epsilon^2$. If we re-run the computations performed in  Example \ref{ex:11}, we obtain   Table \ref{tab:compLit}:  $\epsilon^1$ provides longer approximated subsequences if compared to $\epsilon^2$. Both embedding proposals tend to favor sequences containing one single node or one single subtrace due to the normalization of both  the edge and the nodes' distribution, but $\epsilon^2$ seems to be less influenced than $\epsilon^1$ in the change of the edge distribution. Therefore, $\epsilon^1$ proposal is to be preferred to $\epsilon^2$.
 %\end{example}
 
-\ADD{As a corollary of Proposition~\ref{lem:rewritinglemma}, we can also express the kernel $k_{\gorgembed}(G,G')$ is a function of the dot product of the two sub-embeddings because $\tasks^2\neq\tasks$ is always true:}
+\ADD{As a corollary of Proposition~\ref{lem:rewritinglemma}, we can also express the kernel $k_{\gorgembed}(G,G')$ as a function of the dot product of the two sub-embeddings because $\tasks^2\neq\tasks$ is always true:}
 \begin{equation}\label{eq:corollLem1}
 {\omega\omega't_f^{|R>0|+|R'>0|}\Braket{\hat{\epsilon}(G), \hat{\epsilon}(G')}+ t_f^{|R>0|+|R'>0|}\Braket{\hat{\nu}(G), \hat{\nu}(G')}}
 \end{equation}
@@ -563,7 +563,7 @@ We can prove that when two traces $\logtrace$ and ${\nonlogtrace}$ are equivalen
 	\caption{Two $\tau$-closed transition graphs, $Q$ (left) and $R$ (right), having a different set of traces but the same embedding.}\label{fig:counterexample}
 \end{figure}
 \begin{example}
-	If we use $\epsilon$ (or $\epsilon^2$) and $\nu$ (or $\nu^2$) for $\gorgembed$, we might have a false positive for ``weak equality'' if $Q=(V,s,s,L,R)$ and $R=(V,s',s',L,R)$ are both cycle graphs with $s\neq s'$, $\textit{label}(s)\neq\textit{label}(s')$, $\textit{label}(s)\neq\tau$, and $\textit{label}(s')\neq\tau$. An intuitive example of such situation is presented in Figure \ref{fig:counterexample}: both graphs will have the same frequency for both subtraces and nodes, and therefore have the same  $\epsilon$ and $\nu$ by construction. By having different initial and accepting node with  different labels, we have $\ptraces{Q}{0}=\Set{\textup{a(bca)}^n|n\in\mathbb{N}}$ and $\ptraces{R}{0}=\Set{\textup{c(abc)}^n|n\in\mathbb{N}}$, thus implying $\ptraces{Q}{0}\neq\ptraces{R}{0}$ but $k_{\gorgembed}(Q,R)=1$ for $t_f=1$.
+	If we use $\epsilon$ (or $\epsilon^2$) and $\nu$ (or $\nu^2$) for $\gorgembed$, we might have a false positive for ``weak equality'' if $Q=(V,s,s,L,R)$ and $R=(V,s',s',L,R)$ are both cycle graphs with $s\neq s'$, $\textit{label}(s)\neq\textit{label}(s')$, $\textit{label}(s)\neq\tau$, and $\textit{label}(s')\neq\tau$. Both graphs in Figure \ref{fig:counterexample} have the same frequency for both subtraces and nodes, and therefore have the same  $\epsilon$ and $\nu$ by construction. By having different initial and accepting node with  different labels, we have $\ptraces{Q}{0}=\Set{\textup{a(bca)}^n|n\in\mathbb{N}}$ and $\ptraces{R}{0}=\Set{\textup{c(abc)}^n|n\in\mathbb{N}}$, thus implying $\ptraces{Q}{0}\neq\ptraces{R}{0}$ but $k_{\gorgembed}(Q,R)=1$ for $t_f=1$.
 \end{example}
 
 
@@ -580,23 +580,23 @@ As shown in \S\ref{ex:wheredotiszero}, traces having neither $2$-grams nor trans
 	Given two Weighted Transition Graphs $(G,\omega)$ and $(G',\omega')$ with $G=(V,s,t,L,R)$ and $G'=(s',t',L',R')$, $k_{\gorgembed}(G,G')=0$ iff. $G$ and $G'$ have different set of vertex labels or $2$-grams with $t_f,\omega,\omega'>0$.
 \end{lemma}
 \begin{proof}
-	\ADD{For each transition graph $G$, we can denote the set of vertex labels as $\tasks_G=\Set{\const{a}\in\tasks|\forall u\in V.\; L_{\const{a}u}\neq 0}$.} If we exclude the trivial conditions $t_f=0$, $\omega=0$ or $\omega'=0$ and by Equation \ref{eq:corollLem1}, the only condition when the kernel returns zero is when both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G)}=0$ and $\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. \ADD{This reduces to prove that  iff. $G$ and $G'$ have either different $2$-gram sets or a different set of vertex labels, i.e., $\tasks_G\cap \tasks_{G'}=\emptyset$.}
+{For each transition graph $G$, we can denote the set of vertex labels as $\tasks_G=\Set{\const{a}\in\tasks|\forall u\in V.\; L_{\const{a}u}\neq 0}$.} If we exclude the trivial conditions $t_f=0$, $\omega=0$ or $\omega'=0$ and by Equation \ref{eq:corollLem1}, the only condition when the kernel returns zero is when both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G)}=0$ and $\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. \ADD{This reduces to prove that  iff. $G$ and $G'$ have either different $2$-gram sets or a different set of vertex labels, i.e., $\tasks_G\cap \tasks_{G'}=\emptyset$.} \ADD{The goal can be closed after observing that $\nu_\const{a}(G)=0\Leftrightarrow \forall u\in V. L_{\const{a}u}=0$ and by the requirement in Definition~\ref{def:ppne} $\hat{\epsilon}_\const{ab}(G)=0$, the non-existence of a  $2$-gram can be expressed as $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$.}
 	
-\begin{itemize}
-	\item[$\Leftarrow$] \ADD{We can strengthen the right hand-side by proving that if  $\tasks_G\cap \tasks_{G'}=\emptyset$, then both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$ and $\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. %The hypothesis can be rewritten as} $ \tasks_G\cap \tasks_{G'}=\emptyset\Rightarrow \Braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0\wedge \Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$.
-	We can further rewrite the hypothesis as:}
-\begin{equation}\label{eq:rewr}\begin{aligned}\forall \const{a}\in\tasks. &((\forall u\in V.\; L_{\const{a}u}=0)\wedge (\exists u\in V'.\; L_{\const{a}u}\neq0))\vee\\
-&((\exists u\in V.\; L_{\const{a}u}\neq0)\wedge (\forall u\in V'.\; L_{\const{a}u}=0))\end{aligned}\end{equation} \ADD{We can rewrite it for $\nu$ as $(\nu_\const{a}(G)=0\wedge \nu_\const{a}(G')\neq 0)\vee(\nu_\const{a}(G)\neq0\wedge \nu_\const{a}(G')= 0)$, thus implying $\braket{\hat{\nu}(G),\hat{\nu}(G')}=0$.} 
+%\begin{itemize}
+%	\item[$\Leftarrow$] \ADD{We can strengthen the right hand-side by proving that if  $\tasks_G\cap \tasks_{G'}=\emptyset$, then both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$ and $\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. %The hypothesis can be rewritten as} $ \tasks_G\cap \tasks_{G'}=\emptyset\Rightarrow \Braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0\wedge \Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$.
+%	We can further rewrite the hypothesis as:}
+%\begin{equation}\label{eq:rewr}\begin{aligned}\forall \const{a}\in\tasks. &((\forall u\in V.\; L_{\const{a}u}=0)\wedge (\exists u\in V'.\; L_{\const{a}u}\neq0))\vee\\
+%&((\exists u\in V.\; L_{\const{a}u}\neq0)\wedge (\forall u\in V'.\; L_{\const{a}u}=0))\end{aligned}\end{equation} \ADD{We can rewrite it for $\nu$ as $(\nu_\const{a}(G)=0\wedge \nu_\const{a}(G')\neq 0)\vee(\nu_\const{a}(G)\neq0\wedge \nu_\const{a}(G')= 0)$, thus implying $\braket{\hat{\nu}(G),\hat{\nu}(G')}=0$.} 
+%
+%\ADD{Given that the two Weighted Transition Graphs have no labels in common, we will also have that $\forall \const{ab}\in \tasks^2_{G'}\; \const{ab}\notin\tasks^2_{G}$ and vice versa. Let us then consider $\const{ab}\in \tasks^2_{G'}$: we will have $(\forall u\in V.\;\; L_{\const{a}u}=0)\wedge (\forall u\in V.\;\; L_{\const{b}u}=0)$. This implies that $[LR^iL^t]_\const{ab}=0$ for each $i\in\mathbb{N}_{\neq 0}$ and, by requirement from Definition~\ref{def:ppne}, it implies that $\epsilon_\const{ab}(G)=0$. Similarly, for each $\const{\overline{a}\overline{b}}\in \tasks^2_{G}$, $\epsilon_\const{\overline{a}\overline{b}}(G')=0$. Therefore, $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$}
+%	
+%	\item[$\Rightarrow$] \ADD{For $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$, it always exists a weighted transition graph $(G,\omega)$ for which $\epsilon_\const{ab}=0$ with $\const{ab}\in\tasks^2$. Let us consider $\hat{\epsilon}_\const{ab}(G)=0\wedge \hat{\epsilon}_\const{ab}(G')\neq0$: by the requirement in Definition~\ref{def:ppne} $\hat{\epsilon}_\const{ab}(G)=0$, it implies $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$, thus implying that there exists no $2$-gram $\const{ab}$ in $G$, while $\const{ab}$ is  in $G'$.}
+%	
+%	\ADD{For $\braket{\hat{\nu}(G),\hat{\nu}(G')}=0$, when $\nu$ always returns the null vector $\vec{0}$, having $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$ guarantees that $G$ and $G'$ share no common $2$-gram. Otherwise, it always exists a weighted transition graph $(G,\omega)$ for which $\nu_\const{a}(G)=0$ with $\const{a}\in\tasks$. After restricting $\tasks$ to $\tasks_{G'}\cup\tasks_G$ thus avoiding the trivial cases, we have  $(\hat{\nu}_\const{a}(G)=0\wedge \hat{\nu}_\const{a}(G')\neq0)\vee (\hat{\nu}_\const{a}(G)\neq0\wedge \hat{\nu}_\const{a}(G')=0)$ for each $a\in\tasks_{G'}\cup\tasks_G$: this can be rewritten as Equation \ref{eq:rewr} and therefore as $\tasks_G\cap\tasks_{G'}=\emptyset$.}
+%\end{itemize}
 
-\ADD{Given that the two Weighted Transition Graphs have no labels in common, we will also have that $\forall \const{ab}\in \tasks^2_{G'}\; \const{ab}\notin\tasks^2_{G}$ and vice versa. Let us then consider $\const{ab}\in \tasks^2_{G'}$: we will have $(\forall u\in V.\;\; L_{\const{a}u}=0)\wedge (\forall u\in V.\;\; L_{\const{b}u}=0)$. This implies that $[LR^iL^t]_\const{ab}=0$ for each $i\in\mathbb{N}_{\neq 0}$ and, by requirement from Definition~\ref{def:ppne}, it implies that $\epsilon_\const{ab}(G)=0$. Similarly, for each $\const{\overline{a}\overline{b}}\in \tasks^2_{G}$, $\epsilon_\const{\overline{a}\overline{b}}(G')=0$. Therefore, $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$}
 	
-	\item[$\Rightarrow$] \ADD{For $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$, it always exists a weighted transition graph $(G,\omega)$ for which $\epsilon_\const{ab}=0$ with $\const{ab}\in\tasks^2$. Let us consider $\hat{\epsilon}_\const{ab}(G)=0\wedge \hat{\epsilon}_\const{ab}(G')\neq0$: by the requirement in Definition~\ref{def:ppne} $\hat{\epsilon}_\const{ab}(G)=0$, it implies $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$, thus implying that there exists no $2$-gram $\const{ab}$ in $G$, while $\const{ab}$ is  in $G'$.}
-	
-	\ADD{For $\braket{\hat{\nu}(G),\hat{\nu}(G')}=0$, when $\nu$ always returns the null vector $\vec{0}$, having $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$ guarantees that $G$ and $G'$ share no common $2$-gram. Otherwise, it always exists a weighted transition graph $(G,\omega)$ for which $\nu_\const{a}(G)=0$ with $\const{a}\in\tasks$. After restricting $\tasks$ to $\tasks_{G'}\cup\tasks_G$ thus avoiding the trivial cases, we have  $(\hat{\nu}_\const{a}(G)=0\wedge \hat{\nu}_\const{a}(G')\neq0)\vee (\hat{\nu}_\const{a}(G)\neq0\wedge \hat{\nu}_\const{a}(G')=0)$ for each $a\in\tasks_{G'}\cup\tasks_G$: this can be rewritten as Equation \ref{eq:rewr} and therefore as $\tasks_G\cap\tasks_{G'}=\emptyset$.}
-\end{itemize}
-
-	
-	\xout{This implies that, when a component of $\epsilon$ (or $\nu$) is non-zero, the same component of $\epsilon'$ (or $\nu'$) is zero and viceversa. This directly requires that there is a different set of labels associated to the nodes. }
+	%\xout{This implies that, when a component of $\epsilon$ (or $\nu$) is non-zero, the same component of $\epsilon'$ (or $\nu'$) is zero and viceversa. This directly requires that there is a different set of labels associated to the nodes. }
 \end{proof}
 
 
