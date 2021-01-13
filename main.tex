@@ -69,23 +69,23 @@
 % page charge instructions.
 % Put where the files are available in the appropriate places.
 
-\title{IJCAI--21 Example on typesetting multiple authors}
+\title{Two Approaches to Probabilistic Trace Alignment}
 
-\author{
-First Author$^1$\footnote{Contact Author}\and
-Second Author$^2$\and
-Third Author$^{2,3}$\And
-Fourth Author$^4$\\
-\affiliations
-$^1$First Affiliation\\
-$^2$Second Affiliation\\
-$^3$Third Affiliation\\
-$^4$Fourth Affiliation\\
-\emails
-\{first, second\}@example.com,
-third@other.example.com,
-fourth@example.com
-}
+%\author{
+%First Author$^1$\footnote{Contact Author}\and
+%Second Author$^2$\and
+%Third Author$^{2,3}$\And
+%Fourth Author$^4$\\
+%\affiliations
+%$^1$First Affiliation\\
+%$^2$Second Affiliation\\
+%$^3$Third Affiliation\\
+%$^4$Fourth Affiliation\\
+%\emails
+%\{first, second\}@example.com,
+%third@other.example.com,
+%fourth@example.com
+%}
 
 \makeatletter
 \let\@internalcite\cite
@@ -102,7 +102,7 @@ fourth@example.com
 Trace alignment is a prominent problem in AI, where the goal is to detect the trace from a formal 
 system which best matches an observed behaviour, according to given criteria. In the presence of uncertainty, a
 formal system can provide only the likelihood of observing a trace. The alignment problem thus becomes a multi-criteria
-optimization problem, which must take into account the dychotomy between a very similar but unlikely trace, and a very
+optimization problem, which must take into account the dichotomy between a very similar but unlikely trace, and a very
 dissimilar but likely trace. We propose two approaches to solve the probabilistic alignment problem: a precise approach which
 needs to be called anew for each alignment test; and an approximate one with a pre-processing step. We also present
 specific applications in different AI domains.
