@@ -3,30 +3,31 @@
 \section{Preliminaries}
 \label{sec:models}
 We introduce the basic notions of the formal transition systems and trace alignments that will be used henceforth.
+
 \subsection{Transition Graphs}\label{subsec:ppn}
 
-The graph and trace embedding techniques that we will use as the basis for computing probabilistic alignments cannot be directly defined over reachability graphs. In fact, these techniques rely on graphs where edges are only labeled by probabilities, whereas labels are attached to nodes. In addition, towards readily enabling efficient algorithmic techniques, such graphs are compactly defined using transition matrixes. We therefore take inspiration from \cite{GartnerFW03} and introduce the so-called \emph{probabilistic transition graphs}, which we will later use to encode \uswn{s} via their reachability graphs.
+We consider an abstract model for representing the traces from a process which is based on graphs. These
+graphs, which we call \emph{transition graphs} and formalise below, can be further equiped with edge-labels expressing 
+the probability of a transition, and hence of a specific trace. The following definition is based on \cite{GartnerFW03}.
+\todo{note!! changed the definition of $L$}
 
-%For a matrix $Q$ with row set $A$ and column set $B$, notation $[Q]_{ab}$ for $a \in A$ and $b \in B$ denotes the corresponding element in the matrix. In addition $\transp{Q}$ denotes the transposed matrix where rows and columns are inverted. We employ the usual sum and product operations over matrixes and arrays, and denote, for a square matrix $Q$, the repeated multiplication of $Q$ with itself $n$ times by $Q^n$.\todo{Rimuovere questo paragrafo se serve spazio,}\todo{NOn si capisce il significato di $\omega$}
-%In our technical treatment, we continue to assume the existence of a set $\alphabet$ of labels (including the special label $\tau$).
-\begin{definition} A \emph{(Probabilistic) Transition Graph} is a tuple $(V,s,t,L,R)$ where:
+\begin{definition} A \emph{(probabilistic) transition graph} (TG) is a tuple $(V,s,t,L,R)$ where:
   \begin{inparaenum}[\itshape (i)]
     \item $V \subset \mathbb{N}$ is a set of \emph{nodes};
     \item $s\in V$ is the \emph{initial node};
     \item $e\in V$ is the \emph{accepting node};
-    \item $L: \alphabet \times V \rightarrow \{0,1\}$ is a \emph{label matrix} associating each node in $V$ to a single label in $\alphabet$, where for label $\alpha \in \alphabet$ and node $\ind{i} \in V$, $[L]_{\alpha\ind{i}}$ gives $1$ if $\ind{i}$ is labeled by $\alpha$, $0$ otherwise;
+    \item $L: V \to \alphabet$ is the \emph{node labelling function};
     \item $R: V \times V \rightarrow [0,1]$ is a \emph{(probabilistic) transition matrix} indicating, for each pair of nodes, what is the probability that executing a transition from the first node leads to the second node.
-   % \item $\omega \in [0,1]$ is a \emph{graph weight} indicating an overall value associated to the entire graph.
   \end{inparaenum}
-$L$ and $R$ satisfy the following well-formedness conditions:
-\begin{inparaenum}[\itshape (i)]
-\item for every $i \in V$ there is one and only one label $\alpha \in \alphabet$ so   that $[L]_{\alpha\ind{i}}=1$;
-\item  for  every $\ind{i} \in V$, we have that $\sum_{\ind{j}\in V}[R]_{\ind{ij}}=1$.
-\end{inparaenum}
+Thus $R$ is such that for  every $\ind{i} \in V$, $\sum_{\ind{j}\in V}[R]_{\ind{ij}}=1$.
 
-\ADD{A Weigthed (Probabilistic) Transition Graph is a pair $(G,\omega)$ where $G$ is a (Probabilistic) Transition Graph and $\omega\in[0,1]$ is a weight associated to such graph.}
+\ADD{A \emph{weigthed (probabilistic) transition graph} is a pair $(G,\omega)$ where $G$ is a (probabilistic) TG and 
+$\omega\in[0,1]$ is its \emph{weight}.}
 \end{definition}
-The condition for $L$ indicates that each node is mapped by $L$ to a single label, while the same label may be used for multiple nodes. The condition for $R$ ensures that the values contained therein can be interpreted as a probability distribution when choosing which next node to pick upon executing a transition. Matrices $L$ and $R$ can be exploited to determine the probability of reaching a node labeled by $\beta\in\Sigma$ from any node labeled $\alpha\in\Sigma$ in $n$ steps with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$, that we can shorthand as $[G.\Lambda^n]_{\alpha\beta}$ (see \cite{GartnerFW03} and Example \ref{ex:wheredotiszero}).
+%
+%The condition for $L$ indicates that each node is mapped by $L$ to a single label, while the same label may be used for multiple nodes. 
+\todo{---}
+The condition for $R$ ensures that the values contained therein can be interpreted as a probability distribution when choosing which next node to pick upon executing a transition. Matrices $L$ and $R$ can be exploited to determine the probability of reaching a node labeled by $\beta\in\Sigma$ from any node labeled $\alpha\in\Sigma$ in $n$ steps with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$, that we can shorthand as $[G.\Lambda^n]_{\alpha\beta}$ (see \cite{GartnerFW03} and Example \ref{ex:wheredotiszero}).
 
 A transition graph $\tg$ can be visualized as shown in \figurename~\ref{fig:lmc} (and in \figurename~\ref{fig:closed} after $\tau$-closure). There, the various elements have the obvious interpretation, with the only important consideration that an edge from node $\ind{i}$ to node $\ind{j}$ is only shown if the transition probability $[\tg.R]_{\ind{i}\ind{j}}$ is positive.
 %There, each node $\ind{i} \in \tg.V$ is  represented as a circle with its identifying number. The initial node is decorated by a small incoming edge, while the final node is double circled. The label of the node is shown close to the circle, in agreement with $\tg.L$. Finally, an edge from $\ind{i} \in \tg.V$ to $\ind{j} \in \tg.V$ is shown if the transition probability $[\tg.R]_{\ind{i}\ind{j}}$ is positive. Each edge is decorated with the positive probability assigned by $\tg.R$.
