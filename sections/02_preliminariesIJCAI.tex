@@ -2,8 +2,7 @@
 
 \section{Preliminaries}
 \label{sec:models}
-In this section, we introduce the different models and techniques that will constitute the basis for representing and computing probabilistic trace alignments.
-
+We introduce the basic notions of the formal transition systems and trace alignments that will be used henceforth.
 \subsection{Transition Graphs}\label{subsec:ppn}
 
 The graph and trace embedding techniques that we will use as the basis for computing probabilistic alignments cannot be directly defined over reachability graphs. In fact, these techniques rely on graphs where edges are only labeled by probabilities, whereas labels are attached to nodes. In addition, towards readily enabling efficient algorithmic techniques, such graphs are compactly defined using transition matrixes. We therefore take inspiration from \cite{GartnerFW03} and introduce the so-called \emph{probabilistic transition graphs}, which we will later use to encode \uswn{s} via their reachability graphs.
