@@ -1,22 +1,15 @@
+% !TeX root=../main.tex
+
 \section{Conclusions}
 %\texttt{\color{red}[TODO]}
 \label{sec:conclusion}
 
 In this paper, we have presented an approach to tackle the probabilistic trace alignment as a $k$NN problem.
-%Conceptually, this requires to handle the two possibly contrasting forces of the cost of the alignment on the one hand and the
-%likelihood of the model trace with respect to which the alignment is computed. We consider the important tradeoff between both
-%aspects.
 The approach balances between the likelihood of the aligned trace and the cost of the alignment by providing the top-k alignments instead of a single alignment as output. The experimentation shows that the approximated top-k ranking provides a good trade-off between accuracy and efficiency especially when the reference stochastic net generates several model traces.
 Future works will investigate the probabilistic alignment over fuzzy-labeled nodes and declarative process models. Also, we will try to improve the performance (in terms of efficiency and accuracy) of the proposed approach by intervening both on the embedding and the algorithmic strategies.
 
 
-%enrich constraint-based process models with uncertainty, captured as the probability that a trace will conform with a constraint or not. We have discussed how this impacts the semantics of a constraint model, and how logical and probabilistic reasoning have to be combined to provide core services such as consistency and conformance checking, as well as probabilistic constraint entailment.
-%
-%Notably, all the techniques presented in this paper can be directly grounded with existing tools: automata-based techniques for \LTLf to carry out logical reasoning, and off-the-shelf systems to solve systems of linear inequalities (and corresponding optimization problems) to handle probabilities.
-%
-%In~\cite{DBLP:conf/bpm/Maggi2020}, beside a concrete implementation of the techniques presented in this paper, we investigate the application of probabilistic business constraints to process mining, not only considering standard problems like discovery, but also delving into online operational support and, in particular, probabilistic monitoring~\cite{DBLP:conf/fase/MaggiMA12}.
 
-%Balancing between the likelihood of the model trace with respect to which we are computing the alignment and the cost of the alignment (if the cost of the alignment is too high even if the model trace is very likely applying too many changes in the original trace is in turn not very likely).
-
-\section*{Acknowledgements}
-This research has been partially supported by the project IDEE (FESR1133) funded by the Eur.\ Reg.\ Development Fund (ERDF) Investment for Growth and Jobs Programme 2014-2020. 
+%\section*{Acknowledgements}
+%This research has been partially supported by the project IDEE (FESR1133) funded by the Eur.\ Reg.\ Development Fund (ERDF) 
+%Investment for Growth and Jobs Programme 2014-2020. 
