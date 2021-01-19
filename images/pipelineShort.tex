@@ -66,16 +66,16 @@
 \pgfsetlayers{background,main,foreground}
 
 \begin{document}
-\begin{tikzpicture}[align=center,node distance=5mm,font=\footnotesize]
+\begin{tikzpicture}[align=center,node distance=4mm,font=\footnotesize]
 
 \node[cjoint] (innet) {};
-\node[left=0mm of innet] {TG $\tg$};
+\node[left=0mm of innet] {$\tg$};
 
 \node[cjoint,below=6mm of innet] (inprob) {};
-\node[left=0mm of inprob] {threshold~$\pmin$};
+\node[left=0mm of inprob] {$\pmin$};
 
 \node[cjoint,below=2mm of inprob] (intrace) {};
-\node[left=0mm of intrace] {trace $\trace$};
+\node[left=0mm of intrace] {$\trace$};
 
 %\node[cstep,right=of innet] (brg) {Build\\reachability\\graph};
 
@@ -94,10 +94,10 @@
 
 \node[cstep,right=of mtg] (ut) {Unfold\\traces};
 
-\node[database,fill=marcofucsia1!100,right=13mm of ut,very thick,scale=1.4,anchor=north] (log) {};
+\node[database,fill=marcofucsia1!100,right=11mm of ut,very thick,scale=1.4,anchor=north] (log) {};
 \node[below=2mm of log,xshift=-2mm] {$\ptraces{\closed{\tg}}{\pmin}$};
 
-\node[cstep,right=30mm of ut,opacity=0] (ptanchor){};
+\node[cstep,right=26mm of ut,opacity=0] (ptanchor){};
 
 
 \begin{pgfonlayer}{background}
