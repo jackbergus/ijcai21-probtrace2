@@ -85,6 +85,14 @@ interest. Therefore, we introduce a \emph{decay factor} $\lambda\in[0,1]\subsete
 %
 We lift this approach to consider all occurrences of subtraces $\alpha\beta$ at every distance between $1$ and $|\trace|-1$
 in two steps. First, we encode $\trace$ into a ``linear'' TG $\tg_\trace$ (\figurename~\ref{fig:taustar}) in the obvious way. 
+%
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=.35\textwidth]{images/taustar.pdf}
+	\caption{Graphical representation of the TG encoding trace $\const{caba}$.}
+	\label{fig:taustar}
+\end{figure}
+%
 Then, we compute a simplified version of the embedding from \cite{LodhiSSCW02} as 
 $\trembed_{\alpha\beta}(\trace)=\sum_{1\leq i\leq |\trace|}\lambda^i[(\tg_{\trace}.\Lambda)^i]_{\alpha\beta}$. 
 The kernel between two traces corresponds to the sum of the products of such values calculated 2-gram by 2-gram for the two 
@@ -97,12 +105,6 @@ but does not enjoy strong equality: the similarity of a trace with itself is at 
 %Exploiting this encoding, we can adopt a simplified version of the embedding defined in \cite{LodhiSSCW02,Raedt} as $\embed_{\mathcal{T}}(\tau)_{{\color{green}\alpha\beta}}=\sum_{1\leq i\leq |\tau|}\lambda^i[(\Lambda_\tau)^i]_{\color{green}\alpha\beta}$.
 %Please note that this definition is similar to a transition matrix embedding proposed in \cite{GartnerFW03} via geometric series, that is $\sum_i\lambda^i[R^i]_{\color{green}\alpha\beta}$.
 
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=.4\textwidth]{images/taustar.pdf}
-	\caption{Graphical representation of the transition graph encoding trace $\const{caba}$.}\label{fig:taustar}
-\end{figure}
-%
 %\begin{example}\label{ex:tracembed}
 %	{Let us suppose that we want to align a trace $\tau^*$ to one of the traces from a transition graph: in order to carry out an approximate alignment, we need to transform it to a transition graph first.} A trace $\tau^*=\textup{caba}$ can be graphically represented in Figure \ref{fig:taustar}. The associated TG $T=(\mathtt{\color{blue}1},\mathtt{\color{blue}4},L,R,1)$ has matrices $L$ and $R$  defined as follows:
 %	$$L:=\kbordermatrix{
@@ -129,19 +131,19 @@ but does not enjoy strong equality: the similarity of a trace with itself is at 
 \begin{table}[t!]
 \vspace{+0.5cm}
 \caption{Embedding of traces $\const{caba}$, $\const{caa}$ and $\const{cb}$.}\label{tb:embedding}
-\vspace{-0.4cm}
-\begin{center}
-\scalebox{0.45}{
-	\begin{tabularx}{\textwidth}{
->{\hsize=.1\hsize}X
->{\hsize=.2\hsize}X
+%\vspace{-0.3cm}
+\centering
+\resizebox{0.9\columnwidth}{!}{
+	\begin{tabularx}{1.1\columnwidth}{
+>{\hsize=.15\hsize}X
+>{\hsize=.15\hsize}X
 >{\hsize=.1\hsize}X
 >{\hsize=.1\hsize}X
 >{\hsize=.1\hsize}X
 >{\hsize=.1\hsize}X
 >{\hsize=.1\hsize}X
 >{\hsize=.25\hsize}X
->{\hsize=.2\hsize}X
+>{\hsize=.15\hsize}X
 >{\hsize=.1\hsize}X
 }
 		\toprule
@@ -154,26 +156,34 @@ but does not enjoy strong equality: the similarity of a trace with itself is at 
 		\bottomrule
 	\end{tabularx}
 }
-\vspace{-0.8cm}
-\end{center}
+\vspace{-0.5cm}
 \end{table}
+
 \begin{example}\label{ex:wheredotiszero} %\small
-Consider tasks $\tasks=\Set{a,b,c}$. The possible 2-grams over $\tasks$ are $\tasks^2=\Set{\const{aa},\const{ab},\const{ac},\const{ba},\const{bb},\const{bc},\const{ca},\const{cb},\const{cc}}$. Table~\ref{tb:embedding} shows the embeddings of some traces. Being a 2-gram, trace $\const{cb}$ has only one nonzero component, namely that corresponding to itself, with $\trembed_{\const{cb}}(\const{cb})=\lambda$. Trace $\const{caa}$ has the 2-gram $\const{ca}$ occurring with length $1$ ($\const{\underline{ca}a}$) and $2$ ($\const{\underline{c}a\underline{a}}$), and the 2-gram $\const{aa}$ with occurring length $1$ ($\const{c\underline{aa}}$). Hence: $\trembed_{\const{ca}}(\const{caa})=\lambda+\lambda^2$ and  $\trembed_{\const{aa}}(\const{caa})=\lambda$.  Similar considerations can be carried out for the other traces in the table.
-We now want to compute the similarity between the first trace $\const{caba}$ and the other two traces. To do so, we sum, column by column (that is, 2-gram by 2-gram) the product of the embeddings for each pair of traces. We then get $k_{\trembed}(\const{caba},\const{caa})=\lambda^3+(\lambda+\lambda^3)(\lambda+\lambda^2)$ and $k_{\trembed}(\const{caba},\const{cb})=\lambda^3
-$,
-%{\footnotesize
-%\[
-%k_{\trembed}(\const{caba},\const{caaa})=\lambda(\lambda+\lambda^2+\lambda^3)
-%~~
-%k_{\trembed}(\const{caba},\const{caa})=\lambda(\lambda+\lambda^2)
-%~~
-%k_{\trembed}(\const{caba},\const{cb})=\lambda(\lambda+\lambda^3)
-%\]}
+The possible 2-grams over $\tasks=\Set{a,b,c}$ are 
+$\tasks^2=\Set{\const{aa},\const{ab},\const{ac},\const{ba},\const{bb},\const{bc},\const{ca},\const{cb},\const{cc}}$. 
+Table~\ref{tb:embedding} shows the embeddings of some traces. The 2-gram $\const{cb}$ has only one nonzero component 
+(itself) with $\trembed_{\const{cb}}(\const{cb})=\lambda$. Trace $\const{caa}$ has the 2-gram $\const{ca}$ occurring with 
+length $1$ ($\const{\underline{ca}a}$) and $2$ ($\const{\underline{c}a\underline{a}}$), and the 2-gram $\const{aa}$ with 
+length $1$ ($\const{c\underline{aa}}$). Hence: $\trembed_{\const{ca}}(\const{caa})=\lambda+\lambda^2$ and 
+$\trembed_{\const{aa}}(\const{caa})=\lambda$. 
+We compute the similarity between the trace $\const{caba}$ and the other two traces. To do so, we sum, column by column 
+(i.e., 2-gram by 2-gram) the product of the embeddings for each pair of traces. We get 
+$k_{\trembed}(\const{caba},\const{caa})=\lambda^3+(\lambda+\lambda^3)(\lambda+\lambda^2)$ and 
+$k_{\trembed}(\const{caba},\const{cb})=\lambda^3$,
 which induces ranking $
 k_{\trembed}(\const{caba},\const{caa})>
 k_{\trembed}(\const{caba},\const{cb})
 $.
 \end{example}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% END INPUT
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
 
 \endinput
 \subsection{Graph Embedding}\label{ssec:ge}
