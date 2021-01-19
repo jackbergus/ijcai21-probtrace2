@@ -14,38 +14,35 @@ To align a trace $\logtrace$ over the \unravelled\ traces $\ptraces{\tg}{\pmin}$
 the $k$-Nearest Neighbors describe the best $k$ alignments for $\logtrace$. We discuss two strategies to obtain these
 alignments.
 
-
-%\begin{figure*}[!t]
-%	\begin{minipage}{.49\textwidth}
-%		\includegraphics[width=\textwidth]{images/aligner_exact.pdf}
-%		\caption{Optimal-Ranking Trace Aligner.}\label{fig:optimal}
-%	\end{minipage}\hfill \begin{minipage}{.49\textwidth}
-		
-%		\includegraphics[width=\textwidth]{images/aligner.pdf}
-%		\caption{Approx.-Ranking Trace Aligner.}\label{fig:approximate}
-%	\end{minipage}
-%\end{figure*}
-%\vspace{-0.6cm}
-
-\vspace{+0.2cm}
 \noindent
-\textbf{Optimal-Ranking Trace Aligner.}\label{subsec:eta}
-{One way to probabilistically align traces is to reuse existing trace aligners such as \cite{DBLP:conf/edoc/AdriansyahDA11,LeoniM17}, where $d(\logtrace,\nonlogtrace)$ is the Levenshtein distance.
-%, i.e., the {minimum} cost for aligning one of the two traces with respect to the other when all the possible moves have cost equal to 1.\footnote{This is slightly different from the Levenshtein distance from the literature since here the replacement is obtained as a concatenation of a deletion and an addition.}
-Using the decision theory \cite{dectheor}, we express the ranking score as the product $\probskip{\nonlogtrace} d(\logtrace,\nonlogtrace)$, taking into consideration the cost of the alignment (given by the distance between the model trace and the trace to be aligned) and the probability of the model trace.
+\textbf{Optimal-Ranking Trace Aligner.}
+One approach is to reuse existing trace aligners; e.g., \cite{DBLP:conf/edoc/AdriansyahDA11,LeoniM17} over the Levenshtein 
+distance.
+Using decision theory \cite{dectheor}, we express the ranking score as the product 
+$\probskip{\nonlogtrace} d(\logtrace,\nonlogtrace)$, taking into account the cost of the alignment (the distance between 
+the model trace and the trace to be aligned) and the probability of the model trace.
 
 \begin{figure*}[!t]
 	\centering
 	\subfloat[The similarity/probability space.]{\label{fig:spp}\includegraphics[width=.35\textwidth]{images/original_space.pdf}}\qquad
-	\subfloat[The transformed space for the $k$ nearest neighbours problem.]{\label{fig:knnspace}\includegraphics[width=.35\textwidth]{images/transformed_space.pdf}}\\
-	\caption{Two different characterizations of the probabilistic trace alignment problem. The best possible match is represented in red in both the similarity/probability space and in the transformed one.}
+	\subfloat[The transformed space for the $k$NN problem.]{\label{fig:knnspace}\includegraphics[width=.35\textwidth]{images/transformed_space.pdf}}\\
+	\caption{Two characterizations of the probabilistic trace alignment problem. The best possible match is represented in red in both the similarity/probability space and in the transformed one.}
 \end{figure*}
-To represent the same intuition of such a weighted distance as a ranking function, we must transform it into a
-similarity function returning $1$ when $\nonlogtrace=\logtrace$ and $\probskip{\logtrace}=1$ hold. We then express $d$ as}
-%\xout{We can express our probabilistic trace alignment as finding the trace that maximizes both the trace's probability and its similarity with the query trace $\logtrace$. Still, the trace alignments problems are usually expressed via trace alignments cost functions, and not via trace similarities \cite{LeoniM17}. Given a generic trace cost function $d(\trace,\trace')$, it is always possible to convert it into}
-a normalized similarity score $s_d(\logtrace,\nonlogtrace):=\frac{1}{\frac{1}{c}d(\logtrace,\nonlogtrace)+1}$, where  $c\in\mathbb{N}_{\neq0}$ is a constant. The maximum similarity is reached when the distance is $0$ and the similarity decreases while the distance increases. %\xout{As a consequence, the exact trace aligner will find the weighted trace $\braket{\trace,\mathbb{P}(\trace)}$ in $\mathcal{W}_{\pmin}(P)$ maximising $s_d(\trace,\logtrace)$, and use $s_d$ as a ranking function.} \ADD
- The golden ranking function (i.e., the one producing the optimal ranking) can therefore be represented as $\goldenrank(\logtrace,\nonlogtrace)=\probskip{\nonlogtrace} \probskip{\logtrace} s_d(\logtrace,\nonlogtrace)$. The computation ${\max\arg}_{\nonlogtrace\in \WCal{\pmin}{n}} \goldenrank(\logtrace,{\nonlogtrace})$ returns the best optimal-ranking trace alignment for a log trace $\logtrace$, where $\goldenrank$ must be computed a-new for all the possible $\logtrace$. \ADD{Then, we can represent each trace as a point  $(\mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma'),\; s_d(\sigma,\sigma'))$ in the 2-dimensional similarity/probability space of coordinates $(p,s)$, so that the trace finding problem reduces to find a data point maximising the product $p\cdot s\equiv \mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma')\cdot s_d(\sigma,\sigma')$ (Figure \ref{fig:spp}).}
 
+To represent the same intuition of a weighted distance as a ranking function, we transform it into a
+similarity function returning $1$ when $\nonlogtrace=\logtrace$ and $\probskip{\logtrace}=1$ hold. We express $d$ as
+a normalized similarity score $s_d(\logtrace,\nonlogtrace):=\frac{1}{\frac{1}{c}d(\logtrace,\nonlogtrace)+1}$, where  
+$c\in\mathbb{N}_{\neq0}$ is a constant. The maximum similarity is reached when the distance is $0$ and the similarity decreases 
+as the distance increases. 
+ The golden ranking function producing the optimal ranking is 
+ $\goldenrank(\logtrace,\nonlogtrace)=\probskip{\nonlogtrace} \probskip{\logtrace} s_d(\logtrace,\nonlogtrace)$;
+${\max\arg}_{\nonlogtrace\in \WCal{\pmin}{n}} \goldenrank(\logtrace,{\nonlogtrace})$ yields the best optimal-ranking trace 
+alignment for a log trace $\logtrace$, where $\goldenrank$ must be computed anew for each possible $\logtrace$. 
+\ADD{We can represent each trace as a point  $(\mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma'),\; s_d(\sigma,\sigma'))$ in the 
+2-dimensional similarity/probability space of coordinates $(p,s)$, reducing the trace finding problem to maximising the product 
+$p\cdot s\equiv \mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma')\cdot s_d(\sigma,\sigma')$ (Figure \ref{fig:spp}).}
+
+\todo{--- also figs,table}
 \begin{table}[!t]
 \centering
 \caption{Golden ranking of the paths $\ptraces{\closed{\tg_{\rg{\net}}}}{0}$ with maximum length $4$, where $\logtrace=\const{caba}$ and $c=5$.}\label{tab:expected}
