@@ -1,0 +1,143 @@
+\documentclass[tikz]{standalone}
+
+\usepackage{xspace}
+\usetikzlibrary{automata}
+\usetikzlibrary{fit}
+\usepackage{braket}
+\usetikzlibrary{arrows}
+\input{arrowsnew}
+\usetikzlibrary{arrows.meta,calc,decorations.markings,math,arrows.meta}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usepackage{xfrac}
+\input{tikz-macros}
+\input{../neue_macros}
+
+
+\tikzstyle{joint}=[
+ 	circle,
+	minimum size=1mm,
+    draw,
+    very thick,
+]
+
+\tikzstyle{cjoint}=[
+    joint,
+    fill=marcoorange!80,
+]
+
+\tikzstyle{pjoint}=[
+    joint,
+    fill=marcoorange!30,
+]
+
+\tikzstyle{cstep}=[
+    rectangle,
+    rounded corners=5pt,
+    minimum height=3.5em,
+    minimum width=5em,
+    very thick,
+    draw,
+    fill=marcoblue1!40,
+    font=\footnotesize
+]
+
+\tikzstyle{astep}=[
+    rectangle,
+    minimum height=4.2em,
+    minimum width=5em,
+    thick,
+    draw,
+    fill=marcoblue2!20,
+    inner sep=5,
+]
+
+\tikzset{database/.style={cylinder,aspect=0.5,draw,rotate=90,path picture={
+			\draw (path picture bounding box.160) to[out=180,in=180] (path picture bounding
+			box.20);
+			\draw (path picture bounding box.200) to[out=180,in=180] (path picture bounding
+			box.340);
+}}}
+
+
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+\begin{document}
+\begin{tikzpicture}[align=center,node distance=5mm,font=\footnotesize]
+
+\node[cjoint] (innet) {};
+\node[left=0mm of innet] {TG $\tg$};
+
+\node[cjoint,below=6mm of innet] (inprob) {};
+\node[left=0mm of inprob] {threshold~$\pmin$};
+
+\node[cjoint,below=2mm of inprob] (intrace) {};
+\node[left=0mm of intrace] {trace $\trace$};
+
+%\node[cstep,right=of innet] (brg) {Build\\reachability\\graph};
+
+%\node[cjoint,right=of brg] (rg) {};
+%\node[below=0mm of rg] {$\rg{\net}$};
+
+%\node[cstep,right=of rg] (ls) {Shift\\labels};
+
+%\node[cjoint,right=6mm of innet] (tg) {};
+%\node[below=0mm of tg] {$\tg_{\rg{\net}}$};
+
+\node[cstep,right=6mm of innet] (tc) {Apply\\$\hidden$-closure};
+
+\node[cjoint,right=of tc] (mtg) {};
+\node[below=0mm of mtg] {$\closed{\tg}$};
+
+\node[cstep,right=of mtg] (ut) {Unfold\\traces};
+
+\node[database,fill=marcofucsia1!100,right=13mm of ut,very thick,scale=1.4,anchor=north] (log) {};
+\node[below=2mm of log,xshift=-2mm] {$\ptraces{\closed{\tg}}{\pmin}$};
+
+\node[cstep,right=30mm of ut,opacity=0] (ptanchor){};
+
+
+\begin{pgfonlayer}{background}
+
+\node[
+  astep,
+  fill=marcoblue1!5,
+  densely dotted,
+  fit={($(tc.north west)+(-1mm,4mm)$) ($(ptanchor.south east)+(5mm,-10mm)$)}] {};
+
+
+%\node[astep,fit=(brg) (ls)] (rgtg) {};
+%\node[above=-1mm of rgtg] {graph encoding};
+\node[astep,fit=(tc) (ut)] (tgpt) {};
+\node[above=-1mm of tgpt] {\phantom{g}model trace extraction\phantom{g}};
+\node[astep,fit=(ptanchor),densely dashed] (pta){};
+\node[above=-1mm of pta] {probabilistic alignment};
+
+  
+\end{pgfonlayer}
+
+\node[database,fill=marcogreen1!80,right=8mm of pta,very thick,scale=1.4,anchor=north] (rank) {};
+\draw[link,ultra thick] ($(rank.west)+(3mm,0)$) --($(rank.east)+(3mm,0)$);
+\node[below=2mm of rank,xshift=-2mm] {ranking};
+
+
+
+\draw[link] (innet) -- (tc);
+%\draw[link] (brg) -- (rg);
+%\draw[link] (rg) -- (ls);
+%\draw[link] (ls) -- (tg);
+%\draw[link] (tg) -- (tc);
+\draw[link] (tc) -- (mtg);
+\draw[link] (mtg) -- (ut);
+\draw[link,rounded corners=5pt] (inprob) -| (ut);
+\draw[link] (ut) -- (log);
+\draw[link] (log) -- (pta);
+\draw[link,rounded corners=5pt] (intrace) -| (pta);
+\draw[link] (pta) -- (rank);
+
+\end{tikzpicture}
+\end{document}
+
