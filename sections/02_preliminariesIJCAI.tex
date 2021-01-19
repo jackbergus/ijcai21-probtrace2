@@ -17,40 +17,45 @@ the probability of a transition, and hence of a specific trace. The following de
     \item $s\in V$ is the \emph{initial node};
     \item $e\in V$ is the \emph{accepting node};
     \item $L: V \to \alphabet$ is the \emph{node labelling function};
-    \item $R: V \times V \rightarrow [0,1]$ is a \emph{(probabilistic) transition matrix} indicating, for each pair of nodes, what is the probability that executing a transition from the first node leads to the second node.
+    \item $R: V \times V \rightarrow [0,1]$ is a \emph{(probabilistic) transition matrix} indicating, for each pair of nodes, 
+    	what is the probability that executing a transition from the first node leads to the second node.
   \end{inparaenum}
 Thus $R$ is such that for  every $\ind{i} \in V$, $\sum_{\ind{j}\in V}[R]_{\ind{ij}}=1$.
-
-\ADD{A \emph{weigthed (probabilistic) transition graph} is a pair $(G,\omega)$ where $G$ is a (probabilistic) TG and 
-$\omega\in[0,1]$ is its \emph{weight}.}
+%
+A \emph{weigthed (probabilistic) transition graph} is a pair $(G,\omega)$ where $G$ is a (probabilistic) TG and 
+$\omega\in[0,1]$ is its \emph{weight}.
 \end{definition}
 %
-%The condition for $L$ indicates that each node is mapped by $L$ to a single label, while the same label may be used for multiple nodes. 
-\todo{---}
-The condition for $R$ ensures that the values contained therein can be interpreted as a probability distribution when choosing which next node to pick upon executing a transition. Matrices $L$ and $R$ can be exploited to determine the probability of reaching a node labeled by $\beta\in\Sigma$ from any node labeled $\alpha\in\Sigma$ in $n$ steps with $[LR^n\transp{L}]_{\alpha\beta}/[L\transp{L}]_{\alpha\alpha}$, that we can shorthand as $[G.\Lambda^n]_{\alpha\beta}$ (see \cite{GartnerFW03} and Example \ref{ex:wheredotiszero}).
+The condition for $R$ ensures that its values can be interpreted as a probability distribution for choosing the next node upon 
+executing a transition. $L$ and $R$ determine the probability of reaching a node labeled by $\beta\in\Sigma$ from any node 
+labeled $\alpha\in\Sigma$ in $n$ steps by 
+$[G.\Lambda^n]_{\alpha\beta}:=L^{-1}(a)R^n L^{-1\top}b$, 
+where $L^{-1}$ is seen as a vector (see Example \ref{ex:wheredotiszero}).
 
-A transition graph $\tg$ can be visualized as shown in \figurename~\ref{fig:lmc} (and in \figurename~\ref{fig:closed} after $\tau$-closure). There, the various elements have the obvious interpretation, with the only important consideration that an edge from node $\ind{i}$ to node $\ind{j}$ is only shown if the transition probability $[\tg.R]_{\ind{i}\ind{j}}$ is positive.
-%There, each node $\ind{i} \in \tg.V$ is  represented as a circle with its identifying number. The initial node is decorated by a small incoming edge, while the final node is double circled. The label of the node is shown close to the circle, in agreement with $\tg.L$. Finally, an edge from $\ind{i} \in \tg.V$ to $\ind{j} \in \tg.V$ is shown if the transition probability $[\tg.R]_{\ind{i}\ind{j}}$ is positive. Each edge is decorated with the positive probability assigned by $\tg.R$.
-
-%\begin{definition}[Path, trace]
-%A \emph{path} in a transition graph $\tg$ is a finite sequence of nodes $\ind{i}_1 \cdots \ind{i}_n$ (with $n > 1$) such that, for every $j \in \set{1,\ldots,n-1}$, we have that $[\tg.R]_{\ind{i}_j\ind{i}_{j+1}} > 0$. Such a path is \emph{valid} if it starts from the initial node and ends in the accepting node of $\tg$, that is, $\ind{i}_1 = \tg.s$ and $\ind{i}_n = \tg.e$.
+\begin{figure}[!t]
+	\begin{minipage}{.49\textwidth} \includegraphics[width=.9\textwidth]{images/closed_example.pdf}
+	\caption{A probabilistic TG with abstract weights.}\label{fig:lmc}
+\end{minipage}
+\end{figure}
 %
-%A \emph{trace} is a finite sequence of nodes that can be turned into a valid sequence by introducing in the sequence an arbitrary number of $\tau$ labels (so as to account for hidden transitions in the graph).
-%\end{definition}
-%From the definition, it is clear that every valid path can be straightforwardly converted into a corresponding trace by removing all $\tau$ labels from the sequence.
-
-%$\npath{\ind{i}}{\ind{j}}$
-
-By mirroring to definitions of \uswn{s} taking into account that now labels are on nodes, a \emph{valid sequence} of $\tg$ is a sequence $\ind{i}_0\ldots\ind{i}_n$ of nodes in $\tg.V$ that leads from the initial to the accepting node by only traversing transitions with nonzero probability:
+\figurename~\ref{fig:lmc} shows a TG with the obvious interpretation; an edge from node $\ind{i}$ to node $\ind{j}$ is shown 
+(with its weight) only if the transition probability $[\tg.R]_{\ind{i}\ind{j}}$ is positive.
+%
+A \emph{valid sequence} of the TG $\tg$ is a path $\ind{i}_0\ldots\ind{i}_n$ of nodes in $\tg.V$ from the initial to the 
+accepting node using only transitions with positive probability:
 \begin{inparaenum}[\it (i)]
 \item $\ind{i}_0 = \tg.s$;
 \item $\ind{i}_n = \tg.e$;
-\item if the sequence contains at least two nodes, each two consecutive nodes are connected by a positive transition probability, i.e., for every $j \in \set{1,\ldots,n}$ we have $[R]_{\ind{i}_{j-1}\ind{i}_{j}} > 0$.
+\item for every $j \in \set{1,\ldots,n}$ we have $[R]_{\ind{i}_{j-1}\ind{i}_{j}} > 0$.
 \end{inparaenum}
-Runs and model traces of transition graphs are then defined as in \uswn{s}, and we employ the same notation to indicate the runs underlying a model trace, and the valid sequences underlying a run. The computation of probabilities for runs and traces is hence defined equivalently.
+Runs and model traces of TGs are defined in the obvious manner. We use the same notation to indicate the runs underlying a 
+model trace, and the valid sequences underlying a run. The computation of probabilities for runs and traces is defined equivalently.
 
 \subsection{Kernels and Trace Kernels}\label{subsec:katk}
-As a foundational basis to compute trace alignments, we adapt similarity measures from the database literature.  Given a set of data examples $\mathcal{X}$, (e.g., strings or traces, transition graphs) a (positive definite) \emph{kernel} function $k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product $\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$.
+As a foundational basis to compute trace alignments, we adapt similarity measures from the database literature.  Given a set 
+of data examples $\mathcal{X}$, a (positive definite) \emph{kernel} function 
+$k\colon \mathcal{X}\times \mathcal{X}\to \mathbb{R}$ denotes the similarity of elements in $\mathcal{X}$. If $\mathcal{X}$ is 
+the $d$-dimensional Euclidean Space $\mathbb{R}^d$, the simplest kernel function is the inner product $\Braket{\mathbf{x},\mathbf{x}'}=\sum_{1\leq i\leq d}\mathbf{x}_i\mathbf{x}'_i$.
 A kernel is said to \emph{perform ideally} \cite{Gartner03} when $k(x,x')=1$ whenever $x$ and $x'$ are the same object (\textit{strong equality}) and $k(x,x')=0$ whenever $x$ and $x'$ are distinct objects (\textit{strong dissimilarity}). A kernel is also said to be \emph{appropriate} when similar elements $x,x'\in\mathcal{X}$ are also close in the feature space. Notice that appropriateness can be only assessed  empirically \cite{Gartner03}.
 A positive definite kernel induces a distance metric as:
 \begin{equation}\label{eq:dofk}
