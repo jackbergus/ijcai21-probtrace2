@@ -5,10 +5,9 @@
 We introduce the basic notions of the formal transition systems and trace alignments that will be used henceforth.
 
 \subsection{Transition Graphs}\label{subsec:ppn}
-
 We consider an abstract model for representing the traces from a process which is based on graphs. These
 graphs, which we call \emph{transition graphs} and formalize below, can be further equipped with edge-labels expressing
-the probability of a transition, and hence of a specific trace. The following definition is based on \cite{GartnerFW03}.
+the probability of a transition, and hence of a specific trace. We assume to have a set $\Sigma=\tasks\cup\{\tau\}$ of labels, where labels in $\tasks$ indicate visible activities, whereas $\tau$ indicates an invisible activity. A \textit{trace} is a finite sequence of labels from $\tasks$. The following definition is based on \cite{GartnerFW03}.
 
 \begin{definition} A \emph{(probabilistic) transition graph} (TG) is a tuple $(V,s,t,L,R)$ where:
   \begin{inparaenum}[\itshape (i)]
@@ -28,7 +27,7 @@ $\omega\in[0,1]$ is its \emph{weight}.
 The condition for $R$ ensures that its values can be interpreted as a probability distribution for choosing the next node upon
 executing a transition. $L$ and $R$ determine the probability of reaching a node labeled by $\beta\in\Sigma$ from any node
 labeled $\alpha\in\Sigma$ in $n$ steps by
-$[G.\Lambda^n]_{\alpha\beta}:=L^{-1}(a)R^n L^{-1\top}b$,
+$[G.\Lambda^n]_{\alpha\beta}:=L^{-1}(a)R^n L^{-1\top}(b)$,
 where $L^{-1}$ is seen as a vector (see Example \ref{ex:wheredotiszero}).
 
 \begin{figure}[!t]
@@ -47,8 +46,7 @@ accepting node using only transitions with positive probability:
 \item $\ind{i}_n = \tg.e$;
 \item for every $j \in \set{1,\ldots,n}$ we have $[R]_{\ind{i}_{j-1}\ind{i}_{j}} > 0$.
 \end{inparaenum}
-Runs and model traces of TGs are defined in the obvious manner. We use the same notation to indicate the runs underlying a
-model trace, and the valid sequences underlying a run. The computation of probabilities for runs and traces is defined equivalently.
+TG traces are defined as a label sequence $\sigma=\const{a}_0\cdots\const{a}_n$ from $\tasks$ if there exist a valid sequence $\ind{i}_0\ldots\ind{i}_m$ where the appended labels $L(\ind{i}_0)\cdots L(\ind{i}_m)$ are equivalent to $\sigma$ once all the $\tau$ are stripped. TG traces $\sigma$ might have different underlying valid sequences, which we collectively refer to as $\seqs{\sigma}{TG}$.
 
 \subsection{Kernels and Trace Kernels}\label{subsec:katk}
 As a foundational basis to compute trace alignments, we adapt similarity measures from the database literature.  Given a set
