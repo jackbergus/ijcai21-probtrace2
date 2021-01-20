@@ -1,10 +1,12 @@
+% !TeX root=../main.tex
+
 \begin{table}[!t]
-\caption{Distinct SWNs and associated sets of \unravelled\ traces discovered from the Sepsis Cases event log.}\label{tab:dataset}
+\caption{TGs and traces discovered from the Sepsis Cases event log.}\label{tab:dataset}
 \centering
- \begin{adjustbox}{width=.45\textwidth}
+ \begin{adjustbox}{width=\columnwidth}
 	\begin{tabular}{crl||cl|c}
 		\toprule
-		\textbf{Experiment Conf.} $(\mathcal{U})$ & \textit{Model} & $+$\textit{W. Estimator} & $\pmin$& $\;\;|\WCal{\pmin}{n}(P_{\mathcal{U}})|$ \\
+		\textbf{Conf.} $(\mathcal{U})$ & \textit{Model} & $+$\textit{W. Estimator} & $\pmin$& \# traces \\
 		\midrule
 		
 		\textbf{SM\_CONS\_20} &SplitMiner 2.0  \cite{AugustoCDRP19}       & +\texttt{Constant} &  $\;\;0$ & $157$  \\

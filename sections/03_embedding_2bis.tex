@@ -572,28 +572,43 @@ We call this condition \textit{weak equality} because we cannot prove that when 
 	\vspace*{-0.5cm}
 	\centering
 	\includegraphics[scale=0.7]{images/counterexample.pdf}
-	\caption{Two $\tau$-closed transition graphs, $Q$ (left) and $R$ (right), having a different set of traces but the same embedding.}\label{fig:counterexample}
+	\caption{Two $\tau$-closed TGs, $Q$ (left) and $Q'$ (right), having a different set of traces but the same embedding.}\label{fig:counterexample}
 \end{figure}
 \begin{example}
-	If we use $\epsilon$ (or $\epsilon^2$) and $\nu$ (or $\nu^2$) for $\gorgembed$, we might have a false positive for ``weak equality'' if $Q=(V,s,s,L,R)$ and $R=(V,s',s',L,R)$ are both cycle graphs with $s\neq s'$, $\textit{label}(s)\neq\textit{label}(s')$, $\textit{label}(s)\neq\tau$, and $\textit{label}(s')\neq\tau$. Both graphs in Figure \ref{fig:counterexample} have the same frequency for both subtraces and nodes, and therefore have the same  $\epsilon$ and $\nu$ by construction. By having different initial and accepting node with  different labels, we have $\ptraces{Q}{0}=\Set{\textup{a(bca)}^n|n\in\mathbb{N}}$ and $\ptraces{R}{0}=\Set{\textup{c(abc)}^n|n\in\mathbb{N}}$, thus implying $\ptraces{Q}{0}\neq\ptraces{R}{0}$ but $k_{\gorgembed}(Q,R)=1$ for $t_f=1$.
+Using $\epsilon$ (or $\epsilon^2$) and $\nu$ (or $\nu^2$) for $\gorgembed$ may yield false positives for ``weak equality'' 
+if $Q=(V,s,s,L,R)$ and $Q'=(V,s',s',L,R)$ are both cycle graphs with $s\neq s'$, $\textit{label}(s)\neq\textit{label}(s')$, and
+$\textit{label}(s),\textit{label}(s')\neq\tau$. The graphs in Figure \ref{fig:counterexample} have the 
+same frequency for subtraces and nodes, and thus the same  $\epsilon$ and $\nu$ by construction. Using different 
+initial and accepting node with  different labels, $\ptraces{Q}{0}=\{\textup{a(bca)}^n\mid n\in\mathbb{N}\}$ and 
+$\ptraces{Q'}{0}=\{\textup{c(abc)}^n|n\in\mathbb{N}\}$. Thus, implying $\ptraces{Q}{0}\neq\ptraces{Q'}{0}$ but 
+$k_{\gorgembed}(Q,Q')=1$ for $t_f=1$.
 \end{example}
 
 
 \begin{lemma}[Weak Equality]
-	Given two Weighted Transition Graphs $(G,\omega)$ and $(G',\omega')$ with $G=(V,s,t,L,R)$ and $G'=(s',t',L',R')$ providing the same set of weighted traces, then $k_{\gorgembed}(G,G')=\omega\omega'$ for $t_f=1$.
+	If two weighted TGs $(G,\omega)$ and $(G',\omega')$ yield the same set of weighted traces, then 
+	$k_{\gorgembed}(G,G')=\omega\omega'$ for $t_f=1$.
 \end{lemma}
-\begin{proof}
-	Given Proposition \ref{lem:rewritinglemma} and the positive definition of $\epsilon$ and $\nu$,  we have that $\norm{\hat{\epsilon}(G)-\hat{\epsilon}(G')}{2}\to 0$ as well as $\norm{\hat{\nu}(G)-\hat{\nu}(G')}{2}\to 0$, for which we can immediately close the goal.
-\end{proof}
-
-As shown in \S\ref{ex:wheredotiszero}, traces having neither $2$-grams nor transition labels in common have kernel $0$ and vice versa (\textit{strong dissimilarity}). 
+%\begin{proof}
+%	Given Proposition \ref{lem:rewritinglemma} and the positive definition of $\epsilon$ and $\nu$,  we have that $\norm{\hat{\epsilon}(G)-\hat{\epsilon}(G')}{2}\to 0$ as well as $\norm{\hat{\nu}(G)-\hat{\nu}(G')}{2}\to 0$, for which we can immediately close the goal.
+%\end{proof}
+%
+Traces having neither $2$-grams nor transition labels in common have kernel $0$ and vice versa (\textit{strong dissimilarity}). 
 
 \begin{lemma}[Strong Dissimilarity]\label{lem:sdiss}
-	Given two Weighted Transition Graphs $(G,\omega)$ and $(G',\omega')$ with $G=(V,s,t,L,R)$ and $G'=(s',t',L',R')$, $k_{\gorgembed}(G,G')=0$ iff. $G$ and $G'$ have different set of vertex labels or $2$-grams with $t_f,\omega,\omega'>0$.
+	Given two weighted TGs $(G,\omega)$, $(G',\omega')$, $k_{\gorgembed}(G,G')=0$ iff $G$ and $G'$ have different set 
+	of vertex labels or $2$-grams with $t_f,\omega,\omega'>0$.
 \end{lemma}
 \begin{proof}
-{For each transition graph $G$, we can denote the set of vertex labels as $\tasks_G=\Set{\const{a}\in\tasks|\forall u\in V.\; L_{\const{a}u}\neq 0}$.} If we exclude the trivial conditions $t_f=0$, $\omega=0$ or $\omega'=0$ and by Equation \ref{eq:corollLem1}, the only condition when the kernel returns zero is when both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G)}=0$ and $\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. {This reduces to prove that  iff. $G$ and $G'$ have either different $2$-gram sets or a different set of vertex labels, i.e., $\tasks_G\cap \tasks_{G'}=\emptyset$.} {The goal can be closed after observing that $\nu_\const{a}(G)=0\Leftrightarrow \forall u\in V. L_{\const{a}u}=0$ and by the requirement in Definition~\ref{def:ppne} $\hat{\epsilon}_\const{ab}(G)=0$, the non-existence of a  $2$-gram can be expressed as $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$.}
-	
+{For each TG $G$, we denote the set of vertex labels as 
+$\tasks_G=\Set{\const{a}\in\tasks|\forall u\in V.\; L_{\const{a}u}\neq 0}$.} 
+If we exclude the trivial conditions $t_f=0$, $\omega=0$ or $\omega'=0$, by Equation \ref{eq:corollLem1} the only condition 
+when the kernel returns zero is when both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G)}=0$ and 
+$\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. {This holds  iff $G$ and $G'$ have either different $2$-gram sets or a different 
+set of vertex labels, i.e., $\tasks_G\cap \tasks_{G'}=\emptyset$.} {The result holds by observing that 
+$\nu_\const{a}(G)=0\Leftrightarrow \forall u\in V. L_{\const{a}u}=0$ and by the requirement in Definition~\ref{def:ppne} 
+$\hat{\epsilon}_\const{ab}(G)=0$, the non-existence of a  $2$-gram can be expressed as $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$.}
+	%
 %\begin{itemize}
 %	\item[$\Leftarrow$] \ADD{We can strengthen the right hand-side by proving that if  $\tasks_G\cap \tasks_{G'}=\emptyset$, then both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$ and $\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. %The hypothesis can be rewritten as} $ \tasks_G\cap \tasks_{G'}=\emptyset\Rightarrow \Braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0\wedge \Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$.
 %	We can further rewrite the hypothesis as:}
@@ -605,14 +620,11 @@ As shown in \S\ref{ex:wheredotiszero}, traces having neither $2$-grams nor trans
 %	\item[$\Rightarrow$] \ADD{For $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$, it always exists a weighted transition graph $(G,\omega)$ for which $\epsilon_\const{ab}=0$ with $\const{ab}\in\tasks^2$. Let us consider $\hat{\epsilon}_\const{ab}(G)=0\wedge \hat{\epsilon}_\const{ab}(G')\neq0$: by the requirement in Definition~\ref{def:ppne} $\hat{\epsilon}_\const{ab}(G)=0$, it implies $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$, thus implying that there exists no $2$-gram $\const{ab}$ in $G$, while $\const{ab}$ is  in $G'$.}
 %	
 %	\ADD{For $\braket{\hat{\nu}(G),\hat{\nu}(G')}=0$, when $\nu$ always returns the null vector $\vec{0}$, having $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$ guarantees that $G$ and $G'$ share no common $2$-gram. Otherwise, it always exists a weighted transition graph $(G,\omega)$ for which $\nu_\const{a}(G)=0$ with $\const{a}\in\tasks$. After restricting $\tasks$ to $\tasks_{G'}\cup\tasks_G$ thus avoiding the trivial cases, we have  $(\hat{\nu}_\const{a}(G)=0\wedge \hat{\nu}_\const{a}(G')\neq0)\vee (\hat{\nu}_\const{a}(G)\neq0\wedge \hat{\nu}_\const{a}(G')=0)$ for each $a\in\tasks_{G'}\cup\tasks_G$: this can be rewritten as Equation \ref{eq:rewr} and therefore as $\tasks_G\cap\tasks_{G'}=\emptyset$.}
-%\end{itemize}
-
-	
+%\end{itemize}	
 	%\xout{This implies that, when a component of $\epsilon$ (or $\nu$) is non-zero, the same component of $\epsilon'$ (or $\nu'$) is zero and viceversa. This directly requires that there is a different set of labels associated to the nodes. }
 \end{proof}
-
-
-Since weak equality and strong similarity hold, the embedding performs \textit{weakly-ideally}. {By Lemma~\ref{lem:addedForOurPropos} and \ref{lem:sdiss}, all the combinations of sub-embeddings provided in Table~\ref{tab:embedstrat} give weakly-ideal $G$-embeddings.} 
+%
+Due to weak equality and strong similarity, the embedding is weakly-ideal. {By Lemmas~\ref{lem:addedForOurPropos} and \ref{lem:sdiss}, all combinations of sub-embeddings from Table~\ref{tab:embedstrat} give weakly-ideal $G$-embeddings.} 
 
 %Last, under the assumption that a TG is approximately characterized by $\epsilon$ and $\nu$, we might expect that the TG similarity is characterized by the sum of the distance of both embeddings. Therefore, we show that an increase in both distance embeddings approximately corresponds to a decrease in the kernel output and vice-versa.
 %
