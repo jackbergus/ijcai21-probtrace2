@@ -3,15 +3,16 @@
 \subsection{Alignment Strategy}\label{subsec:as}
 When aligning a log trace with a TG, retrieving the model trace maximizing the combined provision of minimum trace alignment cost 
 and maximum model trace probability does not suffice.
-Hence, we find the best $k$ alignments among all the distinct \unravelled\ model traces in $\ptraces{\tg}{\pmin}$. This is
-known as the $k$-nearest neighbors ($k$NN) problem of finding the $k$ nearest data points to a \textit{query} $x$ from a set 
+Hence, we find the best $k$ alignments among all  model traces in $\ptraces{\tg}{\pmin}$. This reduces to the
+$k$-nearest neighbors ($k$NN) problem by finding the $k$ nearest data points to a \textit{query} $x$ from a set 
 $\mathcal{X}$ of \textit{data points} w.r.t.\ a given distance function $d_k$. Through ad-hoc data structures, such as VP-Trees 
 and KD-Trees, %VP-Trees \cite{Fu2000} \cite{Maneewongvatana99}, and M-Trees \cite{Ciaccia},
-we can retrieve the $k$-neighborhood of $x$ in $\mathcal{X}$ by pre-ordering (\textit{indexing}) $\mathcal{X}$ w.r.t.\ $d_k$ 
-and searching from the top-$1$ alignment.
+we can retrieve the $k$-neighborhood of $x$ in $\mathcal{X}$ by pre-ordering (\textit{indexing}) $\mathcal{X}$ w.r.t.\ $d_k$. 
+%and searching from the top-$1$ alignment.
 %
-To align a trace $\logtrace$ over the \unravelled\ traces $\ptraces{\tg}{\pmin}$,
-the $k$-Nearest Neighbors describe the best $k$ alignments for $\logtrace$. We discuss two strategies to obtain these
+%To align a trace $\logtrace$ over the \unravelled\ traces $\ptraces{\tg}{\pmin}$,
+%the $k$-Nearest Neighbors describe the best $k$ alignments for $\logtrace$. 
+We discuss two strategies to obtain these
 alignments.
 
 \noindent

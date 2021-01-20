@@ -39,7 +39,7 @@ property of loops. Since the probability of a path is the product of the probabi
 probability 1 if all its transitions have probability 1 themselves. Assuming no periodic behavior appears, an execution of a
 loop must decrease the probability. Thus, all valid sequences with a resulting probability of at least $\pmin$ can be enumerated.
 These sequences are merged by trace, summing up their probabilities, thus obtaining the set $\ptraces{\closed{\tg}}{\pmin}$
-of all the traces having a probability at least $\pmin$. The closure operation ensures that the notion of model trace collapses to
+of all the distinct traces having a probability at least $\pmin$. The closure operation ensures that the notion of model trace collapses to
 that of run modulo removing the initial and the final $\tau$ labels attached to the initial and accepting nodes.
 
 The last step ranks the model traces considering their probabilities and the similarity with the input trace $\trace$. In
