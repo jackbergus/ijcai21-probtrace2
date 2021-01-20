@@ -4,9 +4,9 @@
 \label{introduction}
 
 Trace alignment is a prominent problem in AI, where the goal is to detect the trace, from a formal specification of a system,
-which best match an observed behaviour. This problem has applications in many areas. For example, in Business Process Modelling, 
+which best match an observed behavior. This problem has applications in many areas. For example, in Business Process Modeling,
 one may want to reconstruct the full process from a partially observed trace. Alternatively, if events are not registered immediately,
-a log may modify the order of the events; one should be able to detect and correct these deviations. This is often solved 
+a log may modify the order of the events; one should be able to detect and correct these deviations. This is often solved
 through a similarity function expressing how close two traces are, according to some criteria.
 
 When the underlying system is vulnerable to uncertainty (e.g., a shipped package may get lost, or a component be defective)
@@ -16,14 +16,14 @@ traces, and the likelihood of being observed. Indeed, it could be that the most 
 impossible, yielding a suspect alignment. Conversely, the most likely trace may differ too much from the observation to be
 meaningful as an alignment. This trade-off must be treated carefully.
 
-We introduce two ranking strategies aiming to finding the most useful alignments. The first one uses a brute force approach that 
-reuses existing trace aligners like \cite{DBLP:conf/edoc/AdriansyahDA11,LeoniM17}, where the (optimal) ranking 
-is obtained multiplying the Levensthein distance between the observed trace and a model trace by the probability of the 
-model trace. Although this approach returns the best trace alignment ranking for an observation, the alignments must be computed 
-anew for each alignment. For models generating a large number of model traces, this is clearly unfeasible. Therefore, our second 
-strategy produces an approximate ranking where traces are represented as numerical vectors via an embedding $\phi$. 
-By exploiting ad-hoc data structures, we retrieve the neighborhood of size $k$ of the observation \textit{indexing} $\mathcal{X}$ 
-through a vector distance. Instead of analyzing the entire space, we start from the top-$1$ alignment. If the embeddings are 
+We introduce two ranking strategies aiming to finding the most useful alignments. The first one uses a brute force approach that
+reuses existing trace aligners like \cite{DBLP:conf/edoc/AdriansyahDA11,LeoniM17}, where the (optimal) ranking
+is obtained multiplying the Levensthein distance between the observed trace and a model trace by the probability of the
+model trace. Although this approach returns the best trace alignment ranking for an observation, the alignments must be computed
+anew for each alignment. For models generating a large number of model traces, this is clearly unfeasible. Therefore, our second
+strategy produces an approximate ranking where traces are represented as numerical vectors via an embedding $\phi$.
+By exploiting ad-hoc data structures, we retrieve the neighborhood of size $k$ of the observation \textit{indexing} $\mathcal{X}$
+through a vector distance. Instead of analyzing the entire space, we start from the top-$1$ alignment. If the embeddings are
 independent of the observation, one embedding can be used to all alignment problems.
 
 We conclude showcasing specific use-cases where our approaches yield meaningful solutions. 
