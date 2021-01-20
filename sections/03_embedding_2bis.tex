@@ -309,13 +309,9 @@ These sub-embeddings satisfy the conditions required by the G-Embedding.
 \begin{lemma}\label{lem:addedForOurPropos}
 	{The sub-embeddings in Table~\ref{tab:embedstrat} satisfy the requirements from Definition~\ref{def:ppne}.}
 \end{lemma}
-\begin{proof}
-	{With respect to the $\nu$ embeddings, we can see that $\nu^2$ trivially satisfies the requirement as $\nu^2(G)$ returns the null vector $\vec{0}$. Furthermore, $\nu^1_\const{a}(G)=0$ if and only if there exists no $G$-trace  $\nonlogtrace\in\ptraces{G}{0}$ containing $\const{a}$, that is equivalent to  $\forall u\in V.\;L_{\const{a}u}=0$. We can observe that both $\epsilon^1$ and $\epsilon^2$ are function of both the sub-traces of length $i$ from $1$ to $l$, and  $[LR^iL^t]_\const{ab}$ too, thus implying that a summation of possibly zero terms possibly returns zero.}
-%	\begin{itemize}
-%		\item[$\Rightarrow$] \ADD{Given $\const{ab}\in\tasks^2$, if $[LR^iL^t]_\const{ab}=0$ for each $i\in\mathbb{N}$, it implies that the summation of all their terms would be also zero, thus implying $\epsilon^1_\const{ab}(G)=0$ and $\epsilon^2_\const{ab}(G)=0$.}
-%		\item[$\Leftarrow$] \ADD{Given that $l$ in both $\epsilon^2$ and $\epsilon^1$ always corresponds the maximum trace length generated from $\ptraces{G}{0}$, no $2$-grams at occurring length greater than $l$ can happen, thus implying $\forall j>l.\; [LR^lL^t]_\const{ab}=0$. In addition to that, having $\epsilon^1_\const{ab}(G)=0$ (and $\epsilon^2_\const{ab}(G)=0$) implies that $\forall 0<j\leq l.\; [LR^jL]_\const{ab}=0$. Thus, we can finally conclude that $\forall i\in\mathbb{N}_{\neq 0}. [LR^iL^t]_\const{ab}=0$}
-%	\end{itemize}
-\end{proof}
+%\begin{proof}
+%	{With respect to the $\nu$ embeddings, we can see that $\nu^2$ trivially satisfies the requirement as $\nu^2(G)$ returns the null vector $\vec{0}$. Furthermore, $\nu^1_\const{a}(G)=0$ if and only if there exists no $G$-trace  $\nonlogtrace\in\ptraces{G}{0}$ containing $\const{a}$, that is equivalent to  $\forall u\in V.\;L_{\const{a}u}=0$. We can observe that both $\epsilon^1$ and $\epsilon^2$ are function of both the sub-traces of length $i$ from $1$ to $l$, and  $[LR^iL^t]_\const{ab}$ too, thus implying that a summation of possibly zero terms possibly returns zero.}
+%\end{proof}
 %
 The kernel $k_{\gorgembed}$ associated to $\gorgembed$ is {a function of the distance  $\|\hat{\epsilon}(G)-\hat{\epsilon}(G')\|_2^2$ and $\|\hat{\nu}(G)-\hat{\nu}(G')\|_2^2$ for traces $\logtrace$ and ${\nonlogtrace}$.}
 %
@@ -599,30 +595,16 @@ Traces having neither $2$-grams nor transition labels in common have kernel $0$ 
 	Given two weighted TGs $(G,\omega)$, $(G',\omega')$, $k_{\gorgembed}(G,G')=0$ iff $G$ and $G'$ have different set 
 	of vertex labels or $2$-grams with $t_f,\omega,\omega'>0$.
 \end{lemma}
-\begin{proof}
-{For each TG $G$, we denote the set of vertex labels as 
-$\tasks_G=\Set{\const{a}\in\tasks|\forall u\in V.\; L_{\const{a}u}\neq 0}$.} 
-If we exclude the trivial conditions $t_f=0$, $\omega=0$ or $\omega'=0$, by Equation \ref{eq:corollLem1} the only condition 
-when the kernel returns zero is when both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G)}=0$ and 
-$\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. {This holds  iff $G$ and $G'$ have either different $2$-gram sets or a different 
-set of vertex labels, i.e., $\tasks_G\cap \tasks_{G'}=\emptyset$.} {The result holds by observing that 
-$\nu_\const{a}(G)=0\Leftrightarrow \forall u\in V. L_{\const{a}u}=0$ and by the requirement in Definition~\ref{def:ppne} 
-$\hat{\epsilon}_\const{ab}(G)=0$, the non-existence of a  $2$-gram can be expressed as $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$.}
-	%
-%\begin{itemize}
-%	\item[$\Leftarrow$] \ADD{We can strengthen the right hand-side by proving that if  $\tasks_G\cap \tasks_{G'}=\emptyset$, then both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$ and $\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. %The hypothesis can be rewritten as} $ \tasks_G\cap \tasks_{G'}=\emptyset\Rightarrow \Braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0\wedge \Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$.
-%	We can further rewrite the hypothesis as:}
-%\begin{equation}\label{eq:rewr}\begin{aligned}\forall \const{a}\in\tasks. &((\forall u\in V.\; L_{\const{a}u}=0)\wedge (\exists u\in V'.\; L_{\const{a}u}\neq0))\vee\\
-%&((\exists u\in V.\; L_{\const{a}u}\neq0)\wedge (\forall u\in V'.\; L_{\const{a}u}=0))\end{aligned}\end{equation} \ADD{We can rewrite it for $\nu$ as $(\nu_\const{a}(G)=0\wedge \nu_\const{a}(G')\neq 0)\vee(\nu_\const{a}(G)\neq0\wedge \nu_\const{a}(G')= 0)$, thus implying $\braket{\hat{\nu}(G),\hat{\nu}(G')}=0$.} 
-%
-%\ADD{Given that the two Weighted Transition Graphs have no labels in common, we will also have that $\forall \const{ab}\in \tasks^2_{G'}\; \const{ab}\notin\tasks^2_{G}$ and vice versa. Let us then consider $\const{ab}\in \tasks^2_{G'}$: we will have $(\forall u\in V.\;\; L_{\const{a}u}=0)\wedge (\forall u\in V.\;\; L_{\const{b}u}=0)$. This implies that $[LR^iL^t]_\const{ab}=0$ for each $i\in\mathbb{N}_{\neq 0}$ and, by requirement from Definition~\ref{def:ppne}, it implies that $\epsilon_\const{ab}(G)=0$. Similarly, for each $\const{\overline{a}\overline{b}}\in \tasks^2_{G}$, $\epsilon_\const{\overline{a}\overline{b}}(G')=0$. Therefore, $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$}
-%	
-%	\item[$\Rightarrow$] \ADD{For $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$, it always exists a weighted transition graph $(G,\omega)$ for which $\epsilon_\const{ab}=0$ with $\const{ab}\in\tasks^2$. Let us consider $\hat{\epsilon}_\const{ab}(G)=0\wedge \hat{\epsilon}_\const{ab}(G')\neq0$: by the requirement in Definition~\ref{def:ppne} $\hat{\epsilon}_\const{ab}(G)=0$, it implies $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$, thus implying that there exists no $2$-gram $\const{ab}$ in $G$, while $\const{ab}$ is  in $G'$.}
-%	
-%	\ADD{For $\braket{\hat{\nu}(G),\hat{\nu}(G')}=0$, when $\nu$ always returns the null vector $\vec{0}$, having $\braket{\hat{\epsilon}(G),\hat{\epsilon}(G')}=0$ guarantees that $G$ and $G'$ share no common $2$-gram. Otherwise, it always exists a weighted transition graph $(G,\omega)$ for which $\nu_\const{a}(G)=0$ with $\const{a}\in\tasks$. After restricting $\tasks$ to $\tasks_{G'}\cup\tasks_G$ thus avoiding the trivial cases, we have  $(\hat{\nu}_\const{a}(G)=0\wedge \hat{\nu}_\const{a}(G')\neq0)\vee (\hat{\nu}_\const{a}(G)\neq0\wedge \hat{\nu}_\const{a}(G')=0)$ for each $a\in\tasks_{G'}\cup\tasks_G$: this can be rewritten as Equation \ref{eq:rewr} and therefore as $\tasks_G\cap\tasks_{G'}=\emptyset$.}
-%\end{itemize}	
-	%\xout{This implies that, when a component of $\epsilon$ (or $\nu$) is non-zero, the same component of $\epsilon'$ (or $\nu'$) is zero and viceversa. This directly requires that there is a different set of labels associated to the nodes. }
-\end{proof}
+%\begin{proof}
+%{For each TG $G$, we denote the set of vertex labels as 
+%$\tasks_G=\Set{\const{a}\in\tasks|\forall u\in V.\; L_{\const{a}u}\neq 0}$.} 
+%If we exclude the trivial conditions $t_f=0$, $\omega=0$ or $\omega'=0$, by Equation \ref{eq:corollLem1} the only condition 
+%when the kernel returns zero is when both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G)}=0$ and 
+%$\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. {This holds  iff $G$ and $G'$ have either different $2$-gram sets or a different 
+%set of vertex labels, i.e., $\tasks_G\cap \tasks_{G'}=\emptyset$.} {The result holds by observing that 
+%$\nu_\const{a}(G)=0\Leftrightarrow \forall u\in V. L_{\const{a}u}=0$ and by the requirement in Definition~\ref{def:ppne} 
+%$\hat{\epsilon}_\const{ab}(G)=0$, the non-existence of a  $2$-gram can be expressed as $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$.}
+%\end{proof}
 %
 Due to weak equality and strong similarity, the embedding is weakly-ideal. {By Lemmas~\ref{lem:addedForOurPropos} and \ref{lem:sdiss}, all combinations of sub-embeddings from Table~\ref{tab:embedstrat} give weakly-ideal $G$-embeddings.} 
 
