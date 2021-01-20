@@ -152,7 +152,8 @@ Since a trace embedding for $\nonlogtrace$ representing the transitions in $\clo
 TG representation, each $\nonlogtrace$ is mapped to a transition graph $\tg_\nonlogtrace$.
 %
 \begin{definition}[trace projection]
-Let $\closed{G}=(V,s,t,L,R)$ be a $\tau$-closed TG, and $\pmin\in(0,1]$. for each trace $\nonlogtrace\in\ptraces{\closed{G}}{\pmin}$, the $\closed{G}$ projection over $\nonlogtrace$ is a \ADD{Weighted Transition Graph} $(\closed{G}_\nonlogtrace,\omega)$, where $\closed{G}_\nonlogtrace$ is a transition graph such that
+Let $\closed{G}=(V,s,t,L,R)$ be a $\tau$-closed TG, and $\pmin\in(0,1]$. The $\closed{G}$ projection over the trace 
+$\nonlogtrace$ is the weighted TG $(\closed{G}_\nonlogtrace,\omega)$, where $\closed{G}_\nonlogtrace$ is a transition graph such that
 \begin{inparaenum}[\it (i)]
 	\item $\closed{G}_\nonlogtrace.V$ contains all distinct nodes generating $\nonlogtrace$ from $\closed{G}$	(i.e., $\bigcup_{\xi\in\runs{\nonlogtrace}{\closed{G}}}\seqs{\xi}{ \closed{G}}$);
 	\item $\closed{G}_\nonlogtrace.s = s$;
