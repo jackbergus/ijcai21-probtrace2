@@ -157,9 +157,9 @@ Let $\closed{G}=(V,s,t,L,R)$ be a $\tau$-closed TG, and $\pmin\in(0,1]$. The $\c
 $\nonlogtrace$ is the weighted TG $(\closed{G}_\nonlogtrace,\omega)$, where $\closed{G}_\nonlogtrace$ is the TG 
 $(V_\nonlogtrace,s,t,L_\nonlogtrace,R_\nonlogtrace)$ where
 $V_\nonlogtrace$ contains the nodes generating $\nonlogtrace$ from $\closed{G}$	
-	(i.e., $\bigcup_{\xi\in\runs{\nonlogtrace}{\closed{G}}}\seqs{\xi}{ \closed{G}}$) and
+	(i.e., $\seqs{\sigma'}{ \closed{G}}$) and
 $L_\nonlogtrace$ and $R_\nonlogtrace$ are the restrictions of $L$ and $R$ to $V_\nonlogtrace$; and
-$$\omega := 1-\prod_{\xi\in\runs{\sigma}{\closed{G}},\eta\in\seqs{\xi}{\closed{G}}}\Big(1-(\textit{ifte}([L]_{\tau\eta_1},[R]_{\eta_1\eta_2})\textit{ifte}([L]_{\tau t_n},[R]_{t_{n-1} t_n})\Big),$$
+$\omega := 1-\prod_{\Ind{0}\cdots\Ind{n}\in\seqs{\sigma'}{ \closed{G}}}\Big(1-(\textit{ifte}(\mathbf{1}_{L_{\sigma'}(\Ind{0})=\tau},[R_{\sigma'}]_{\Ind{0}\Ind{1}})\textit{ifte}(\mathbf{1}_{L_{\sigma'}(\Ind{n})=\tau},[R_{\sigma'}]_{\Ind{n-1}\Ind{n}})\Big)$
 	where $\textit{ifte}(x,y):=x(y-1)+1$ returns $y$ if $x=1$ and $1$ otherwise. We denote the set of all the $\closed{G}_\nonlogtrace$ as $\TBf{\pmin}{4}(\closed{G})$.\todo{need to understand this}
 %\dots
 %		
