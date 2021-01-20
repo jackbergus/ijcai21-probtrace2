@@ -152,16 +152,14 @@ Since a trace embedding for $\nonlogtrace$ representing the transitions in $\clo
 TG representation, each $\nonlogtrace$ is mapped to a transition graph $\tg_\nonlogtrace$.
 %
 \begin{definition}[trace projection]
-Let $\closed{G}=(V,s,t,L,R)$ be a $\tau$-closed TG, and $\pmin\in(0,1]$. The $\closed{G}$ projection over the trace 
-$\nonlogtrace$ is the weighted TG $(\closed{G}_\nonlogtrace,\omega)$, where $\closed{G}_\nonlogtrace$ is a transition graph such that
-\begin{inparaenum}[\it (i)]
-	\item $\closed{G}_\nonlogtrace.V$ contains all distinct nodes generating $\nonlogtrace$ from $\closed{G}$	(i.e., $\bigcup_{\xi\in\runs{\nonlogtrace}{\closed{G}}}\seqs{\xi}{ \closed{G}}$);
-	\item $\closed{G}_\nonlogtrace.s = s$;
-	\item  $\closed{G}_\nonlogtrace.t = t$;
-	\item $\closed{G}_\nonlogtrace.L$ (and $\closed{G}_\nonlogtrace.R$) is the submatrix of $L$ (and $R$) over the columns (and rows) in $\closed{G}_\nonlogtrace.V$, and $\omega \in [0,1]$ is a \emph{graph weight} preserving the transition probabilities from and to $\tau$ nodes and computed as $1-\prod_{\xi\in\runs{\sigma}{\closed{G}},\eta\in\seqs{\xi}{\closed{G}}}\Big(1-(\textit{ifte}([L]_{\tau\eta_1},[R]_{\eta_1\eta_2})$
-	 $\textit{ifte}([L]_{\tau t_n},[R]_{t_{n-1} t_n})\Big)$,
-	where $\textit{ifte}(x,y):=x(y-1)+1$ returns $y$ if $x=1$ and $1$ otherwise. We denote the set of all the $\closed{G}_\nonlogtrace$ as $\TBf{\pmin}{4}(\closed{G})$.
-\end{inparaenum}
+Let $\closed{G}=(V,s,t,L,R)$ be a $\tau$-closed TG, and $\pmin\in(0,1]$. The $\closed{G}$ \emph{projection} over the trace 
+$\nonlogtrace$ is the weighted TG $(\closed{G}_\nonlogtrace,\omega)$, where $\closed{G}_\nonlogtrace$ is the TG 
+$(V_\nonlogtrace,s,t,L_\nonlogtrace,R_\nonlogtrace)$ where
+$V_\nonlogtrace$ contains the nodes generating $\nonlogtrace$ from $\closed{G}$	
+	(i.e., $\bigcup_{\xi\in\runs{\nonlogtrace}{\closed{G}}}\seqs{\xi}{ \closed{G}}$) and
+$L_\nonlogtrace$ and $R_\nonlogtrace$ are the restrictions of $L$ and $R$ to $V_\nonlogtrace$; and
+$$\omega := 1-\prod_{\xi\in\runs{\sigma}{\closed{G}},\eta\in\seqs{\xi}{\closed{G}}}\Big(1-(\textit{ifte}([L]_{\tau\eta_1},[R]_{\eta_1\eta_2})\textit{ifte}([L]_{\tau t_n},[R]_{t_{n-1} t_n})\Big),$$
+	where $\textit{ifte}(x,y):=x(y-1)+1$ returns $y$ if $x=1$ and $1$ otherwise. We denote the set of all the $\closed{G}_\nonlogtrace$ as $\TBf{\pmin}{4}(\closed{G})$.\todo{need to understand this}
 %\dots
 %		
 %		\dots we generate a set $\TBf{\pmin}{n}(\closed{G})$ of projected TGs $P$ for each trace in $\WCal{\pmin}{n}(P)$ as follows: for each weighted trace $\braket{\nonlogtrace,\probskip{\nonlogtrace}}\in\WCal{\pmin}{n}(P)$ generated from a path $\pi_\nonlogtrace=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a TG $P_\nonlogtrace=(s',t',L_\nonlogtrace,R_\nonlogtrace,\omega')$, where \begin{inparaenum}[\it (i)]
@@ -197,7 +195,9 @@ $\nonlogtrace$ is the weighted TG $(\closed{G}_\nonlogtrace,\omega)$, where $\cl
 \end{tabular}}
 \vspace{-0.2cm}
 \end{table}
-The graph weight $\omega$ derives from the outgoing edges of the initial node and the ingoing edges of the accepting node when such nodes are labeled as $\tau$. Given that (i) the embedding strategy from \cite{LodhiSSCW02} allows trace embedding only for visible (i.e., non-$\tau$) transitions, and (ii) the trace extraction process discards the $\tau$ information, we use $\omega$ to preserve such information.
+The graph weight $\omega$ derives from the outgoing edges of the initial node and the ingoing edges of the accepting node; 
+such nodes are labeled as $\tau$. Since the embedding strategy from \cite{LodhiSSCW02} considers only visible 
+transitions, and the trace extraction process discards the $\tau$ information, we use $\omega$ to preserve such information.
 %We call the pair consisting of a transition graph and a graph weight a \emph{weighted transition graph}.
 \begin{example}\label{ex:neue}
 %\end{aligned}$$
