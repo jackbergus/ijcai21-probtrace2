@@ -230,13 +230,15 @@ $\gorgembed$ embedding is defined for any weighted TG.
 %\end{table}
 \begin{definition}[G-Embedding]\label{def:ppne}
 %Given a finite set of non-empty labels $\trace_\tau =\trace\backslash\{\tau\}$, $\trace_\tau^2$ denotes all the possible pair of labels associated to paths ${\color{green}\alpha}\rightsquigarrow{\color{green}\beta}$ and $\trace_\tau$ denotes the set of all the possible non-$\tau$ node labels. Therefore, it is always possible to enumerate $\trace_\tau^2\cup\trace_\tau$ via an enumeration by a bijection $\iota\colon \trace_\tau^2\cup\trace_\tau\to  N$, where $N\subset \mathbb{N}_{\neq 0}$ and $\max N=|N|$.
-Given a Weighted Transition Graph $(G,\omega)$ with $G=(V,s,t,L,R)$ and a tuning parameter $t_f\in[0,1]\subseteq\mathbb{R}^+_{0}$, the \emph{G-Embedding} 
-$\gorgembed$ over the visible $2$-grams and transition labels, $\tasks\cup\tasks^2$, is defined by
-$$\gorgembed_{i}(G)=\begin{cases}
+Given a weighted TG $(G,\omega)$ with $G=(V,s,t,L,R)$ and a tuning parameter $t_f\in[0,1]$, the \emph{G-Embedding} 
+over the visible $2$-grams and transition labels, $\tasks\cup\tasks^2$, is 
+$$\gorgembed_{i}(G):=\begin{cases}
 	\omega \frac{\epsilon_\const{ab}(G)}{\|\epsilon\|_2}\;t_f^{|R>0|}\, & {i}=\const{ab}\in\tasks^2\\
 	\frac{\nu_\const{a}(G)}{\|\nu\|_2}\;\;\;\,t_f^{|R>0|}\, & {i}=\const{a}\in\tasks\\
 \end{cases}$$
-where $\nu$ (and $\epsilon$) represents the non-negatively defined embeddings associated to $G.L$ (both $G.R$ and $G.L$): {we require that  $\epsilon$  returns $\epsilon_\const{ab}=0$ for the $2$-grams $\const{ab}$ that are not represented within the Transition Graph ($\forall \const{ab}\in\tasks^2.\; \left(\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0\right) \Leftrightarrow \epsilon_\const{ab}(G)=0$), and either $\nu$ always returns the empty vector or $\nu_\const{a}(G)=0$ iff. the labels $\const{a}\in\tasks$ that are associated to no vertex in $V$ ($\forall \const{a}\in\tasks. \left(\forall u\in V. L_{\const{a}u}=0\right)\Rightarrow \nu_\const{a}(G)=0$).}
+where $\nu$ and $\epsilon$ represent the embeddings associated to $L$ and $L,R$: $\epsilon$  returns 
+$\epsilon_\const{ab}=0$ for the $2$-grams $\const{ab}$ not represented by the TG, and either $\nu$ always returns the empty 
+vector or $\nu_\const{a}(G)=0$ iff the labels $\const{a}\in\tasks$ that are associated to no vertex in $V$.
 \end{definition}
 %
 Here, ${\max\arg}_{\nonlogtrace\in \WCal{\pmin}{n}, G_\nonlogtrace\in\TBf{p}{n}(P)} k_{\gorgembed}(G_\logtrace, G_{\nonlogtrace})$ returns the best approximated trace alignment for a log trace represented as $G_{\logtrace}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\logtrace}$ as $\underset{P}{\max\arg}\underset{ P_\trace\in\mathbf{P}_p^n(P)}{\max} k_{\gorgembed}(P_\trace, P_{\logtrace})$.}¯
@@ -256,17 +258,16 @@ Here, ${\max\arg}_{\nonlogtrace\in \WCal{\pmin}{n}, G_\nonlogtrace\in\TBf{p}{n}(
 	\end{tabular}}
 \end{table}
 %
-For sub-embeddings $\epsilon$ and $\nu$, {in our experiment section}, we choose two possible interchangeable definitions ($x=1$ and $x=2$) shown in Table \ref{tab:embedstrat}: here, $l$ is the path length (reported in Table \ref{tab:proj}), and $c$ for $\nu^1$ is a normalization factor such that $\sum_{\const{a}\in\tasks}\nu^1_\const{a}(P)=1$. While $\nu^2$ implies to completely ignore the label frequency contribution, $\epsilon^2$ is the direct implementation of $\trembed$ from \S\ref{subsec:katk}, and $\epsilon^1$ and $\epsilon^2$ only differ from the normalization perspective. $t_f\in [0,1]\subseteq\mathbb{R}^+_{0}$ and $\lambda\in (0,1]\subset\mathbb{R}^+_{0}$ are tuning parameters that can be
-inferred from the available data \cite{DriessensRG06}. The latter describes the previously mentioned decay factor, while $t_f$
-represents the relevance of our embedding representation as the number of edges within $\closed{G}_\nonlogtrace$ increases. In our experiments and
-examples, we choose $t_f=0.0001$ and $\lambda=0.07$.
-
-
-
-%In Example \ref{ex:cmpexample}, we will see that the given definition of $\epsilon^1$ provides a better approximation than the edge embedding $\epsilon^2$.
-
-
-This representation is independent of the representation associated with a trace to be aligned. Therefore it does not have to be recomputed at each alignment with a different $\logtrace$.
+We choose two possible interchangeable definitions for $\nu$ and $\epsilon$ shown in Table \ref{tab:embedstrat}, where $l$ 
+is the path length, and $c$ for $\nu^1$ is a normalization factor such that $\sum_{\const{a}\in\tasks}\nu^1_\const{a}(P)=1$; 
+$\nu^2$ completely ignores the label frequency contribution; $\epsilon^2$ is the embedding $\trembed$ from \S\ref{subsec:katk};
+and $\epsilon^1$ and $\epsilon^2$ only differ from the normalization. $t_f\in [0,1]$ and $\lambda\in (0,1]$ are tuning 
+parameters that can be inferred from the available data \cite{DriessensRG06}. The latter describes the decay factor, while $t_f$
+represents the relevance of our embedding representation as the number of edges within $\closed{G}_\nonlogtrace$ increases.
+We choose $t_f=0.0001$ and $\lambda=0.07$.
+%
+This representation is independent of the representation of the trace to be aligned and does not have to be 
+recomputed for each alignment.
 
 
 
@@ -293,17 +294,18 @@ This representation is independent of the representation associated with a trace
 	\end{tabular}}
 
 \end{table*}
-\begin{example} %\small \label{ex:withpaths} %After generating all the TGs for the \unravelled\ traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the $2$-grams included in the model traces.\footnoteref{fn:caveat}
+\begin{example} 
+%\small \label{ex:withpaths} %After generating all the TGs for the \unravelled\ traces (Example \ref{ex:neue}), we further associate a sub-embedding $\epsilon$ using the $2$-grams included in the model traces.\footnoteref{fn:caveat}
 %Given $\nonlogtrace_\tau=\Set{a,b,c}$, the embedding space is of size $6$: three features (computed using $\nu$) correspond to the labels of the non-$\tau$ vertices in $\nonlogtrace_\tau$, i.e., $\{a,b,c\}$, and other three features (computed using $\epsilon$) correspond to the $2$-grams subsequences that are also traces in $W^4_0(P)$, i.e., $\{aa,ca,cb\}$. Therefore, $\{a,b,c,aa,ca,cb\}\subset \nonlogtrace_\tau^2\cup\nonlogtrace_\tau$ is the whole set of features describing both the label and the transition matrix, so $\gorgembed$ is a vector with 6 dimensions.
 %\xout{The embedding associated to $P$ is described in Table \ref{tab:emb1} as $\gorgembed(P)$: it shows that doing ${\color{green}a}\rightsquigarrow{\color{green}a}$ is more probable than doing  ${\color{green}c}\rightsquigarrow{\color{green}a}$. Also, given that both the probability of performing ${\color{green}c}\overset{1}{\rightsquigarrow}{\color{green}b}$ is relatively low and trace $\color{green}cb$ is relatively infrequent, ${\color{green}c}{\rightsquigarrow}{\color{green}b}$ is less probable than any other subtrace. If we now consider the single nodes, $\color{green}c$ shares a subset of traces with $\color{green}a$ where $\color{green}a$ is more frequent than $\color{green}c$, and therefore the score of the former is higher than the one of the latter. Also, the score associated to the single node $\color{green}b$ is lower than the one for the single node $\color{green}c$ because $\color{green}b$ is less frequent and appears in less probable traces than $\color{green}c$: in particular, $\color{green}c$ appears in \textit{ca}, which is more probable than \textit{cb}.}
-Table \ref{tab:emb2} shows the embeddings $\gorgembed(\overline{G}_\nonlogtrace)$ generated from Example \ref{ex:neue}, where the $l=|\nonlogtrace|$ for each $\unravelled$ trace $\nonlogtrace$.
-{After representing trace $\logtrace=\const{caba}$ to be aligned as a graph (\figurename~\ref{fig:taustar}), we can represent its}
-%\xout{Similar considerations can be also drawn from the}
-embedding $\gorgembed(\overline{G}_{\logtrace})$ with strategies $\epsilon^1$ and $\nu^1$ %\xout{associated to the trace $\logtrace=\textup{caba}$ (also in Table --):} \ADD
-{as} in Table \ref{tab:embsitar}: $\const{a}$ is clearly the most frequent label while $\const{b}$ and $\const{c}$ are equiprobable. The $2$-gram $\const{ca}$ appears twice in the trace set and then, it is more frequent than the remaining $2$-grams.
+Table \ref{tab:emb2} shows the embeddings $\gorgembed(\overline{G}_\nonlogtrace)$ generated from Example \ref{ex:neue}, where the $l=|\nonlogtrace|$ for each \unravelled trace.
+After representing trace $\logtrace=\const{caba}$ as a graph (\figurename~\ref{fig:taustar}), we find its
+embedding $\gorgembed(\overline{G}_{\logtrace})$ with strategies $\epsilon^1$ and $\nu^1$ 
+{as} in Table \ref{tab:embsitar}: $\const{a}$ is the most frequent label and $\const{b}$ and $\const{c}$ are equiprobable. 
+The $2$-gram $\const{ca}$ appears twice in the trace set and is more frequent than other $2$-grams.
 \end{example}
-
-{We can also prove that such sub-embeddings satisfy the conditions required by the G-Embedding. }
+%
+These sub-embeddings satisfy the conditions required by the G-Embedding.
 \begin{lemma}\label{lem:addedForOurPropos}
 	{The sub-embeddings in Table~\ref{tab:embedstrat} satisfy the requirements from Definition~\ref{def:ppne}.}
 \end{lemma}
@@ -314,38 +316,24 @@ embedding $\gorgembed(\overline{G}_{\logtrace})$ with strategies $\epsilon^1$ an
 %		\item[$\Leftarrow$] \ADD{Given that $l$ in both $\epsilon^2$ and $\epsilon^1$ always corresponds the maximum trace length generated from $\ptraces{G}{0}$, no $2$-grams at occurring length greater than $l$ can happen, thus implying $\forall j>l.\; [LR^lL^t]_\const{ab}=0$. In addition to that, having $\epsilon^1_\const{ab}(G)=0$ (and $\epsilon^2_\const{ab}(G)=0$) implies that $\forall 0<j\leq l.\; [LR^jL]_\const{ab}=0$. Thus, we can finally conclude that $\forall i\in\mathbb{N}_{\neq 0}. [LR^iL^t]_\const{ab}=0$}
 %	\end{itemize}
 \end{proof}
-
-
 %
-%\xout{After defining the embedding, we can show that this embedding establishes some desired features that are independent of the definition of $\epsilon$ and $\nu$, and that $\epsilon$ and $\nu$ only depend on the characterization of both the labelling $L$ and the transition matrix $R$. We provide a rewriting proposition that is going to be used in the incoming subsection to provide the aforementioned characterizing properties.} \ADD
+The kernel $k_{\gorgembed}$ associated to $\gorgembed$ is {a function of the distance  $\|\hat{\epsilon}(G)-\hat{\epsilon}(G')\|_2^2$ and $\|\hat{\nu}(G)-\hat{\nu}(G')\|_2^2$ for traces $\logtrace$ and ${\nonlogtrace}$.}
 %
-%Given that kernel functions $k_\phi$ are defined as the dot product between the embedding $\phi$ of distinct objects $x$ (\S\ref{subsec:katk}), then we can express the kernel $k_{\gorgembed}$ as such dot product and, after normalizing $\epsilon$ and $\nu$, we can rewrite such kernel
-The kernel $k_{\gorgembed}$ associated to $\gorgembed$ is {a function of the distance  $\|\hat{\epsilon}(G)-\hat{\epsilon}(G')\|_2^2$ and $\|\hat{\nu}(G)-\hat{\nu}(G')\|_2^2$ for traces $\logtrace$ and ${\nonlogtrace}$:}
-%
-\begin{proposition}\label{lem:rewritinglemma}
-Given {two Weighted Transition Graphs} $(G,\omega)$ and $(G',\omega')$ with $G=(s,t,L,R)$ and $G'=(s',t',L',R')$, the definition for $k_\gorgembed$ is expanded as follows:
+%\begin{proposition}\label{lem:rewritinglemma}
+Given {two weighted TGs} $(G,\omega)$ and $(G',\omega')$ with $G=(s,t,L,R)$ and $G'=(s',t',L',R')$, the definition of
+$k_\gorgembed$ is expanded to
 $$\begin{aligned}
 k_{\gorgembed}(G,G')=&\omega\omega't_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\epsilon}(G)-\hat{\epsilon}(G')}{2}^2}{2}\right)+\\
 &t_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\nu}(G)-\hat{\nu}(G')}{2}^2}{2}\right)
 \end{aligned}$$
-
-\end{proposition}
-\begin{proof} We can close the goal by definition of $k_{\phi}$ as a vector dot product for any embedding $\phi$ and by  $\|\hat{\mathbf{x}}-\hat{\mathbf{x}}'\|_2^2=(2-1\braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$ (\S\ref{subsec:katk}).
-%	
-%	 for normalized vectors (\S\ref{subsec:katk}), we can expand the former definition as follows:
-%$$\begin{aligned}
-%{k_{\gorgembed}(P,P')}&{=\Braket{\gorgembed(P),\gorgembed(P')}}\\
-%	&{=\sum_{\alpha\beta\in \trace_\tau^2}\frac{\epsilon_{\color{green}\alpha\beta}}{\|\epsilon\|_2}\frac{{\epsilon'}_{\color{green}\alpha\beta}}{\|\epsilon'\|_2}\omega\omega't_f^{|R>0|+|R'>0|}\quad+\quad \sum_{\alpha\in \trace_\tau}\frac{\nu_{\color{green}\alpha}}{\|\nu\|_2}\frac{{\nu'}_{\color{green}\alpha}}{\|\nu'\|_2}t_f^{|R>0|+|R'>0|}}\\
-%	&{=ww'\trace^{|Rb>0|+|R'>0|}\sum_{\alpha\beta\in \trace_\tau^2}\frac{\epsilon_{\color{green}\alpha\beta}}{\|\epsilon\|_2}\frac{{\epsilon'}_{\color{green}\alpha\beta}}{\|\epsilon'\|_2}\quad+\quad t_f^{|R>0|+|R'>0|}\sum_{\alpha\in \trace_\tau}\frac{\nu_{\color{green}\alpha}}{\|\nu\|_2}\frac{{\nu'}_{\color{green}\alpha}}{\|\nu'\|_2}}\\
-%	&{=\omega\omega't_f^{|R>0|+|R'>0|}\Braket{\hat{\epsilon}, \hat{\epsilon}'}+ t_f^{|R>0|+|R'>0|}\Braket{\hat{\nu}, \hat{\nu}'}}\\
-%	&{=\omega\omega't_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\epsilon}- \hat{\epsilon}'}{2}^2}{2}\right)+ t_f^{|R>0|+|R'>0|}\left(1-\frac{\norm{\hat{\nu}- \hat{\nu}'}{2}^2}{2}\right)}\\
-%\end{aligned}$$
-\end{proof}
-
-
-
+%\end{proposition}
+%\begin{proof} We can close the goal by definition of $k_{\phi}$ as a vector dot product for any embedding $\phi$ and by  $\|\hat{\mathbf{x}}-\hat{\mathbf{x}}'\|_2^2=(2-1\braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$ (\S\ref{subsec:katk}).
+%%	
+%\end{proof}
 %
-When $\hat{\epsilon}(G)$ and $\hat{\epsilon}(G')$ are affected by numerical cancelation due to truncation error (i.e., $\norm{\hat{\epsilon}(G)-\hat{\epsilon}(G')}{2}^2\to 0$), the $\nu$ strategy intervenes as a backup ranking strategy. The first term of the sum does not affect the ranking, as it reduces to a constant factor.
+When $\hat{\epsilon}(G)$ and $\hat{\epsilon}(G')$ are affected by truncation errors 
+(i.e., $\norm{\hat{\epsilon}(G)-\hat{\epsilon}(G')}{2}^2\to 0$), the $\nu$ strategy intervenes as a backup ranking. The first 
+term of the sum does not affect the ranking, as it reduces to a constant factor.
 
 %\xout{Given that we can now follow Definition \ref{def:ppne} for representing a trace $\trace$ as a proper embedding after transforming it as a TG $P_{\logtrace}$ (\S\ref{subsec:katk}), we can find the TG $P$ providing the best approximate match with  a trace $\trace$ as follows:}
 %\[\Rcancel{\underset{{P}}{\max\arg}\;k_{\gorgembed}(P,T)}\]
@@ -439,10 +427,11 @@ When $\hat{\epsilon}(G)$ and $\hat{\epsilon}(G')$ are affected by numerical canc
 
 
 \begin{example}%\small \label{ex:11}
-	The dot products $k_{\gorgembed}(\logtrace,\nonlogtrace)=\braket{\gorgembed(\overline{G}_\logtrace),\;\gorgembed(\overline{G}_{\nonlogtrace})}$ with sub-embedding $\nu^1$ and $\epsilon^1$, for each trace $\nonlogtrace\in\WCal{0}{4}_{|\sigma'|\leq 4}$, are represented in Table \ref{tab:rank3}, where the optimal ranking $\goldenrank$ is also showed. $k_{\gorgembed}$ approximates the optimal ranking as it tends to rank the transition graphs $\closed{G}_\nonlogtrace$ (generated from $\overline{G}$ via projection) similarly to the $\net$-traces over $\mathcal{R}$.
+The products $k_{\gorgembed}(\logtrace,\nonlogtrace)=\braket{\gorgembed(\overline{G}_\logtrace),\;\gorgembed(\overline{G}_{\nonlogtrace})}$ 
+with sub-embedding $\nu^1$ and $\epsilon^1$, for each trace $\nonlogtrace$ appear in 
+Table \ref{tab:rank3} along optimal ranking $\goldenrank$. $k_{\gorgembed}$ approximates the optimal ranking as it tends to rank the transition graphs $\closed{G}_\nonlogtrace$ (generated from $\overline{G}$ via projection) similarly to the traces over $\mathcal{R}$.
 \end{example}
-
-
+%
 %\begin{example}\label{ex:moreskew}
 %	\xout{Let us suppose to change the probability distribution associated with the $P$'s edges, so that it becomes more skewed and that some traces are relatively more probable than others. Let us set $p_1=p_2=0.5$, $p_3=0.9$, $p_6=0.1$, $p_4=0.3$, and $p_5=0.7$, so that the initial choice is equiprobable but performing a loop is more probable than terminating the path. We keep the other tuning parameters as in Example \ref{ex:withpaths}. In this case, we generate the following set of weighted traces:}
 %	$$\begin{aligned}
@@ -563,19 +552,21 @@ When $\hat{\epsilon}(G)$ and $\hat{\epsilon}(G')$ are affected by numerical canc
 %		\bottomrule
 %	\end{tabular}
 %\end{table}
-
+%
 %\begin{example}\label{ex:cmpexample}
 %	Let us compare the ranking results by replacing in $\gorgembed$ the edge embedding $\epsilon^1$ with $\epsilon^2$. If we re-run the computations performed in  Example \ref{ex:11}, we obtain   Table \ref{tab:compLit}:  $\epsilon^1$ provides longer approximated subsequences if compared to $\epsilon^2$. Both embedding proposals tend to favor sequences containing one single node or one single subtrace due to the normalization of both  the edge and the nodes' distribution, but $\epsilon^2$ seems to be less influenced than $\epsilon^1$ in the change of the edge distribution. Therefore, $\epsilon^1$ proposal is to be preferred to $\epsilon^2$.
 %\end{example}
-
-{As a corollary of Proposition~\ref{lem:rewritinglemma}, we can also express the kernel $k_{\gorgembed}(G,G')$ as a function of the dot product of the two sub-embeddings because $\tasks^2\neq\tasks$ is always true:}
+%
+The kernel $k_{\gorgembed}(G,G')$ can also be expressed as a function of the dot product of the two sub-embeddings because $\tasks^2\neq\tasks$.
 \begin{equation}\label{eq:corollLem1}
 {\omega\omega't_f^{|R>0|+|R'>0|}\Braket{\hat{\epsilon}(G), \hat{\epsilon}(G')}+ t_f^{|R>0|+|R'>0|}\Braket{\hat{\nu}(G), \hat{\nu}(G')}}
 \end{equation}
 
 \noindent
 \textbf{Properties.}\label{subsub:prop}
-We can prove that when two traces $\logtrace$ and ${\nonlogtrace}$ are equivalent (correspond to the same sequence of labels and have the same probability), the kernel computation reduces to $\omega\omega'$. When both weights are $1$, the kernel returns $1$. We call this condition \textit{weak equality} because we cannot possibly prove that when the kernel is equal to $\omega\omega'$ then the two traces we are comparing are equivalent (there could be equal embeddings coming from non-equivalent traces). 
+When two traces $\logtrace$ and ${\nonlogtrace}$ are equivalent (correspond to the same sequence of labels with the 
+same probability), the kernel computation reduces to $\omega\omega'$. When both weights are $1$, the kernel returns $1$. 
+We call this condition \textit{weak equality} because we cannot prove that when the kernel is equal to $\omega\omega'$ then the two traces are equivalent (there could be equal embeddings coming from non-equivalent traces). 
 
 \begin{figure}[!t]
 	\vspace*{-0.5cm}
