@@ -101,9 +101,13 @@ Figure \ref{fig:knnspace} (below) shows that the embedding moves the points of t
 The transformation required for running the $k$NN algorithm preserves the ranking induced by $\mathcal{R}$.
 
 \begin{lemma}
-	{Given a value $k\in[0,1]\subseteq \mathbb{R}^+_0$, the set of points having the product $ps$ at least $k$ corresponds to the set of $t$-transformed points having a distance of at least $1/k$ from the origin of the axes.}
+The set of points having the product $ps$ at least $k\in[0,1]$ corresponds to the set of $t$-transformed points with distance 
+at least $1/k$ from the origin.
 \end{lemma}
-\begin{proof} By ignoring the irrelevant traces for $ps= 0$, we have:
+%
+\begin{proof} 
+\todo{may be removed if needed}
+Ignoring the irrelevant traces for $ps= 0$, we have:
 	\[
 	ps\geq k\Leftrightarrow \frac{1}{ps}=
 	{ \frac{\sqrt{p^2+s^2}}{ps\sqrt{p^2+s^2}}= \left\|t(p,s)-\vec{0}\right\|_2\leq\frac{1}{k} }\\
@@ -114,31 +118,41 @@ The transformation required for running the $k$NN algorithm preserves the rankin
 \]
 \end{proof}
 	
-\vspace{+0.2cm}	
 \noindent
 \textbf{Approximate-Ranking Trace Embedder.}\label{subsec:ate}
-Ranking optimality comes at the sub-optimal cost of a brute-force recomputation of $\goldenrank$ for each novel trace $\logtrace$ to align.
-%\footnote{By embedding  all the \unravelled\ model traces via $\phi_{\logtrace}(\nonlogtrace)=\Big(\frac{1}{\probskip{\nonlogtrace}\sqrt{\probskip{\nonlogtrace}^2+s_d^2(\logtrace,\nonlogtrace)}},\frac{1}{s_d(\logtrace,\nonlogtrace)\sqrt{\probskip{\nonlogtrace}^2+s_d^2(\logtrace,\nonlogtrace)}}\Big)$ over a specific $\logtrace$, by representing  $\logtrace$ as $(0,0)$, and by using the Euclidean Distance as a distance, we ensure that all the neighbors of $(0,0)$ will represent the top-$k$ best alignments for $\logtrace$.}. %This is not optimal for $k$NN-based techniques, as this entails the  redefinition of the multidimensional search space $\mathcal{X}$ for each new alignment $\logtrace$. The ``recomputation cost'' could be completely avoided by providing an embedding strategy $\gorgembed$ that is independent of the to-be-aligned trace $\logtrace$.
+Ranking optimality comes at the cost of a brute-force recomputation of $\goldenrank$ for each trace $\logtrace$ to align.
 Since each embedding $\phi$ entails an associated similarity metric $k_\phi$ (\S\ref{subsec:katk}) and hence an associated
 distance $d_{k_\phi}$ (Equation \ref{eq:dofk}), we can compute the embeddings for all the \unravelled\ traces
-before performing the top-$k$ search ensuring that they are independent of the trace to align, thus avoiding the brute-force cost. This computational gain comes with a loss in precision, as the generation of precise embeddings for graph data with loops is an NP-Complete (thus intractable) problem \cite{GartnerFW03} and, in its approximated version, is not able to accurately represent the data using low-dimensional vectors \cite{Seshadhri5631}. So, our proposed embedding (that we indicate with $\gorgembed$) is weakly-ideal (\S\ref{subsec:katk} and \cite{Gartner03}).
+before the top-$k$ search ensuring that they are independent of the trace to align, avoiding the brute-force cost. 
+This computational gain comes with a loss in precision; the generation of precise embeddings for graph data with loops is 
+NP-complete \cite{GartnerFW03} and, in its approximated version, is unable to accurately represent data using low-dimensional 
+vectors \cite{Seshadhri5631}. Our proposed embedding ($\gorgembed$) is thus weakly-ideal (\S\ref{subsec:katk}).
 
-{To obtain $\gorgembed$, we adapt the embedding strategy} $\trembed$ from \cite{LodhiSSCW02} {by addressing some short\-comings that this strategy presents:}
+$\gorgembed$ is a variant of the embedding $\trembed$ from \cite{LodhiSSCW02}, which addresses some of its shortcomings.
+Indeed, $\trembed$
 \begin{alphalist}
- \item it does not perform weakly-ideally, so we cannot numerically assess if two embeddings represent equivalent traces (Example \ref{ex:wheredotiszero});
- \item it does not characterize $\tau$-moves, so the probabilities of the initial and final $\tau$-moves are not preserved;
- \item it is affected by numerical errors from finite arithmetics: longer traces $\nonlogtrace$ generated from skewed probability distributions $\expN.\Lambda^i$ suffer from greater truncation errors, as smaller $\lambda^i$ components for bigger $i<|\nonlogtrace|$ will be ignored, preventing a complete numerical vector characterization of  $\nonlogtrace$ in practice.
+ \item is not weakly-ideal, so we cannot numerically assess if two embeddings represent equivalent traces 
+ (Example \ref{ex:wheredotiszero});
+ \item does not characterize $\tau$-moves, so the probabilities of the initial and final $\tau$-moves are not preserved; and
+ \item is affected by numerical errors from finite arithmetics: longer traces $\nonlogtrace$ generated from skewed probability 
+ 	distributions $G.\Lambda^i$ yield greater truncation errors, as smaller $\lambda^i$ components for bigger 
+ 	$i<|\nonlogtrace|$ are ignored, preventing a complete numerical vector characterization of  $\nonlogtrace$ in practice.
+\end{alphalist}
+%
+To overcome these shortcomings we 
+\begin{alphalist} 
+\item propose a weakly-ideal embedding, which also 
+\item exploits an $\omega$ factor for preserving probabilities from and to $\tau$ transitions, and 
+\item mitigate the numerical truncation errors induced by trace length and probability distribution skewness through two 
+sub-embedding strategies, $\epsilon^x$ and $\nu^x$. The former descends from $\trembed$ and the latter approximates 
+the trace similarity through label frequencies.
 \end{alphalist}
 
-{To overcome these shortcomings we} \begin{alphalist} \item propose a weakly-ideal embedding, which also \item exploits an
-$\omega$ factor for preserving probabilities from and to $\tau$ transitions. We also \item mitigate the
-numerical truncation errors induced by trace length and probability distribution skewness through two sub-embedding strategies,
-$\epsilon^x$ and $\nu^x$, where the former descends from $\trembed$ and the latter approximates the trace similarity via label frequencies similarity.
-\end{alphalist}
-
-Since a trace embedding for $\nonlogtrace\in\WCal{\pmin}{n}$ adequately representing the transitions in $\expN.\Lambda$ requires an intermediate $G$ representation, we map each $\nonlogtrace$ to a transition graph $\tg_\nonlogtrace$ as follows:
-	\begin{definition}[$\closed{G}$ projection over traces]
-		Given a minimum probability thre\-shold $\pmin$ and a $\tau$-closed transition graph $\closed{G}=(V,s,t,L,R)$, for each trace $\nonlogtrace\in\ptraces{\closed{G}}{\pmin}$, the $\closed{G}$ projection over $\nonlogtrace$ is a \ADD{Weighted Transition Graph} $(\closed{G}_\nonlogtrace,\omega)$, where $\closed{G}_\nonlogtrace$ is a transition graph such that
+Since a trace embedding for $\nonlogtrace$ representing the transitions in $\closed{\tg}.\Lambda$ requires an intermediate 
+TG representation, each $\nonlogtrace$ is mapped to a transition graph $\tg_\nonlogtrace$.
+%
+\begin{definition}[trace projection]
+Let $\closed{G}=(V,s,t,L,R)$ be a $\tau$-closed TG, and $\pmin\in(0,1]$. for each trace $\nonlogtrace\in\ptraces{\closed{G}}{\pmin}$, the $\closed{G}$ projection over $\nonlogtrace$ is a \ADD{Weighted Transition Graph} $(\closed{G}_\nonlogtrace,\omega)$, where $\closed{G}_\nonlogtrace$ is a transition graph such that
 \begin{inparaenum}[\it (i)]
 	\item $\closed{G}_\nonlogtrace.V$ contains all distinct nodes generating $\nonlogtrace$ from $\closed{G}$	(i.e., $\bigcup_{\xi\in\runs{\nonlogtrace}{\closed{G}}}\seqs{\xi}{ \closed{G}}$);
 	\item $\closed{G}_\nonlogtrace.s = s$;
