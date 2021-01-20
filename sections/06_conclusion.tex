@@ -4,7 +4,7 @@
 %\texttt{\color{red}[TODO]}
 \label{sec:conclusion}
 
-In this paper, we have presented an approach to tackle the probabilistic trace alignment as a $k$NN problem.
+We have presented an approach to tackle the probabilistic trace alignment as a $k$NN problem.
 The approach balances between the likelihood of the aligned trace and the cost of the alignment by providing the top-k alignments instead of a single alignment as output. The experimentation shows that the approximated top-k ranking provides a good trade-off between accuracy and efficiency especially when the reference stochastic net generates several model traces.
 Future works will investigate the probabilistic alignment over fuzzy-labeled nodes and declarative process models, thus allowing to generalize the proposed approach to noisy walks in plan recognition for non-rational agents \cite{RamirezG10}. Also, we will try to improve the performance (in terms of efficiency and accuracy) of the proposed approach by intervening both on the embedding and the algorithmic strategies, such as extending the Viterbi Algorithm  to perform $k$ candidates instead of the one maximizing probability and similarity value. Last, we will also investigate the possibility of representing POMDPs as Transition Graphs when the reward function is completely determined by the distance between traces' actions.
 
