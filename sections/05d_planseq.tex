@@ -1,6 +1,10 @@
 
 \subsection{Plan Recognition}
-\textit{Plan recognition} predicts an agent's plans based on its observed actions. In such scenarios, it is commonly assumed that the possible activities can be exhaustively enumerating in finite time \cite{RamirezG09}. 
+\textit{Plan recognition} predicts an agent's plans based on its observed actions. In such scenarios, it is commonly assumed that the possible activities can be exhaustively enumerated in finite time \cite{RamirezG09}. 
 
-Although 
-an unexpected context change could make the agent change its plan to $\sigma''$. As the already-executed plan $\sigma'$ cannot be retracted, the resulting plan after the context change $\overline{\sigma}$ shares intermediate features between $\sigma''$ and $\sigma'$ \cite{FoxGLS06}, which differences can be described by plan repairs.
+Although  an unexpected context change could make the agent change its plan from the initial $\sigma'$ to $\sigma''$, the already-executed plan $\sigma'$ cannot be retracted. Thus, the  resulting set of actions ${\sigma}$ after the context change  shares intermediate features between $\sigma''$ and $\sigma'$, which differences can be described by plan repairs \cite{FoxGLS06}. Given that the set of all the possible plans can be described using stochastic processes such as HMM \cite{LI2020101974}, the plan recognition problem can be reduced to a sequence analysis as in the biological use case. As a result, we can use our pipeline to solve the plan recognition problem and exploit the top-$k$ query to retrieve all the likely initial and target plans by considering both sequence probability and their similarity.
+
+Previous approaches considered \textit{de facto} the shortest paths towards a given goal as the optimal plan for reaching a given destination  \cite{RamirezG10}: this requirement can be met by representing each shortest path of interest as TGs. 
+
+
+ After observing that the first scenario can be promptly be derived by representing such paths as TGs and that TGs supports actions occurring multiple times, such scenarios
