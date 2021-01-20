@@ -227,12 +227,15 @@ $2$-grams in $\tasks^2$ and $\nu$ over the labels in $\tasks$, which  provide di
 %\end{tabular}
 %\end{table}
 \begin{definition}[G-Embedding]\label{def:ppne}
-Given a weighted TG $(G,\omega)$ with $G=(V,s,t,L,R)$ and a tuning parameter $t_f\in[0,1]\subseteq\mathbb{R}^+_{0}$, the \emph{G-Embedding} $\gorgembed$ over the visible $2$-grams and transition labels, $\tasks\cup\tasks^2$, is defined by
+Given a weighted TG $(G,\omega)$ with $G=(V,s,t,L,R)$ and a tuning parameter $t_f\in[0,1]$, the \emph{G-Embedding} 
+$\gorgembed$ over the visible $2$-grams and transition labels, $\tasks\cup\tasks^2$, is defined by
 $$\gorgembed_{i}(G)=\begin{cases}
 	\omega \frac{\epsilon_\const{ab}(G)}{\|\epsilon\|_2}\;t_f^{|R>0|}\, & {i}=\const{ab}\in\tasks^2\\
 	\frac{\nu_\const{a}(G)}{\|\nu\|_2}\;\;\;\,t_f^{|R>0|}\, & {i}=\const{a}\in\tasks\\
 \end{cases}$$
-where $\nu$ (and $\epsilon$) represents the non-negatively defined embeddings associated to $G.L$ (both $G.R$ and $G.L$): \ADD{we require that  $\epsilon$  returns $\epsilon_\const{ab}=0$ for the $2$-grams $\const{ab}$ that are not represented within the Transition Graph ($\forall \const{ab}\in\tasks^2.\; \left(\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0\right) \Leftrightarrow \epsilon_\const{ab}(G)=0$), and either $\nu$ always returns the empty vector or $\nu_\const{a}(G)=0$ iff. the labels $\const{a}\in\tasks$ that are associated to no vertex in $V$ ($\forall \const{a}\in\tasks. \left(\forall u\in V. L_{\const{a}u}=0\right)\Rightarrow \nu_\const{a}(G)=0$).}
+where $\nu$ (and $\epsilon$) represents the non-negatively defined embeddings associated to $G.L$ (both $G.R$ and $G.L$): 
+\ADD{$\epsilon$ returns $\epsilon_\const{ab}=0$ for the $2$-grams $\const{ab}$ that are not represented within the TG 
+and either $\nu$ always returns the empty vector or $\nu_\const{a}(G)=0$ iff the labels $\const{a}\in\tasks$ that are associated to no vertex in $V$} % ($\forall \const{a}\in\tasks. \left(\forall u\in V. L_{\const{a}u}=0\right)\Rightarrow \nu_\const{a}(G)=0$).}
 \end{definition}
 %
 Here, ${\max\arg}_{\nonlogtrace\in \WCal{\pmin}{n}, G_\nonlogtrace\in\TBf{p}{n}(P)} k_{\gorgembed}(G_\logtrace, G_{\nonlogtrace})$ returns the best approximated trace alignment for a log trace represented as $G_{\logtrace}$. %\xout{Similarly, we can provide the TG $P\in\mathbf{P}$ providing the best approximated alignment for $P_{\logtrace}$ as $\underset{P}{\max\arg}\underset{ P_\trace\in\mathbf{P}_p^n(P)}{\max} k_{\gorgembed}(P_\trace, P_{\logtrace})$.}¯
