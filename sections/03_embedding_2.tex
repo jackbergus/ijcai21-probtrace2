@@ -22,13 +22,6 @@ Using decision theory \cite{dectheor}, we express the ranking score as the produ
 $\probskip{\nonlogtrace} d(\logtrace,\nonlogtrace)$, taking into account the cost of the alignment (the distance between 
 the model trace and the trace to be aligned) and the probability of the model trace.
 
-\begin{figure*}[!t]
-	\centering
-	\subfloat[The similarity/probability space.]{\label{fig:spp}\includegraphics[width=.35\textwidth]{images/original_space.pdf}}\qquad
-	\subfloat[The transformed space for the $k$NN problem.]{\label{fig:knnspace}\includegraphics[width=.35\textwidth]{images/transformed_space.pdf}}\\
-	\caption{Two characterizations of the probabilistic trace alignment problem. The best possible match is represented in red in both the similarity/probability space and in the transformed one.}
-\end{figure*}
-
 To represent the same intuition of a weighted distance as a ranking function, we transform it into a
 similarity function returning $1$ when $\nonlogtrace=\logtrace$ and $\probskip{\logtrace}=1$ hold. We express $d$ as
 a normalized similarity score $s_d(\logtrace,\nonlogtrace):=\frac{1}{\frac{1}{c}d(\logtrace,\nonlogtrace)+1}$, where  
@@ -40,12 +33,20 @@ ${\max\arg}_{\nonlogtrace\in \WCal{\pmin}{n}} \goldenrank(\logtrace,{\nonlogtrac
 alignment for a log trace $\logtrace$, where $\goldenrank$ must be computed anew for each possible $\logtrace$. 
 \ADD{We can represent each trace as a point  $(\mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma'),\; s_d(\sigma,\sigma'))$ in the 
 2-dimensional similarity/probability space of coordinates $(p,s)$, reducing the trace finding problem to maximising the product 
-$p\cdot s\equiv \mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma')\cdot s_d(\sigma,\sigma')$ (Figure \ref{fig:spp}).}
+$p\cdot s\equiv \mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma')\cdot s_d(\sigma,\sigma')$ (Figure \ref{fig:sps}).}
+%
+\begin{figure}[!t]
+	\centering
+	\subfloat{\label{fig:spp}\includegraphics[width=.35\textwidth]{images/original_space.pdf}}\qquad
+	\subfloat{\label{fig:knnspace}\includegraphics[width=.33\textwidth]{images/transformed_space.pdf}}\\
+	\caption{Two characterizations of probabilistic trace alignment; the similarity/probability space above, and the transformed
+	$k$NN space below. The best possible match is shown in red in both spaces.}\label{fig:sps}
+\end{figure}
 
-\todo{--- also figs,table}
+
 \begin{table}[!t]
 \centering
-\caption{Golden ranking of the paths $\ptraces{\closed{\tg_{\rg{\net}}}}{0}$ with maximum length $4$, where $\logtrace=\const{caba}$ and $c=5$.}\label{tab:expected}
+\caption{Golden ranking of $\ptraces{\closed{\tg}}{0}$ with maximum length $4$, where $\logtrace=\const{caba}$ and $c=5$.}\label{tab:expected}
 \resizebox{.45\textwidth}{!}{\begin{tabular}{lc|ll|c}
 	\toprule
 	
@@ -68,32 +69,36 @@ $p\cdot s\equiv \mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma')\cdot s_d(\sigma,\sigma
 \end{tabular}}
 \end{table}
 \begin{example}\label{ex:rankingTaus}
-Given the $\tau$-closed transition graph $\closed{\tg_{\rg{\net}}}$ in \figurename~\ref{fig:closed}, we assign the probability values
-$\pa=0.8$, $\pb=0.2$, $\pc=\pf=0.5$, $\pd=0.7$, and $\pe=0.3$. The $\ptraces{\expN}{0}=\ptraces{N}{0}$ with maximum length $4$ are:
+Consider the TG $\closed{\tg}$ in \figurename~\ref{fig:lmc} with probabilities
+$\pa=0.8$, $\pb=0.2$, $\pc=\pf=0.5$, $\pd=0.7$, and $\pe=0.3$. The traces with maximum length $4$ are:
 %$$\begin{aligned}
 %\ptraces{\expN}{0}_{|\nonlogtrace|\leq 4}=
-$\{\braket{\const{a},0.4},\braket{\const{aa},0.2}$, $\braket{\const{aaa},0.1}$, $\braket{\const{ca},0.07}$, $\braket{\const{cb},0.06}$,
-$\braket{\const{aaaa},0.05},\braket{\const{caa},0.035},\braket{\const{caaa},0.0175}\}$. Table \ref{tab:expected} represents the expected alignment raking of such traces with  $\nonlogtrace=\textup{caba}$.  Albeit traces $\const{caa}$ and $\const{caaa}$ are the most similar to $\const{caba}$, their associated trace probability  is rather low, so traces having higher probability but lower similarity score are preferred (e.g., $\const{a}$ and $\const{aa}$).
+$\{\braket{\const{a},0.4},\braket{\const{aa},0.2}$, $\braket{\const{aaa},0.1}$, $\braket{\const{ca},0.07}$, 
+$\braket{\const{cb},0.06}$,
+$\braket{\const{aaaa},0.05},\braket{\const{caa},0.035},\braket{\const{caaa},0.0175}\}$. 
+Table \ref{tab:expected} represents their alignment raking with  $\nonlogtrace=\textup{caba}$.  Although $\const{caa}$ and 
+$\const{caaa}$ are the most similar to $\const{caba}$, their associated probability  is rather low, so traces with 
+higher probability but lower similarity score are preferred (e.g., $\const{a}$ and $\const{aa}$).
 \end{example}
-	
-\ADD{Given that users might still prefer the most similar ones to the ones maximizing both probability and similarity, we %prefer to 
-return the %user the whole set of the 
-best $k$ solutions. %rather than cherry-picking the best solution maximizing both probability and similarity. 
-So, we reduce the problem to the desired $k$-nearest neighbor problem within the Euclidean Space: we define a transformation $t$ such that the distance of the transformed point $t(p,s)$ from  the origin $\vec{0}$ corresponds to $\sfrac{1}{ps}$, thus preserving the score from the golden ranking and making the points maximizing $ps$ nearer to the origin of the axes. We then chose the following transformation:}
+%
+\ADD{Since users might still prefer the most similar ones to the ones maximizing both probability and similarity, we 
+return the best $k$ solutions.
+We reduce the problem to $k$NN over the Euclidean Space through a transformation $t$ such that the distance of the 
+transformed point $t(p,s)$ from  the origin $\vec{0}$ is $\sfrac{1}{ps}$. This preserves the score from the golden ranking 
+and maps the points maximizing $ps$ nearer to the origin. We choose}
 $t(p,s):=\left(\frac{1}{s\sqrt{p^2+s^2}},\; \frac{1}{p\sqrt{p^2+s^2}}\right)$. 
-	\ADD{Given that the  for each candidate trace %$\nonlogtrace$ to align to $\logtrace$  
-	we always start %looking for the candidates 
-	from the origin of the axes, our search always starts scanning from the best candidates.}
-
+Our search always starts from the origin, and hence finds the best candidates first.
 	
+%
 \begin{example}
-	\ADD{Figure \ref{fig:spp} shows a family of hyperbolae $ps$ describing all the alignments having $\mathcal{R}(\sigma,\sigma')=ps$. Point $\color{red}(1,1)$ represents the best possible trace match, i.e., a trace $\nonlogtrace\in\ptraces{N}{0}$ with $\nonlogtrace=\logtrace$ and $\mathbb{P}_N(\nonlogtrace)\mathbb{P}_N(\logtrace)=1$.
-		
-		
-	Figure \ref{fig:knnspace} shows that the aforementioned embedding moves the points of the hyperbola $ps$ over a circumference $x^2+y^2=\sfrac{1}{(ps)^2}$ describing a locus of the points equidistant as $\sfrac{1}{ps}$ from the origin of the axes $(0,0)$.}
+\ADD{Figure \ref{fig:sps} (above) shows a family of hyperbolae $ps$ with all the alignments having 
+$\mathcal{R}(\sigma,\sigma')=ps$. Point $\color{red}(1,1)$ is the best possible trace match, i.e., a trace 
+$\nonlogtrace\in\ptraces{G}{0}$ with $\nonlogtrace=\logtrace$ and $\mathbb{P}_G(\nonlogtrace)\mathbb{P}_G(\logtrace)=1$.
+%		
+Figure \ref{fig:knnspace} (below) shows that the embedding moves the points of the hyperbola $ps$ to a circumference $x^2+y^2=\sfrac{1}{(ps)^2}$ describing a locus of the points equidistant as $\sfrac{1}{ps}$ from the origin of the axes $(0,0)$.}
 \end{example}
-
-The following lemma guarantees that the transformation required for running the $k$NN algorithm preserves the ranking induced by $\mathcal{R}$.
+%
+The transformation required for running the $k$NN algorithm preserves the ranking induced by $\mathcal{R}$.
 
 \begin{lemma}
 	{Given a value $k\in[0,1]\subseteq \mathbb{R}^+_0$, the set of points having the product $ps$ at least $k$ corresponds to the set of $t$-transformed points having a distance of at least $1/k$ from the origin of the axes.}
