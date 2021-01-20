@@ -4,7 +4,8 @@
 
 Although  an unexpected context change could make the agent change its plan from the initial $\sigma'$ to $\sigma''$, the already-executed plan $\sigma'$ cannot be retracted. Thus, the  resulting set of actions ${\sigma}$ after the context change  shares intermediate features between $\sigma''$ and $\sigma'$, which differences can be described by plan repairs \cite{FoxGLS06}. Given that the set of all the possible plans can be described using stochastic processes such as HMM \cite{LI2020101974}, the plan recognition problem can be reduced to a sequence analysis as in the biological use case. As a result, we can use our pipeline to solve the plan recognition problem and exploit the top-$k$ query to retrieve all the likely initial and target plans by considering both sequence probability and their similarity.
 
-Previous approaches considered \textit{de facto} the shortest paths towards a given goal as the optimal plan for reaching a given destination  \cite{RamirezG10}: this requirement can be met by representing each shortest path of interest as TGs. 
+
+Previous approaches considered \textit{de facto} the shortest paths towards a given goal as the optimal plan for reaching a given destination  \cite{RamirezG10}: this requirement can be met by representing each shortest path of interest as TGs. Furthermore, given that such scenarios 
 
 
  After observing that the first scenario can be promptly be derived by representing such paths as TGs and that TGs supports actions occurring multiple times, such scenarios
