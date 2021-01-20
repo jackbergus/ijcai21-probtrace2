@@ -78,7 +78,7 @@ to a different subtrace $\const{a}\const{b}$ of size $2$ (i.e., $2$-grams%
 but increase the computational complexity of considering all subtraces of length $p$ whose elements occur at any
 distance from each other within the trace.}),
 the associated coordinate should represent the frequency and ``compactness'' of this subtrace within the trace $\trace$ of
-interest. Therefore, we introduce a \emph{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ that, for all $m$ subtraces where $\const{a}$ and $\const{b}$ appear in $\trace$ at the same relative distance $\delta < |\trace|$, weights the resulting embedding as $\lambda^\delta m$.
+interest. We introduce a \emph{decay factor} $\lambda\in[0,1]\subseteq\mathbb{R}$ that, for all $m$ subtraces where $\const{a}$ and $\const{b}$ appear in $\trace$ at the same relative distance $\delta < |\trace|$, weights the resulting embedding as $\lambda^\delta m$.
 %
 We lift this approach to consider all occurrences of subtraces $\const{a}\const{b}$ at every distance between $1$ and $|\trace|-1$
 in two steps. First, we encode $\trace$ into a ``linear'' TG $\tg_\trace$ (\figurename~\ref{fig:taustar}) in the obvious way.
@@ -92,8 +92,7 @@ in two steps. First, we encode $\trace$ into a ``linear'' TG $\tg_\trace$ (\figu
 %
 Then, we compute a simplified version of the embedding from \cite{LodhiSSCW02} as
 $\trembed_{\const{a}\const{b}}(\trace)=\sum_{1\leq i\leq |\trace|}\lambda^i[(\tg_{\trace}.\Lambda)^i]_{\const{a}\const{b}}$.
-The kernel between two traces corresponds to the sum of the products of such values calculated 2-gram by 2-gram for the two
-traces. This trace kernel returns strong dissimilarity when the two traces have no shared 2-grams at any arbitrary occurring length,
+The kernel between two traces corresponds to the sum of the products of such values calculated 2-gram by 2-gram. This trace kernel returns strong dissimilarity when the two traces have no shared 2-grams at any arbitrary occurring length,
 but does not enjoy strong equality: the similarity of a trace with itself is at least $\lambda^2$ - returned when the trace is a
 2-gram.
 
