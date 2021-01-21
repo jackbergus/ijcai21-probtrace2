@@ -104,10 +104,11 @@ Figure \ref{fig:knnspace} (below) shows that the embedding moves the points of t
 %
 The transformation required for running the $k$NN algorithm preserves the ranking induced by $\mathcal{R}$.
 
-\begin{restatable}{lemma}{transfspace}
+\begin{lemma}
+	\label{lem:transfspace}
 The set of points having the product $ps$ at least $k\in[0,1]$ corresponds to the set of $t$-transformed points with distance 
 at least $1/k$ from the origin.
-\end{restatable}
+\end{lemma}
 	
 \noindent
 \textbf{Approximate-Ranking Trace Embedder.}\label{subsec:ate}
@@ -575,19 +576,20 @@ $\ptraces{Q'}{0}=\{\textup{c(abc)}^n|n\in\mathbb{N}\}$. Thus, implying $\ptraces
 $k_{\gorgembed}(Q,Q')=1$ for $t_f=1$.
 \end{example}
 
-\begin{restatable*}[Weak Equality]{lemma}{we}
+\begin{lemma}[Weak Equality]
+	\label{we}
 	If two weighted TGs $(G,\omega)$ and $(G',\omega')$ yield the same set of weighted traces, then 
 $k_{\gorgembed}(G,G')=\omega\omega'$ for $t_f=1$.
-\end{restatable*}
+\end{lemma}
 
 %
 Traces having neither $2$-grams nor transition labels in common have kernel $0$ and vice versa (\textit{strong dissimilarity}). 
 
-\begin{restatable*}[Strong Dissimilarity]{lemma}{sdiss}
+\begin{lemma}[Strong Dissimilarity]
 	\label{lem:sdiss}
 	Given two weighted TGs $(G,\omega)$, $(G',\omega')$, $k_{\gorgembed}(G,G')=0$ iff $G$ and $G'$ have different set 
-of vertex labels or $2$-grams with $t_f,\omega,\omega'>0$.
-\end{restatable*}
+	of vertex labels or $2$-grams with $t_f,\omega,\omega'>0$.
+\end{lemma}
 
 
 %
