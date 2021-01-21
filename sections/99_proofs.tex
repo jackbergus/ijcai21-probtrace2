@@ -8,16 +8,15 @@
 \transfspace*
 \begin{proof} 
 Ignoring the irrelevant traces for $ps= 0$, we have:
-	\[
-	ps\geq k\Leftrightarrow \frac{1}{ps}=
-	{ \frac{\sqrt{p^2+s^2}}{ps\sqrt{p^2+s^2}}= \left\|t(p,s)-\vec{0}\right\|_2\leq\frac{1}{k} }\]
-In particular:
-\[
- \sqrt{\frac{p^2+s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k} \]
-\[	{\Leftrightarrow \sqrt{\frac{p^2}{p^2s^2(p^2+s^2)}+\frac{s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k}} \]
-\[	{\Leftrightarrow \sqrt{\frac{1}{s^2(p^2+s^2)}+\frac{1}{p^2(p^2+s^2)}}\leq\frac{1}{k}} \]\[
-	{\Leftrightarrow \left\|{\biggr({\frac{1}{s\sqrt{p^2+s^2}},\frac{1}{p\sqrt{p^2+s^2}}\biggr)}-\vec{0}}\right\|_2\leq\frac{1}{k}} \\
-\]
+\[\begin{aligned}
+ps\geq k&{\Leftrightarrow \frac{1}{ps}\leq\frac{1}{k}} \\
+&{\Leftrightarrow \frac{\sqrt{p^2+s^2}}{ps\sqrt{p^2+s^2}}\leq\frac{1}{k} }\\
+&{\Leftrightarrow \sqrt{\frac{p^2+s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k}} \\
+&{\Leftrightarrow \sqrt{\frac{p^2}{p^2s^2(p^2+s^2)}+\frac{s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k}} \\
+&{\Leftrightarrow \sqrt{\frac{1}{s^2(p^2+s^2)}+\frac{1}{p^2(p^2+s^2)}}\leq\frac{1}{k}} \\
+&{\Leftrightarrow \left\|{\biggr({\frac{1}{s\sqrt{p^2+s^2}},\frac{1}{p\sqrt{p^2+s^2}}\biggr)}-\vec{0}}\right\|_2\leq\frac{1}{k}} \\
+&{\Leftrightarrow \left\|t(p,s)-\vec{0}\right\|_2\leq\frac{1}{k}} \\
+\end{aligned}\]
 .
 \end{proof}
 
@@ -45,5 +44,11 @@ $\hat{\epsilon}_\const{ab}(G)=0$, the non-existence of a  $2$-gram can be expres
 
 \addedForOurPropos*
 \begin{proof}
-	{With respect to the $\nu$ embeddings, we can see that $\nu^2$ trivially satisfies the requirement as $\nu^2(G)$ returns the null vector $\vec{0}$. Furthermore, $\nu^1_\const{a}(G)=0$ if and only if there exists no $G$-trace  $\nonlogtrace\in\ptraces{G}{0}$ containing $\const{a}$, that is equivalent to  $\forall u\in V.\;L_{\const{a}u}=0$. We can observe that both $\epsilon^1$ and $\epsilon^2$ are function of both the sub-traces of length $i$ from $1$ to $l$, and  $[LR^iL^t]_\const{ab}$ too, thus implying that a summation of possibly zero terms possibly returns zero.}
+	{With respect to the $\nu$ embeddings, we can see that $\nu^2$ trivially satisfies the requirement as $\nu^2(G)$ returns the null vector $\vec{0}$. Furthermore, $\nu^1_\const{a}(G)=0$ if and only if there exists no $G$-trace  $\nonlogtrace\in\ptraces{G}{0}$ containing $\const{a}$, that is equivalent to  $\forall u\in V.\;L_{\const{a}u}=0$.}
+
+{We can observe that both $\epsilon^1$ and $\epsilon^2$ are function of both the sub-traces of length $i$ from $1$ to $l$, and  $[LR^iL^t]_\const{ab}$ too:}
+\begin{itemize}
+	\item[$\Rightarrow$] {Given $\const{ab}\in\tasks^2$, if $[LR^iL^t]_\const{ab}=0$ for each $i\in\mathbb{N}$, it implies that the summation of all their terms would be also zero, thus implying $\epsilon^1_\const{ab}(G)=0$ and $\epsilon^2_\const{ab}(G)=0$.}
+	\item[$\Leftarrow$] {Given that $l$ in both $\epsilon^2$ and $\epsilon^1$ always corresponds the maximum trace length generated from $\ptraces{G}{0}$, no $2$-grams at occurring length greater than $l$ can happen, thus implying $\forall j>l.\; [LR^lL^t]_\const{ab}=0$. In addition to that, having $\epsilon^1_\const{ab}(G)=0$ (and $\epsilon^2_\const{ab}(G)=0$) implies that $\forall 0<j\leq l.\; [LR^jL]_\const{ab}=0$. Thus, we can finally conclude that $\forall i\in\mathbb{N}_{\neq 0}. [LR^iL^t]_\const{ab}=0$}
+\end{itemize}
 \end{proof}
