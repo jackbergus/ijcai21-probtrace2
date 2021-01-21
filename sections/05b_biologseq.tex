@@ -1,9 +1,9 @@
-
-
-\subsection{Biological Sequence Analysis}
-Biological sequence analysis performs sequence alignments for sequence classification and recognition tasks \cite{durbin1998biological}. When sequence similarity is weak, it is hard to identify the most significant alignment to prefer: sequence similarity is then combined with probability for better ranking the preferred alignments \cite{durbin1998biological}. This is a shared point with our proposed approach. 
+\smallskip
+\noindent
+\textbf{Biological Sequence Analysis.}
+Biological sequence analysis performs sequence alignments for sequence classification and recognition tasks. When sequence similarity is weak, it is hard to identify the most significant alignment to prefer: sequence similarity is then combined with probability for better ranking the preferred alignments \cite{durbin1998biological}. This is a shared point with our proposed approach. 
 %
-Biological sequences of interest, such as CpG islands or full DNA sequences, can be summarized into a probabilistic model, either via node-labelled Discrete-Time Markov Chains (PNFA) \cite{RyabkoU08} or Hidden Markov Models \cite{Helske2018}. As it is always possible to represent DTMC as HMM \cite{DUPONT20051349} and given that HMM can be represented as TGs, we will only consider node-labelled DTMC. %The probability of reaching a state $s_t$ with a given label $\lambda(s)$ after visiting $t$ other states only depends on the previously visited state $s_{t+1}$, thus making such models memoryless. Therefore, e
+Biological sequences of interest, such as CpG islands or full DNA sequences, can be summarized into a probabilistic model, either via node-labelled Discrete-Time Markov Chains (PNFA) \cite{RyabkoU08} or Hidden Markov Models \cite{Helske2018}. As it is always possible to represent DTMC as HMM \cite{DUPONT20051349} and given that HMM can be represented as TGs, we only consider node-labelled DTMC. %The probability of reaching a state $s_t$ with a given label $\lambda(s)$ after visiting $t$ other states only depends on the previously visited state $s_{t+1}$, thus making such models memoryless. Therefore, e
 Every biological sequence's probability is the joint probability of the transition probabilities required to visit the multigraph associated to the DTMC for generating the sequence, thus % The probability associated with each biological sequence reflects 
 reflecting the likelihood of having the final trace within the set of traces of interest. 
 %

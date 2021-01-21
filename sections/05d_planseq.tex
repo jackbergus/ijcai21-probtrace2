@@ -1,9 +1,16 @@
 
-\subsection{Plan Recognition}
-\textit{Plan recognition} predicts an agent's plan based on its observed actions. In such scenarios, it is commonly assumed that the possible activities can be exhaustively enumerated in finite time \cite{RamirezG09}. 
+\smallskip
+\noindent
+\textbf{Plan Recognition}
+ predicts an agent's plan based on its observed actions. This problem has been widely studied in AI. Of particular relevance for us are approaches that map plan recognition back to a standard planning problem \cite{RamirezG09}, which has been done also in a probabilistic setting \cite{RamirezG10}. In those works, the observed trace is typically a subtrace of a model trace, projecting away non-observable steps; this constitutes a specific instantiation of our approach. 
+%A related case is the one where an initial plan 
+%$\sigma'$. 
+%In this setting, it is commonly assumed that the possible activities can be exhaustively enumerated in finite time 
+%Although  an unexpected context change could make the agent change its plan from the initial $\sigma'$ to $\sigma''$, the already-executed plan $\sigma'$ cannot be retracted. Thus, the  resulting set of actions ${\sigma}$ after the context change  shares intermediate features between $\sigma''$ and $\sigma'$, which differences can be described through plan 
+A related problem, which calls for considering alignments in their full generality, is that of plan repair \cite{FoxGLS06}. 
+%%
+By considering planning domains adopting stochastic approaches such as HMM \cite{LI2020101974}, the plan recognition problem can be reduced to a sequence analysis as in the biological use case described before. We can then use our pipeline to tackle the plan recognition problem and exploit the reduction to the \textit{k}NN problem. %the top-$k$ query to retrieve all the  initial and target plans likely to $\sigma$ by considering both sequence probability and their similarity.
 
-Although  an unexpected context change could make the agent change its plan from the initial $\sigma'$ to $\sigma''$, the already-executed plan $\sigma'$ cannot be retracted. Thus, the  resulting set of actions ${\sigma}$ after the context change  shares intermediate features between $\sigma''$ and $\sigma'$, which differences can be described by plan repairs \cite{FoxGLS06}. Given that the set of all the possible plans can be described using stochastic processes such as HMM \cite{LI2020101974}, the plan recognition problem can be reduced to a sequence analysis as in the biological use case. We can use our pipeline to solve the plan recognition problem and exploit the reduction to the \textit{k}NN problem. %the top-$k$ query to retrieve all the  initial and target plans likely to $\sigma$ by considering both sequence probability and their similarity.
 
-
-Previous approaches considered the shortest paths towards a goal as the optimal plans \cite{RamirezG10}: we can model this in our pipeline by %this requirement can be met by 
-representing a shortest path of interest as a TG $G$ (Fig.\ref{fig:taustar}). Next, given that the posterior probability $\mathbb{P}(g|\nonlogtrace)$ of having $g\in\mathcal{G}$ as a plan's goal is approximated  as $\propto \mathbb{P}(\nonlogtrace|g)\mathbb{P}(g)$, where $\mathbb{P}(g)$ is a probability distribution  over the goals $g$ and $\mathbb{P}(g|\nonlogtrace)$ is  proportional to $s_d(\logtrace,\nonlogtrace)$, we can exploit the Optimal-Ranking by $s=s_d(\logtrace,\nonlogtrace)$ and $p=\mathbb{P}(g)$, and Approximate-Ranking by choosing $(G,\mathbb{P}(g))$ as a weighted TG for the $G$-embedding.
+Previous approaches considered shortest paths towards a goal as the optimal plans \cite{RamirezG10}: we can capture this in our pipeline by %this requirement can be met by 
+representing a shortest path of interest as a TG $G$ (Fig.\ref{fig:taustar}). Next, given that the posterior probability $\mathbb{P}(g|\nonlogtrace)$ of having $g\in\mathcal{G}$ as a plan's goal is approximated  as $\propto \mathbb{P}(\nonlogtrace|g)\mathbb{P}(g)$, where $\mathbb{P}(g)$ is a probability distribution  over the goals $g$ and $\mathbb{P}(g|\nonlogtrace)$ is  proportional to $s_d(\logtrace,\nonlogtrace)$, we can exploit Optimal-Ranking with $s=s_d(\logtrace,\nonlogtrace)$ and $p=\mathbb{P}(g)$, or Approximate-Ranking by choosing $(G,\mathbb{P}(g))$ as a weighted TG for the $G$-embedding.

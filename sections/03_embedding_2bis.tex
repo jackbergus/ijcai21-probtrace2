@@ -15,6 +15,7 @@ we can retrieve the $k$-neighborhood of $x$ in $\mathcal{X}$ by pre-ordering (\t
 We discuss two strategies to obtain these
 alignments.
 
+\smallskip
 \noindent
 \textbf{Optimal-Ranking Trace Aligner.}
 One approach is to reuse existing trace aligners; e.g., \cite{DBLP:conf/edoc/AdriansyahDA11,LeoniM17} over the Levenshtein 
@@ -39,8 +40,8 @@ $p\cdot s\equiv \mathbb{P}_N(\sigma)\mathbb{P}_N(\sigma')\cdot s_d(\sigma,\sigma
 \begin{figure}[!t]
 	\centering
 	\vspace{-4mm}
-	\subfloat{\label{fig:spp}\includegraphics[width=.22\textwidth]{images/original_space.pdf}}
-	\subfloat{\label{fig:knnspace}\includegraphics[width=.22\textwidth]{images/transformed_space.pdf}}\\
+	\subfloat{\label{fig:spp}\includegraphics[width=.248\textwidth]{images/original_space.pdf}}
+	\subfloat{\label{fig:knnspace}\includegraphics[width=.248\textwidth]{images/transformed_space.pdf}}\\
 	\caption{Two characterizations of probabilistic trace alignment; the similarity/probability space left, and the transformed
 	$k$NN space right. The best possible match is shown in red in both spaces.}\label{fig:sps}
 \end{figure}
@@ -84,24 +85,25 @@ $\const{caaa}$ are the most similar to $\const{caba}$, their associated probabil
 higher probability but lower similarity score are preferred (e.g., $\const{a}$ and $\const{aa}$).
 \end{example}
 %
-{Since users might still prefer the most similar ones to the ones maximizing both probability and similarity, we 
+{Since users might still prefer the most similar traces to the ones maximizing both probability and similarity, we 
 return the best $k$ solutions.
 We reduce the problem to $k$NN over the Euclidean Space through a transformation $t$ such that the distance of the 
 transformed point $t(p,s)$ from  the origin $\vec{0}$ is $\sfrac{1}{ps}$. This preserves the score from the golden ranking 
-and maps the points maximizing $ps$ nearer to the origin. We choose}
+and maps the points maximizing $ps$ close to the origin. We choose}
 $t(p,s):=\left(\frac{1}{s\sqrt{p^2+s^2}},\; \frac{1}{p\sqrt{p^2+s^2}}\right)$. 
 Our search always starts from the origin, and hence finds the best candidates first.
 	
 %
 \begin{example}
 {Figure \ref{fig:sps} (above) shows a family of hyperbolae $ps$ with all the alignments having 
-$\mathcal{R}(\sigma,\sigma')=ps$. Point $\color{red}(1,1)$ is the best possible trace match, i.e., a trace 
+$\mathcal{R}(\sigma,\sigma')=ps$. Point $(1,1)$ is the best possible trace match, i.e., a trace 
 $\nonlogtrace\in\ptraces{G}{0}$ with $\nonlogtrace=\logtrace$ and $\mathbb{P}_G(\nonlogtrace)\mathbb{P}_G(\logtrace)=1$.
 %		
 Figure \ref{fig:knnspace} (below) shows that the embedding moves the points of the hyperbola $ps$ to a circumference $x^2+y^2=\sfrac{1}{(ps)^2}$ describing a locus of the points equidistant as $\sfrac{1}{ps}$ from the origin of the axes $(0,0)$.}
 \end{example}
 %
 The transformation required for running the $k$NN algorithm preserves the ranking induced by $\mathcal{R}$.
+
 
 \begin{lemma}
 The set of points having the product $ps$ at least $k\in[0,1]$ corresponds to the set of $t$-transformed points with distance 
@@ -124,8 +126,8 @@ at least $1/k$ from the origin.
 \noindent
 \textbf{Approximate-Ranking Trace Embedder.}\label{subsec:ate}
 Ranking optimality comes at the cost of a brute-force recomputation of $\goldenrank$ for each trace $\logtrace$ to align.
-Since each embedding $\phi$ entails an associated similarity metric $k_\phi$ (\S\ref{subsec:katk}) and hence an associated
-distance $d_{k_\phi}$ (Equation \ref{eq:dofk}), we can compute the embeddings for all the \unravelled\ traces
+Each embedding $\phi$ entails an associated similarity metric $k_\phi$ (\S\ref{subsec:katk}) and an associated
+distance $d_{k_\phi}$ (Equation \ref{eq:dofk}), hence we can compute the embeddings for all the \unravelled\ traces
 before the top-$k$ search ensuring that they are independent of the trace to align, avoiding the brute-force cost. 
 This computational gain comes with a loss in precision; the generation of precise embeddings for graph data with loops is 
 NP-complete \cite{GartnerFW03}. %and, in its approximated version, is unable to accurately represent data using low-dimensional 
@@ -163,7 +165,7 @@ $V_\nonlogtrace$ contains the nodes generating $\nonlogtrace$ from $\closed{G}$
 	(i.e., $\seqs{\sigma'}{ \closed{G}}$) and
 $L_\nonlogtrace$ and $R_\nonlogtrace$ are the restrictions of $L$ and $R$ to $V_\nonlogtrace$; and
 $\omega := 1-\prod_{\Ind{0}\cdots\Ind{n}\in\seqs{\sigma'}{ \closed{G}}}\Big(1-(\textit{ifte}(\mathbf{1}_{L_{\sigma'}(\Ind{0})=\tau},[R_{\sigma'}]_{\Ind{0}\Ind{1}})\textit{ifte}(\mathbf{1}_{L_{\sigma'}(\Ind{n})=\tau},[R_{\sigma'}]_{\Ind{n-1}\Ind{n}})\Big)$
-	where $\textit{ifte}(x,y):=x(y-1)+1$ returns $y$ if $x=1$ and $1$ otherwise. We denote the set of all the $\closed{G}_\nonlogtrace$ as $\TBf{\pmin}{4}(\closed{G})$.\todo{need to understand this}
+	where $\textit{ifte}(x,y):=x(y-1)+1$ returns $y$ if $x=1$ and $1$ otherwise. We denote the set of all the $\closed{G}_\nonlogtrace$ as $\TBf{\pmin}{4}(\closed{G})$.%\todo{need to understand this}
 %\dots
 %		
 %		\dots we generate a set $\TBf{\pmin}{n}(\closed{G})$ of projected TGs $P$ for each trace in $\WCal{\pmin}{n}(P)$ as follows: for each weighted trace $\braket{\nonlogtrace,\probskip{\nonlogtrace}}\in\WCal{\pmin}{n}(P)$ generated from a path $\pi_\nonlogtrace=s\to n_2\rightsquigarrow n_m\to t$ over $R$, we generate a TG $P_\nonlogtrace=(s',t',L_\nonlogtrace,R_\nonlogtrace,\omega')$, where \begin{inparaenum}[\it (i)]
@@ -177,7 +179,7 @@ $\omega := 1-\prod_{\Ind{0}\cdots\Ind{n}\in\seqs{\sigma'}{ \closed{G}}}\Big(1-(\
 \begin{table}[!t]
 	\caption{Projections of $\tg$ over $\net$-traces of length $4$.}\label{tab:proj}
 	\centering
-	\resizebox{.25\textwidth}{!}{\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
+	\resizebox{.3\textwidth}{!}{\begin{tabular}{>{\centering\arraybackslash} m{1cm}| >{\centering\arraybackslash} m{4cm} >{\centering\arraybackslash} m{1cm} >{\centering\arraybackslash} m{1cm} }
 			\toprule
 			$\nonlogtrace$&$G_\nonlogtrace$&$l$&$\omega$\\
 			\midrule
@@ -197,7 +199,7 @@ $\omega := 1-\prod_{\Ind{0}\cdots\Ind{n}\in\seqs{\sigma'}{ \closed{G}}}\Big(1-(\
 	$\const{caaa}$ & \includegraphics{images/trace_ca_loop} & $4$ & $\color{violet}\pb\pf$\\
 	\bottomrule
 \end{tabular}}
-\vspace{-0.2cm}
+%\vspace{-0.2cm}
 \end{table}
 The graph weight $\omega$ derives from the outgoing edges of the initial node and the ingoing edges of the accepting node; 
 such nodes are labeled as $\tau$. Since the embedding strategy from \cite{LodhiSSCW02} considers only visible 
@@ -560,8 +562,11 @@ Table \ref{tab:rank3} along optimal ranking $\goldenrank$. $k_{\gorgembed}$ appr
 %\end{example}
 %
 The kernel $k_{\gorgembed}(G,G')$ can also be expressed as a function of the dot product of the two sub-embeddings because $\tasks^2\neq\tasks$.
+
+\vspace*{-3mm}
 \begin{equation}\label{eq:corollLem1}
-{\omega\omega't_f^{|R>0|+|R'>0|}\Braket{\hat{\epsilon}(G), \hat{\epsilon}(G')}+ t_f^{|R>0|+|R'>0|}\Braket{\hat{\nu}(G), \hat{\nu}(G')}}
+\begin{array}{l}\omega\omega't_f^{|R>0|+|R'>0|}\Braket{\hat{\epsilon}(G), \hat{\epsilon}(G')}\\+ t_f^{|R>0|+|R'>0|}\Braket{\hat{\nu}(G), \hat{\nu}(G')}
+\end{array}  
 \end{equation}
 
 \noindent

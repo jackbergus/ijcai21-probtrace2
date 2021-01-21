@@ -29,9 +29,9 @@ We follow the pipeline shown in \figurename~\ref{fig:pipe} and described next.
 %
 The original TG $\tg$ is processed through a \emph{$\hidden$-closure} that compiles away all invisible transitions, resulting in
 a new TG $\closed{\tg}$ using $\hidden$ labels only in the initial and accepting states, without modifying the
-model traces or their probabilities. We omit the details, which rely on well-known automata-based techniques for removing
+model traces nor their probabilities. We omit the details, which rely on well-known automata-based techniques for removing
 $\epsilon$-moves. The only observation is that, to preserve probabilities, we assume that the TG has no $\tau$ loops with
-positive probability. In other words, we assume that all possible movements are observable.
+positive probability. In other words, we assume that all possible movements are eventually observable.
 The TG in \figurename~\ref{fig:lmc} already has this shape.
 
 The next step unfolds the TG $\closed{\tg}$ to collect all the traces with probability at least $\pmin$. For this, we rely on a key
@@ -72,7 +72,7 @@ The $\tau$-closure process has two main purposes: first, reduce the size of the 
 $\tau$-labeled nodes \texttt{\color{blue}w} and preserving the connection between  the nodes \texttt{\color{blue}u}
 from its ingoing edges   $\texttt{\color{blue}u}\xrightarrow{\color{violet}\rho}\texttt{\color{blue}w}$ with the nodes \texttt{\color{blue}v} from its ingoing edges   $\texttt{\color{blue}w}\xrightarrow{\color{violet}\rho'}\texttt{\color{blue}v}$ by establishing new edges $\texttt{\color{blue}u}\xrightarrow{\color{violet}\rho\rho'}\texttt{\color{blue}v}$. $\tau$-labeled initial (or accepting) nodes are removed iff they have only one outgoing (ingoing) edge with probability $1$.
 
-\begin{example}\todo{Is it now ok?}
+\begin{example}
 	The $\tau$-closure removes the non-initial and non-accepting nodes within an automaton, while preserving the probabilistic trace equivalence of the two automata. Let us suppose to apply the $\tau$-closure to the automata in \figurename~\ref{fig:orig}: node \texttt{\color{blue}10} is removed alongside its associated edges, and new edges $\texttt{\color{blue}3}\xrightarrow{\color{violet}\rho_{65}}\texttt{\color{blue}4}$ and $\texttt{\color{blue}3}\xrightarrow{\color{violet}\rho_{6f}}\texttt{\color{blue}5}$ are introduced. The resulting TG $P$ is represented with the same graphical depiction \figurename~\ref{fig:closed}.
 \end{example}
 %
