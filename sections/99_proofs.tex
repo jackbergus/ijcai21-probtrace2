@@ -1,0 +1,49 @@
+\appendix
+\section{Appendix}
+
+\makeatletter
+\@addtoreset{lemma}{section}
+\makeatother
+
+\transfspace*
+\begin{proof} 
+Ignoring the irrelevant traces for $ps= 0$, we have:
+	\[
+	ps\geq k\Leftrightarrow \frac{1}{ps}=
+	{ \frac{\sqrt{p^2+s^2}}{ps\sqrt{p^2+s^2}}= \left\|t(p,s)-\vec{0}\right\|_2\leq\frac{1}{k} }\]
+In particular:
+\[
+ \sqrt{\frac{p^2+s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k} \]
+\[	{\Leftrightarrow \sqrt{\frac{p^2}{p^2s^2(p^2+s^2)}+\frac{s^2}{p^2s^2(p^2+s^2)}}\leq\frac{1}{k}} \]
+\[	{\Leftrightarrow \sqrt{\frac{1}{s^2(p^2+s^2)}+\frac{1}{p^2(p^2+s^2)}}\leq\frac{1}{k}} \]\[
+	{\Leftrightarrow \left\|{\biggr({\frac{1}{s\sqrt{p^2+s^2}},\frac{1}{p\sqrt{p^2+s^2}}\biggr)}-\vec{0}}\right\|_2\leq\frac{1}{k}} \\
+\]
+.
+\end{proof}
+
+
+\rewritinglemma*
+\begin{proof} We can close the goal by definition of $k_{\phi}$ as a vector dot product for any embedding $\phi$ and by  $\|\hat{\mathbf{x}}-\hat{\mathbf{x}}'\|_2^2=(2-1\braket{\hat{\mathbf{x}},\hat{\mathbf{x}}'})$ (\S\ref{subsec:katk}).
+\end{proof}
+
+\we*
+\begin{proof}
+	Given Proposition \ref{lem:rewritinglemma} and the positive definition of $\epsilon$ and $\nu$,  we have that $\norm{\hat{\epsilon}(G)-\hat{\epsilon}(G')}{2}\to 0$ as well as $\norm{\hat{\nu}(G)-\hat{\nu}(G')}{2}\to 0$, for which we can immediately close the goal.
+\end{proof}
+
+\sdiss*
+\begin{proof}
+{For each TG $G$, we denote the set of vertex labels as 
+$\tasks_G=\Set{\const{a}\in\tasks|\forall u\in V.\; L_{\const{a}u}\neq 0}$.} 
+If we exclude the trivial conditions $t_f=0$, $\omega=0$ or $\omega'=0$, by Equation \ref{eq:corollLem1} the only condition 
+when the kernel returns zero is when both $\Braket{\hat{\epsilon}(G),\hat{\epsilon}(G)}=0$ and 
+$\Braket{\hat{\nu}(G),\hat{\nu}(G')}=0$ hold. {This holds  iff $G$ and $G'$ have either different $2$-gram sets or a different 
+set of vertex labels, i.e., $\tasks_G\cap \tasks_{G'}=\emptyset$.} {The result holds by observing that 
+$\nu_\const{a}(G)=0\Leftrightarrow \forall u\in V. L_{\const{a}u}=0$ and by the requirement in Definition~\ref{def:ppne} 
+$\hat{\epsilon}_\const{ab}(G)=0$, the non-existence of a  $2$-gram can be expressed as $\forall i\in\mathbb{N}_{\neq0}. [LR^iL^t]_\const{ab}=0$.}
+\end{proof}
+
+\addedForOurPropos*
+\begin{proof}
+	{With respect to the $\nu$ embeddings, we can see that $\nu^2$ trivially satisfies the requirement as $\nu^2(G)$ returns the null vector $\vec{0}$. Furthermore, $\nu^1_\const{a}(G)=0$ if and only if there exists no $G$-trace  $\nonlogtrace\in\ptraces{G}{0}$ containing $\const{a}$, that is equivalent to  $\forall u\in V.\;L_{\const{a}u}=0$. We can observe that both $\epsilon^1$ and $\epsilon^2$ are function of both the sub-traces of length $i$ from $1$ to $l$, and  $[LR^iL^t]_\const{ab}$ too, thus implying that a summation of possibly zero terms possibly returns zero.}
+\end{proof}

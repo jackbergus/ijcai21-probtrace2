@@ -30,6 +30,9 @@
 \usepackage{tcolorbox}
 \usepackage{rotating}
 \usepackage{latexsym,amssymb,amsmath}
+\usepackage{thmtools,thm-restate}
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
 \usepackage{makecell}
 \usepackage{xspace}
 \usepackage{paralist}
@@ -96,6 +99,8 @@
 % Remove date
 \date{\vspace{-5em}} 
 
+%\newtheorem{lem}{Lemma}
+
 \begin{document}
 
 \maketitle
@@ -124,7 +129,8 @@ specific applications in different AI domains.
 
 \bibliographystyle{named}
 \bibliography{biblio3}
-
+\newpage
+\input{sections/99_proofs.tex}
 
 
 \end{document}
