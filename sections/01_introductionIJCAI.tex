@@ -14,10 +14,9 @@ one can no longer express precisely which traces are allowed by the system, but 
 of being observed. In this case, the alignment problem must take into account both dimensions: the similarity between the
 traces, and the likelihood of being observed. Indeed, it could be that the most similar trace is so unlikely as to be deemed almost
 impossible, yielding a suspect alignment. Conversely, the most likely trace may differ too much from the observation to be
-meaningful as an alignment. This trade-off must be treated carefully. Users can be supported in choosing the best alignment in each specific case if, instead of being provided with a single alignments, they are provided with a ranking of alignments.
+meaningful as an alignment. This trade-off must be treated carefully. 
 
-We introduce two ranking strategies aiming at finding the most useful alignments. The first one uses a brute force approach that
-reuses existing trace aligners like \cite{DBLP:conf/edoc/AdriansyahDA11,LeoniM17}, where the (optimal) ranking
+Users can be supported in choosing the best alignment in each specific case if, instead of being provided with a single alignments, they are provided with a ranking of alignments. We introduce two ranking strategies aiming at finding the most useful alignments. The first one uses a brute force approach that reuses existing trace aligners like \cite{DBLP:conf/edoc/AdriansyahDA11,LeoniM17}, where the (optimal) ranking
 is obtained multiplying the Levenshtein distance between the observed trace and a model trace, by the probability of the
 model trace. Although this approach returns the best alignment ranking for an observation, candidate alignments have to be computed
 anew for each observation. For models inducing a large number of model traces, this is clearly unfeasible. Our second
