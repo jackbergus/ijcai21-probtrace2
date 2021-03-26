@@ -9,6 +9,7 @@ paper:
 	$(bibtex) main.aux
 	$(pdflatex)  -interaction nonstopmode main.tex
 	$(pdflatex)  -interaction nonstopmode main.tex
+	$(pdflatex)  -interaction nonstopmode ijcai21-authors-response.tex
 
 all:	$(IMAGES) paper
 
