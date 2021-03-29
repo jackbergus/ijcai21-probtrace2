@@ -49,6 +49,11 @@ We appreciate the reviewers' concern on having just one dataset of reference. Ho
 
 We also appreciate the reviewers' concern that the manuscript does not include a significant empirical component. All things being equal, we agree that scholarly studies are strengthened by the inclusion of supporting empirical evidence. However, we part with the reviewers on the belief that our study is incomplete without such an empirical element. Still, the focus of this paper was more on the formal characterization of our proposed approach: due to the lack of space, we could not include such experiments that were coming from our previous work. That said, we look forward to the kind of empirical experiments would corroborate the theoretical properties that we studied in this present work.
 
+We close by the points made by reviewers, in particular Reviewer 49, on the model itself. We are afraid that some aspects of transition graphs were not clear due to the necessity of summarizing the framework for space reasons. We inadvertently removed there the fact that the probability of a run is obtained by summing up the probabilities of all valid sequences that induce that run, and in turn the probability of each valid sequence is obtained by summing up all its associated probabilities. As for $\tau$-closure, we did not report its details as it essentially behaves like standard $\epsilon$-move elimination procedures for finite-state automata. The absence of loops that solely go through $\tau$-transitions is reasonable modeling wise (as skipping multiple times an entire loop iteration is conceptually not distinguishable from not skipping it at all - so we would require there the presence of at least a visible activity witnessing that the iteration was executed, possibly skipping parts of it).
+
+\medskip
+
+
 \textbf{References}
 \begin{enumerate}
 	\item\label{a} Leemans, S.J.J., et al.: \textit{Earth movers’ stochastic
